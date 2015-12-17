@@ -1,6 +1,6 @@
 # DS-III
 
-Build _the third Death Star_ for myself!
+Build _the third Death Star_!
 
 
 Notes:
