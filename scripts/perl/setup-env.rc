@@ -1,0 +1,8 @@
+#-*- mode: sh -*-
+
+function perl-env() {
+    source ~/perl5/perlbrew/etc/bashrc
+    local PERL_ENV=${1-default}@${2-default}
+    perlbrew switch $PERL_ENV
+    echo "[PERL]Perl switched to $PERL_ENV."
+}
