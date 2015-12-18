@@ -1,8 +1,13 @@
 #-*- mode: sh -*-
 
-function perl-env() {
+function perl-env-setup() {
     source ~/perl5/perlbrew/etc/bashrc
     local PERL_ENV=${1-default}@${2-default}
     perlbrew switch $PERL_ENV
-    echo "[PERL]Perl switched to $PERL_ENV."
+    echo "[PERL] Perlbrew is switched to $PERL_ENV."
+}
+
+function perl-env-off() {
+    perlbrew off
+    echo "[PERL] Perlbrew is turned off."
 }

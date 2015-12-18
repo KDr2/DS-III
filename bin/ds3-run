@@ -1,1 +1,13 @@
 #!/bin/bash
+# -*- mode: sh -*-
+
+function ds3-run() {
+    local MODULE=$1
+    local SCRIPT_NAME=$2
+    shift 2
+
+    local SCRIPT_FILE=$DS3_HOME/scripts/$MODULE/$SCRIPT_NAME*
+    $SCRIPT_FILE "$@"
+}
+
+ds3-run "$@"

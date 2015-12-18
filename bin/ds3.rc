@@ -1,0 +1,62 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+[[ $- == *i* ]] || {
+    echo "ds3.rc must be run in interactive mode!"
+    exit 255
+}
+
+function import-rcs() {
+    local RC_SCRIPTS=(
+        bin/ds3-env.rc
+    )
+    for RC in ${RC_SCRIPTS[*]}; do
+        [[ -f $DS3_HOME/$RC ]] && source $DS3_HOME/$RC
+    done
+}
+
+function ds3-help() {
+    cat <<EOF
+USAGE:
+$(echo $'\t')ds3 [CMD] [arguments...]
+CMD:
+$(echo $'\t')- env
+$(echo $'\t')- run
+$(echo $'\t')- help
+EOF
+}
+
+function ds3() {
+    [[ $# -lt 2 ]] && {
+        ds3-help
+        return 254
+    }
+
+    local CMD=$(tr [[:lower:]] [[:upper:]] <<< $1)
+    shift 1
+
+    case $CMD in
+        ENV)
+            ds3-env "$@"
+            return
+            ;;
+        RUN)
+            $DS3_HOME/bin/ds3-run "$@"
+            return
+        ;;
+        HELP)
+            ds3-help "$@"
+            return
+        ;;
+        *)
+            echo "Unkown command: $CMD"
+            return 254
+    esac
+    return 0
+}
+
+function init() {
+    import-rcs
+}
+
+echo ${DS3_HOME?variable not set.} &>/dev/null && init

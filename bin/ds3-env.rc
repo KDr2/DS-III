@@ -1,0 +1,21 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+function ds3-env() {
+    local FUNC_POSTFIX
+    if [[ $1 == 'off' ]]; then
+        shift 1
+        FUNC_POSTFIX=env-off
+    else
+        FUNC_POSTFIX=env-setup
+    fi
+
+    local MODULE=$1
+    shift 1
+
+    local ENV_FILE=$DS3_HOME/scripts/$MODULE/setup-env.rc
+    local TARGET_FUNC=$MODULE-$FUNC_POSTFIX
+
+    source $ENV_FILE
+    eval $TARGET_FUNC "$@"
+}
