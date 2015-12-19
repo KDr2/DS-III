@@ -17,5 +17,5 @@ function ds3-env() {
     local TARGET_FUNC=$MODULE-$FUNC_POSTFIX
 
     source $ENV_FILE
-    eval $TARGET_FUNC "$@"
+    $TARGET_FUNC "$@"
 }

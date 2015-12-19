@@ -9,6 +9,7 @@
 function import-rcs() {
     local RC_SCRIPTS=(
         bin/ds3-env.rc
+        auxil/completion.rc
     )
     for RC in ${RC_SCRIPTS[*]}; do
         [[ -f $DS3_HOME/$RC ]] && source $DS3_HOME/$RC
