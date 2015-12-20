@@ -1,0 +1,29 @@
+#-*- mode: sh -*-
+
+function julia-env-setup() {
+    local VERSION=${1-dev}
+    local NEW_JULIA_HOME
+    if [[ $VERSION == dev ]] ; then
+        NEW_JULIA_HOME=~/Work/opensrc/julia/usr/bin
+    else
+        if [[ -d $HOME/programs/julia-$VERSION/bin ]]; then
+            NEW_JULIA_HOME=$HOME/programs/julia-$VERSION/bin
+        elif [[ -d /usr/local/julia-$VERSION/bin ]]; then
+            NEW_JULIA_HOME=/usr/local/julia-$VERSION/bin
+        else
+            echo "[JULIA] version $VERSION not found."
+            [[ -z $JULIA_HOME ]] || echo "[JULIA] the last env $JULIA_HOME is still in use."
+            return 1
+        fi
+    fi
+    string-remove-from-var PATH $JULIA_HOME
+    export JULIA_HOME=$NEW_JULIA_HOME
+    string-append-to-var PATH $JULIA_HOME
+    echo "[JULIA] JULIA_HOME is set to $JULIA_HOME"
+}
+
+function julia-env-off() {
+    string-remove-from-var PATH $JULIA_HOME
+    unset JULIA_HOME
+    echo "[JULIA] JULIA_HOME is unset."
+}
