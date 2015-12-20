@@ -19,11 +19,11 @@ function import-rcs() {
 function ds3-help() {
     cat <<EOF
 USAGE:
-$(echo $'\t')ds3 [CMD] [arguments...]
+$(echo $'\t')ds3 <CMD> [arguments...]
 CMD:
-$(echo $'\t')- env
-$(echo $'\t')- run
-$(echo $'\t')- help
+$(echo $'\t')- env [off] <module>
+$(echo $'\t')- run <module> <script> [arguments...]
+$(echo $'\t')- help <module> <script>
 EOF
 }
 
