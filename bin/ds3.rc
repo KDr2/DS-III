@@ -8,6 +8,7 @@
 
 function import-rcs() {
     local RC_SCRIPTS=(
+        lib/bash/common.bash
         bin/ds3-env.rc
         auxil/completion.rc
     )
