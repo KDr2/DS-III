@@ -1,8 +1,14 @@
 #!/bin/bash
 # -*- mode: sh -*-
 
+DEFAULT_VERSION=5.22.1
+
 [[ -f ~/perl5/perlbrew/etc/bashrc ]] || {
     \curl -L http://install.perlbrew.pl | bash
+    source ~/perl5/perlbrew/etc/bashrc
+    perlbrew install $DEFAULT_VERSION
+    perlbrew alias create $DEFAULT_VERSION default
+    perlbrew lib create default@default
 }
 
 # No use now, use $DS3_HOME/bin/ds3.rc

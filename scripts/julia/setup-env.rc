@@ -18,7 +18,7 @@ function julia-env-setup() {
     fi
     string-remove-from-var PATH $JULIA_HOME
     export JULIA_HOME=$NEW_JULIA_HOME
-    string-append-to-var PATH $JULIA_HOME
+    string-prepend-to-var PATH $JULIA_HOME
     echo "[JULIA] JULIA_HOME is set to $JULIA_HOME"
 }
 

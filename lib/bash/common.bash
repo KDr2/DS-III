@@ -33,7 +33,7 @@ function string-contains() {
 # arg1: STRING/VAR_NAME
 # arg2: TARGET_STRING_ITEM
 # arg3: IFS
-# e.g.: string-append-to-var PATH "/bin"
+# e.g.: string-(ap|pre)pend-to-var PATH "/bin"
 #
 
 function string-append() {
@@ -51,6 +51,24 @@ function string-append-to-var() {
     local REAL_IFS=${3-:}
     local FULL_STRING=$(eval "echo \$$1")
     export $1=$(string-append "$FULL_STRING" "$2" "$REAL_IFS")
+}
+
+
+function string-prepend() {
+    local REAL_IFS=${3-:}
+    if string-contains "$1" "$2" "$REAL_IFS"; then
+        echo "$1"
+        return
+    fi
+    #echo $(string-join "$REAL_IFS" "$FULL_STRING" "$2")
+    echo "$2${REAL_IFS}$1"
+}
+
+
+function string-prepend-to-var() {
+    local REAL_IFS=${3-:}
+    local FULL_STRING=$(eval "echo \$$1")
+    export $1=$(string-prepend "$FULL_STRING" "$2" "$REAL_IFS")
 }
 
 
