@@ -9,7 +9,10 @@ DEFAULT_VERSION=5.22.1
     perlbrew install $DEFAULT_VERSION
     perlbrew alias create $DEFAULT_VERSION default
     perlbrew lib create default@default
+    perlbrew install-cpanm
 }
+
+[[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
 # No use now, use $DS3_HOME/bin/ds3.rc
 function init-bashrc() {

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+export CPY_SRC_ROOT=$HOME/Work/opensrc/cpython
+export CPY_DEST_DIR=$HOME/programs/python-dev
+
+$CPY_SRC_ROOT/configure --prefix=$CPY_DEST_DIR/$VERSION \
+                        --with-threads --with-signal-module \
+                        --enable-profiling --with-pydebug \
+                        --with-valgrind

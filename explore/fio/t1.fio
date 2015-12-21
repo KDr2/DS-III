@@ -1,0 +1,8 @@
+[t1]
+name=t1
+ioengine=sync
+readwrite=write
+size=24M
+fsync=1
+#fdatasync=1
+direct=1

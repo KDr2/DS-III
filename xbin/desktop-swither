@@ -1,0 +1,95 @@
+#!/usr/bin/env perl
+#-*- mode: perl -*-
+
+=pod
+
+    Workaround for fluxbox bug 1008 1067
+    - http://sourceforge.net/p/fluxbox/bugs/1008/
+    - http://sourceforge.net/p/fluxbox/bugs/1067/
+
+    It maybe fixed by edman007, at 1067, I patch this on my bug1067 branch
+    And hope it will be patched to the upstream.
+
+    See the patch at the end of this file.
+
+=cut
+
+use strict;
+use warnings;
+
+sub desktop {
+    my @wmc = `wmctrl -d`;
+    my $num = $#wmc;
+    for (0..$num) {
+        return ($num+1, $_) if $wmc[$_] =~ m/^\d+\s+\*/;
+    }
+    return ($num+1, $num);
+}
+
+
+sub desktop_next {
+    my ($num, $cur) = desktop();
+    my $nex = ($cur + 1) % $num;
+    `wmctrl -s  $nex`
+}
+
+sub desktop_prev {
+    my ($num, $cur) = desktop();
+    my $pre = ($cur - 1 + $num) % $num;
+    `wmctrl -s $pre`
+}
+
+
+
+if (lc($ARGV[0] // "next") eq 'prev') {
+    desktop_prev();
+} else {
+    desktop_next();
+}
+
+__END__
+
+commit 24a45e7f6d89259e783000a2607d99e9c1749a24
+Author: Ed Martin <edman007@edman007.com>
+Date:   Fri Jul 19 01:03:20 2013 -0400
+
+    Fix bug #1067 (and dups)
+    - Do not Ungrab the keyboard for a KeyPress event, this causes us to
+      lose the KeyRelease event which is needed to ungrab the keyboard
+      after the event happened
+
+diff --git a/src/Keys.cc b/src/Keys.cc
+index 388ec52..ad5dca0 100644
+--- a/src/Keys.cc
++++ b/src/Keys.cc
+@@ -581,11 +581,6 @@ bool Keys::doAction(int type, unsigned int mods, unsigned int key,
+         return false;
+     }
+
+-    // if focus changes, windows will get NotifyWhileGrabbed,
+-    // which they tend to ignore
+-    if (type == KeyPress)
+-        XUngrabKeyboard(Fluxbox::instance()->display(), CurrentTime);
+-
+     WinClient *old = WindowCmd<void>::client();
+     WindowCmd<void>::setClient(current);
+     temp_key->m_command->execute();
+diff --git a/src/Screen.cc b/src/Screen.cc
+index 366b8df..3c7c79f 100644
+--- a/src/Screen.cc
++++ b/src/Screen.cc
+@@ -812,12 +812,8 @@ void BScreen::propertyNotify(Atom atom) {
+ }
+
+ void BScreen::keyPressEvent(XKeyEvent &ke) {
+-    if (Fluxbox::instance()->keys()->doAction(ke.type, ke.state, ke.keycode,
+-                                              Keys::GLOBAL|Keys::ON_DESKTOP))
+-        // re-grab keyboard, so we don't pass KeyRelease to clients
+-        // also for catching invalid keys in the middle of keychains
+-        FbTk::EventManager::instance()->grabKeyboard(rootWindow().window());
+-
++    Fluxbox::instance()->keys()->doAction(ke.type, ke.state, ke.keycode,
++                                          Keys::GLOBAL|Keys::ON_DESKTOP);
+ }
+
+ void BScreen::keyReleaseEvent(XKeyEvent &ke) {

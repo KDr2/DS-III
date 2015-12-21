@@ -1,0 +1,22 @@
+#!/bin/bash
+#-*- mode: sh -*-
+
+source $DS3_HOME/lib/bash/common.bash
+
+if [[ $GOROOT == "" || ! -d $GOROOT ]]; then
+    export GOROOT=$HOME/Work/opensrc/go
+fi
+
+if [[ ! -d $GOROOT ]]; then
+    git clone git@github.com:golang/go.git $GOROOT
+fi
+
+
+export GO_TOOL_PATH=$HOME/Work/opensrc/go-tools
+
+if [[ ! -d $GO_TOOL_PATH/src/golang.org/x/tools ]]; then
+    mkdir -p $GO_TOOL_PATH/src/golang.org/x/tools
+    git clone git@github.com:golang/tools.git $GO_TOOL_PATH/src/golang.org/x/tools
+fi
+
+string-append-to-var GOPATH $GO_TOOL_PATH

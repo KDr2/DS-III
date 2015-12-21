@@ -1,0 +1,6 @@
+#!/bin/sh
+#-*- mode: sh -*-
+configure --prefix=/data0/usr/local/emacs \
+    --with-x-toolkit=no \
+    --without-makeinfo \
+    --without-selinux

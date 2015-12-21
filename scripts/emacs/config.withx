@@ -1,0 +1,6 @@
+#!/bin/sh
+#-*- mode: sh -*-
+# toolkit: gtk/gtk2/gtk3/... \
+./configure --prefix=$HOME/programs/emacs \
+  --with-x --with-xft --with-x-toolkit=gtk2 \
+  --without-selinux

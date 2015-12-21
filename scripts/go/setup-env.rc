@@ -1,0 +1,76 @@
+#!/bin/bash
+#-*- mode: sh -*-
+#
+#  - GOROOT
+#  - GOROOT_FINAL
+#  - GOARCH: amd64/386/arm
+#  - GOOS: linux/freebsd/netbsd/openbsd/dragonfly/solaris/plan9/darwin/windows
+#  - GOHOSTOS
+#  - GOHOSTARCH
+#  - GOBIN, default: $GOROOT/bin
+#  - GO386: 387/sse2
+#  - GOARM: 5/6/7
+#  - GOPATH
+#
+#  - GOROOT_BOOTSTRAP: bootstrap golang
+#
+
+#
+#  ds3 env go <VERSION>
+#  ds3 env go gopath [PATH]
+#  ds3 env go -gopath [PATH]
+#  ds3 env off go
+#
+
+function go-env-setup() {
+    local ARG1=${1-dev}
+    if [[ $(echo $ARG1 | tr '[:upper:]' '[:lower:]') == 'gopath' ]]; then #cmd gopath
+        string-prepend-to-var GOPATH ${2-$PWD}
+        return
+    elif [[ $(echo $ARG1 | tr '[:upper:]' '[:lower:]') == '-gopath' ]]; then #cmd -gopath
+        string-remove-from-var GOPATH ${2-$PWD}
+        return
+    else
+        local VERSION=$ARG1
+    fi
+
+
+    case $(uname -m|tr '[:upper:]' '[:lower:]') in
+        amd64|x84_64)
+            export GOARCH=amd64
+            ;;
+        i*86)
+            export GOARCH=386
+            ;;
+        arm)
+            export GOARCH=arm
+            ;;
+        *)
+            export GOARCH=amd64
+            ;;
+    esac
+    export GOOS=$(uname -s|tr '[:upper:]' '[:lower:]')
+
+    if [[ $VERSION == "dev" ]]; then
+        export GOROOT=$HOME/Work/opensrc/go
+        string-prepend-to-var GOPATH "$HOME/Work/opensrc/go-tools"
+        local SYSTEM_GO=$($DS3_HOME/auxil/find-versions.pl /usr/local/go- -max)
+        [[ -n $SYSTEM_GO ]] && export GOROOT_BOOTSTRAP=$SYSTEM_GO
+    else
+        export GOROOT=/usr/local/go-$VERSION
+    fi
+
+    # add $GOROOT/bin to PATH
+    string-prepend-to-var PATH "$GOROOT/bin"
+}
+
+
+function go-env-off() {
+    string-remove-from-var PATH "$GOROOT/bin"
+    unset GOARCH
+    unset GOOS
+    unset GOROOT
+    unset GOROOT_BOOTSTRAP
+    unset GOPATH
+    echo "[GO] Go env variables are unset."
+}
