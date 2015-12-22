@@ -1,0 +1,11 @@
+
+* files:
+  - flisp mkboot0.lsp src.lsp > input.compiled.lsp
+  - flisp bin2hex.scm < input.compiled.lsp >output.c.inc
+  - .c #include output.c.inc as image
+
+* raw
+  - read flisp_raw.boot as image
+
+* standalone
+  - include flisp.boot.inc as image

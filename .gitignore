@@ -1,0 +1,40 @@
+#
+.data/*
+
+# Compiled Object files
+*.exe
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# TeX/LaTex output
+*.out
+*.toc
+*.pdf
+*.aux
+*.log
+
+# Erlang
+*.beam
+
+# other spcripts
+*.pyc
+*.pyo
+
+#luajit
+*.dasc.h
+*.dasc.c
+*.dash.h
+*.dash.c
+
+#clojure
+.nrepl-port

@@ -1,0 +1,12 @@
+
+probe begin{
+    printf("=========================\n")
+}
+
+//probe process(@1).function(@2){
+probe process("/home/kdr2/Work/opensrc/femtolisp/flisp").function("fl_cons"){
+    //printf("%s\n",ubacktrace());
+    print_ubacktrace();
+    printf("%p\n", $a);
+    printf("%p\n", $b);
+} 

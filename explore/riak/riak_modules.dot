@@ -1,0 +1,96 @@
+digraph RiakDeps{
+    compound=true
+    concentrate=true
+    rankdir=LR
+    fontname="courier"
+    fontsize=12
+    
+    node [fontname="courier"
+          fontsize=10 color="gray"]
+    edge [color="pink" style="dashed"]
+
+    riak[shape="octagon" label="Riak" color="green4"]
+    riak_kv[shape="octagon" color="green4"]
+    riak_core[shape="octagon" color="green4"]
+    riak_search[shape="octagon" color="green4"]
+    cluster_info[shape="octagon" color="green4"]
+    riak_pb[shape="octagon" color="green4"]
+    riak_api[shape="octagon" color="green4"]
+    riak_control[shape="octagon" color="green4"]
+    riak_pipe[shape="octagon" color="green4"]
+    riak_sysmon[shape="octagon" color="green4"]
+    merge_index[shape="octagon" color="green4"]
+    eleveldb[shape="octagon" color="green4"]
+    lager[shape="octagon" color="green4"]
+    ebloom[shape="octagon" color="green4"]
+    erlang_js[shape="octagon" color="green4"]
+    luke[shape="octagon" color="green4"]
+    bitcask[shape="octagon" color="green4"]
+    webmachine[shape="octagon" color="green4"]
+    protobuffs[shape="octagon" color="green4"]
+    
+    eper[shape="diamond" color="blue"]
+    mochiweb[shape="diamond" color="blue"]
+    poolboy[shape="diamond" color="blue"]
+    basho_stats[shape="diamond" color="blue"]
+    folsom[shape="diamond" color="blue"]
+    
+    riak -> riak_kv
+    riak -> riak_search
+    riak -> riak_control
+    riak -> cluster_info
+    
+    riak_kv -> riak_core
+    riak_kv -> riak_api
+    riak_kv -> riak_pipe
+    riak_kv -> luke
+    riak_kv -> erlang_js
+    riak_kv -> bitcask
+    riak_kv -> merge_index
+    riak_kv -> ebloom
+    riak_kv -> eper
+    riak_kv -> eleveldb
+    riak_kv -> sext
+
+    riak_search -> riak_kv
+    riak_search -> merge_index
+    riak_search -> riak_api
+    riak_search -> riak_pb
+
+    riak_control -> webmachine
+    riak_control -> riak_core
+    riak_control -> erlydtl
+
+    riak_core -> lager
+    riak_core -> poolboy
+    riak_core -> protobuffs
+    riak_core -> basho_stats
+    riak_core -> riak_sysmon
+    riak_core -> webmachine
+    riak_core -> folsom
+
+    riak_api -> lager
+    riak_api -> riak_pb
+    riak_api -> riak_core
+
+    riak_pipe -> riak_core
+
+    bitcask -> meck
+
+    merge_index -> lager
+
+    eper -> getopt
+
+    sext -> edown
+
+    riak_pb -> protobuffs
+
+    webmachine -> mochiweb
+
+    protobuffs -> meck
+
+    folsom -> bear
+    folsom -> meck
+    
+}
+
