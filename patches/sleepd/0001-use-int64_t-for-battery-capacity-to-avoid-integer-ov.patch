@@ -1,0 +1,97 @@
+From 5eef101c0b5360a6da4219c94d2086008373520b Mon Sep 17 00:00:00 2001
+From: KDr2 <killy.draw@gmail.com>
+Date: Wed, 11 Jun 2014 18:35:29 +0800
+Subject: [PATCH] use int64_t for battery capacity to avoid integer overflow
+
+---
+ acpi.c | 14 +++++++-------
+ acpi.h |  6 +++---
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/acpi.c b/acpi.c
+index 38bf820..417ce67 100644
+--- a/acpi.c
++++ b/acpi.c
+@@ -27,7 +27,7 @@ char acpi_batt_info[ACPI_MAXITEM][128];
+ /* Filenames of the battery status files for each system battery. */
+ char acpi_batt_status[ACPI_MAXITEM][128];
+ /* Stores battery capacity, or 0 if the battery is absent. */
+-int acpi_batt_capacity[ACPI_MAXITEM];
++int64_t acpi_batt_capacity[ACPI_MAXITEM];
+ 
+ int acpi_ac_count = 0;
+ char acpi_ac_adapter_info[ACPI_MAXITEM][128];
+@@ -86,15 +86,15 @@ int strmcmp(const char *s1, const char *s2)
+ 
+ /* Given a buffer holding an acpi file, searches for the given key in it,
+  * and returns the numeric value. 0 is returned on failure. */
+-inline int scan_acpi_num (const char *buf, const char *key) {
++inline int64_t scan_acpi_num (const char *buf, const char *key) {
+ 	char *ptr;
+-	int ret = 0;
++	int64_t ret = 0;
+ 
+ 	do {
+ 		ptr = strchr(buf, '\n');
+ 		if (!strmcmp(buf, key)) {
+ 			if ((ptr = strchr(buf, '='))) {
+-				sscanf(ptr + 1, "%d", &ret);
++				sscanf(ptr + 1, "%ld", &ret);
+ 				return ret;
+ 			} else {
+ 				return 0;
+@@ -145,14 +145,14 @@ char *get_acpi_value (const char *file, const char *key) {
+ 
+ /* Returns the last full charge capacity of a battery.
+  */
+-int get_acpi_batt_capacity(int battery) {
++int64_t get_acpi_batt_capacity(int battery) {
+ 	char *s;
+ 
+ 	s = get_acpi_value(acpi_batt_info[battery], acpi_labels[label_last_full_capacity]);
+ 	if (s == NULL) {
+ 		return 0;
+ 	} else {
+-		return atoi(s);
++		return atoll(s);
+ 	}
+ }
+ 
+@@ -327,7 +327,7 @@ int acpi_read (int battery, apm_info *info) {
+ 	/* Work out if the battery is present, and what percentage of full
+ 	 * it is and how much time is left. */
+ 	if (strcmp(scan_acpi_value(buf, acpi_labels[label_present]), "1") == 0) {
+-		int pcap = scan_acpi_num(buf, acpi_labels[label_remaining_capacity]);
++		int64_t pcap = scan_acpi_num(buf, acpi_labels[label_remaining_capacity]);
+ 		state = scan_acpi_value(buf, acpi_labels[label_charging_state]);
+ 		if (state) {
+ 			if (state[0] == 'D') { /* discharging */
+diff --git a/acpi.h b/acpi.h
+index f82cba7..f7c77cc 100644
+--- a/acpi.h
++++ b/acpi.h
+@@ -20,10 +20,10 @@ int acpi_supported (void);
+ int acpi_read (int battery, apm_info *info);
+ #endif
+ char *get_acpi_file (const char *file);
+-int scan_acpi_num (const char *buf, const char *key);
++int64_t scan_acpi_num (const char *buf, const char *key);
+ char *scan_acpi_value (const char *buf, const char *key);
+ char *get_acpi_value (const char *file, const char *key);
+-int get_acpi_batt_capacity(int battery);
++int64_t get_acpi_batt_capacity(int battery);
+ 
+ extern int acpi_batt_count;
+ /* Filenames of the battery info files for each system battery. */
+@@ -31,7 +31,7 @@ extern char acpi_batt_info[ACPI_MAXITEM][128];
+ /* Filenames of the battery status files for each system battery. */
+ extern char acpi_batt_status[ACPI_MAXITEM][128];
+ /* Stores battery capacity, or 0 if the battery is absent. */
+-extern int acpi_batt_capacity[ACPI_MAXITEM];
++extern int64_t acpi_batt_capacity[ACPI_MAXITEM];
+ 
+ extern int acpi_ac_count;
+ extern char acpi_ac_adapter_info[ACPI_MAXITEM][128];
+-- 
+2.0.0
+
