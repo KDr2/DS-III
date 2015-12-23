@@ -1,0 +1,77 @@
+#!/bin/sh
+#-*- sh -*-
+
+#  LuaJIT:
+echo ${LUAJIT_HOME:=$HOME/programs/luajit/v2.1}
+LUAJIT_LIB=$LUAJIT_HOME/lib
+LUAJIT_INC=$LUAJIT_HOME/include/luajit-2.1
+
+# Lua:
+# LUA_HOME=...
+# LUA_LIB=$LUA_HOME/lib
+# LUA_INC=$LUA_HOME/include
+
+echo ${NGX_SRC:=$HOME/Work/opensrc/nginx} &>/dev/null
+echo ${NGX_DEST:=$HOME/programs/nginx} &>/dev/null
+
+#  ### modules ###
+#  --with-rtsig_module                enable rtsig module
+#  --with-select_module               enable select module
+#  --without-select_module            disable select module
+#  --with-poll_module                 enable poll module
+#  --without-poll_module              disable poll module
+#
+#  --with-file-aio                    enable file AIO support
+#  --with-ipv6                        enable IPv6 support
+#
+#  --with-http_ssl_module             enable ngx_http_ssl_module
+#  --with-http_spdy_module            enable ngx_http_spdy_module
+#  --with-http_realip_module          enable ngx_http_realip_module
+#  --with-http_addition_module        enable ngx_http_addition_module
+#  --with-http_xslt_module            enable ngx_http_xslt_module
+#  --with-http_image_filter_module    enable ngx_http_image_filter_module
+#  --with-http_geoip_module           enable ngx_http_geoip_module
+#  --with-http_sub_module             enable ngx_http_sub_module
+#  --with-http_dav_module             enable ngx_http_dav_module
+#  --with-http_flv_module             enable ngx_http_flv_module
+#  --with-http_mp4_module             enable ngx_http_mp4_module
+#  --with-http_gunzip_module          enable ngx_http_gunzip_module
+#  --with-http_gzip_static_module     enable ngx_http_gzip_static_module
+#  --with-http_auth_request_module    enable ngx_http_auth_request_module
+#  --with-http_random_index_module    enable ngx_http_random_index_module
+#  --with-http_secure_link_module     enable ngx_http_secure_link_module
+#  --with-http_degradation_module     enable ngx_http_degradation_module
+#  --with-http_stub_status_module     enable ngx_http_stub_status_module
+
+cd $NGX_SRC
+
+$NGX_SRC/auto/configure --prefix=$NGX_DEST \
+                        --with-debug \
+                        --with-http_ssl_module \
+                        --with-http_spdy_module \
+                        --with-http_realip_module \
+                        --with-http_addition_module \
+                        --with-http_auth_request_module \
+                        --add-module=$NGX_SRC/../ngx_modules/ngx_devel_kit \
+                        --add-module=$NGX_SRC/../ngx_modules/lua-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/ngx_postgres \
+                        --add-module=$NGX_SRC/../ngx_modules/drizzle-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/set-misc-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/echo-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/memc-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/headers-more-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/srcache-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/rds-json-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/lua-upstream-nginx-module \
+                        --add-module=$NGX_SRC/../ngx_modules/others/ngx_coolkit \
+                        --add-module=$NGX_SRC/../ngx_modules/others/redis2-nginx-module
+
+
+# config:
+# worker_processes  1;
+# master_process  off;
+# daemon          off;
+# #error_log  logs/error.log;
+# #error_log  logs/error.log  debug;
+# #error_log  logs/error.log  notice;
+# #error_log  logs/error.log  info;

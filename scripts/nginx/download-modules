@@ -1,0 +1,27 @@
+#!/bin/bash
+#-*- mode: sh -*-
+
+MODULES_DIR=$HOME/Work/opensrc/ngx_modules
+mkdir -p $MODULES_DIR/others
+
+ORIGIN_IFS=$IFS
+IFS=$'\n'
+
+for MOD in $(cat $CUR_DIR/modules-list.txt); do
+    echo "Install/Update $MOD ..."
+    IFS=$ORIGIN_IFS
+    MOD_INFO=($MOD)
+    if [[ -d $MODULES_DIR/${MOD_INFO[0]} ]]; then
+        cd $MODULES_DIR/${MOD_INFO[0]}
+        git pull
+    else
+        MOD_PATH=${MOD_INFO[0]}
+        if [[ ${MOD_PATH:0:7} == "others/" ]]; then
+            cd $MODULES_DIR/others
+        else
+            cd $MODULES_DIR
+        fi
+        git clone ${MOD_INFO[1]}
+    fi
+    cd $CUR_DIR
+done

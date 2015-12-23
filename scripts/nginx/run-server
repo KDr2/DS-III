@@ -1,0 +1,4 @@
+#!/bin/bash
+
+NGX_HOME=/opt/programs/openresty/nginx
+sudo $NGX_HOME/sbin/nginx "$@"
