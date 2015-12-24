@@ -3,13 +3,13 @@
 
 MODULES_DIR=$HOME/Work/opensrc/ngx_modules
 mkdir -p $MODULES_DIR/others
+SAVED_WD=$PWD
+SAVED_IFS="$IFS"
+IFS=$'\n' MODULES=($(cat $DS3_HOME/scripts/nginx/modules-list.txt))
+IFS="$SAVED_IFS"
 
-ORIGIN_IFS=$IFS
-IFS=$'\n'
-
-for MOD in $(cat $CUR_DIR/modules-list.txt); do
+for MOD in "${MODULES[@]}"; do
     echo "Install/Update $MOD ..."
-    IFS=$ORIGIN_IFS
     MOD_INFO=($MOD)
     if [[ -d $MODULES_DIR/${MOD_INFO[0]} ]]; then
         cd $MODULES_DIR/${MOD_INFO[0]}
@@ -23,5 +23,5 @@ for MOD in $(cat $CUR_DIR/modules-list.txt); do
         fi
         git clone ${MOD_INFO[1]}
     fi
-    cd $CUR_DIR
+    cd $SAVED_WD
 done
