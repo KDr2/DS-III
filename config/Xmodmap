@@ -1,0 +1,22 @@
+!
+! xmodmap config
+!
+
+! +
+!================================
+! map CapLock to Ctrl_L
+!--------------------------------
+remove Lock = Caps_Lock
+keysym Caps_Lock = Control_L
+add Control = Control_L
+!================================
+
+! +
+!================================
+! swap Ctrl_R and Alt_R
+!--------------------------------
+remove Mod1 = Alt_R
+add Control = Alt_R
+remove Control = Control_R
+add Mod1 = Control_R
+!================================
