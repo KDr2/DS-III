@@ -1,0 +1,12 @@
+#!/bin/bash
+#-*- mode: sh -*-
+
+echo ${PG_SRC_ROOT:=$HOME/Work/opensrc/postgres} &>/dev/null
+echo ${PG_DEST_DIR:=$HOME/programs/postgres} &>/dev/null
+
+
+mkdir -p $PG_SRC_ROOT/build/dev
+cd $PG_SRC_ROOT/build/dev
+$PG_SRC_ROOT/configure --prefix=$PG_DEST_DIR/dev \
+    --with-openssl --with-libxml --with-libxslt \
+    --enable-debug --enable-profiling

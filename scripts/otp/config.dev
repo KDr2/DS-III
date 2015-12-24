@@ -1,0 +1,39 @@
+#!/bin/bash
+#-*- sh -*-
+
+cd $HOME/Work/opensrc/otp
+
+if [[ $1 == "autoconf" ]]; then
+    ./otp_build autoconf
+fi
+
+./configure --enable-threads --enable-smp-support \
+            --enable-kernel-poll \
+            --enable-sctp \
+            --enable-hipe \
+            --with-dynamic-trace=systemtap  --enable-vm-probes \
+            --with-ssl --enable-shared-zlib \
+            --enable-dirty-schedulers \
+            --without-javac \
+            --prefix=$HOME/programs/otp/develop
+
+
+#-------------------------------------------------
+# other options:
+# #halfword, conflict with HiPE
+# --enable-halfword-emulator
+
+#-------------------------------------------------
+# For DEBUG:
+# cd $ERL_TOP/erts/emulator
+# make debug FLAVOR=(plain|smp)
+# run `$ERL_TOP/bin/cerl -debug'
+# gdb script:  $ERL_TOP/erts/etc/unix/etp-commands
+
+# SKIP lib/<_>
+#   - appmon
+#   - docbuilder
+#   - inviso
+#   - pman
+#   - toolbar
+#   - tv

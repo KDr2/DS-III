@@ -1,0 +1,26 @@
+# $HOME/.config/matplotlib/matplotlibrc
+# http://matplotlib.org/faq/usage_faq.html#what-is-a-backend
+
+#PYTHONPATH: /usr/lib/python2.7/dist-packages/gtk-2.0:/usr/lib/python2.7/dist-packages:/usr/lib/pymodules/python2.7
+
+backend: GTKCairo
+
+# RENDERS:
+# AGG     png                     raster graphics – high quality images using the Anti-Grain Geometry engine
+# PS      ps eps                  vector graphics – Postscript output
+# PDF     pdf                     vector graphics – Portable Document Format
+# SVG     svg                     vector graphics – Scalable Vector Graphics
+# Cairo   png ps pdf svg ...      vector graphics – Cairo graphics
+# GDK     png jpg tiff ...        raster graphics – the Gimp Drawing Kit
+
+# BACKENDS:
+# GTKAgg 	    Agg rendering to a GTK 2.x canvas (requires PyGTK)
+# GTK3Agg     Agg rendering to a GTK 3.x canvas (requires PyGObject)
+# GTK         GDK rendering to a GTK 2.x canvas (not recommended) (requires PyGTK)
+# GTKCairo    Cairo rendering to a GTK 2.x canvas (requires PyGTK and pycairo)
+# GTK3Cairo   Cairo rendering to a GTK 3.x canvas (requires PyGObject and pycairo)
+# WXAgg       Agg rendering to to a wxWidgets canvas (requires wxPython)
+# WX          Native wxWidgets drawing to a wxWidgets Canvas (not recommended) (requires wxPython)
+# TkAgg       Agg rendering to a Tk canvas (requires TkInter)
+# Qt4Agg      Agg rendering to a Qt4 canvas (requires PyQt4)
+# macosx      Cocoa rendering in OSX windows (presently lacks blocking show() behavior when matplotlib is in non-interactive mode)
