@@ -1,0 +1,21 @@
+#!/bin/bash
+
+PREFIX=$HOME/programs/rust
+
+if [ -e /usr/lib/x86_64-linux-gnu/libjemalloc_pic.a ]; then
+    JEMALLOC_OPT=--jemalloc-root=/usr/lib/x86_64-linux-gnu
+fi
+
+if [ -e $PREFIX/bin/rustc ]; then
+    #LOCAL_RUST="--enable-local-rust --local-rust-root=$PREFIX"
+    :
+fi
+
+./configure \
+    --prefix=$PREFIX $LOCAL_RUST $JEMALLOC_OPT \
+    --enable-fast-make \
+    --enable-ccache \
+    --enable-rpath \
+    --llvm-root=/usr/lib/llvm-3.6 \
+    --enable-valgrind \
+    --disable-docs

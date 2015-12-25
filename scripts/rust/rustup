@@ -1,0 +1,6 @@
+#!/bin/bash
+
+CHANNEL=${1-stable} #stable|beta|nightly
+PREFIX=$HOME/programs/rust-$CHANNEL
+curl -sS https://static.rust-lang.org/rustup.sh -o /tmp/rustup.sh
+bash /tmp/rustup.sh --prefix=$PREFIX --channel=$CHANNEL --yes
