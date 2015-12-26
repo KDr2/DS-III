@@ -43,6 +43,7 @@ function string-append() {
         return
     fi
     #echo $(string-join "$REAL_IFS" "$FULL_STRING" "$2")
+    [[ -z $1 ]] && { echo "$2"; return; }
     echo "$1${REAL_IFS}$2"
 }
 
@@ -61,6 +62,7 @@ function string-prepend() {
         return
     fi
     #echo $(string-join "$REAL_IFS" "$FULL_STRING" "$2")
+    [[ -z $1 ]] && { echo "$2"; return; }
     echo "$2${REAL_IFS}$1"
 }
 

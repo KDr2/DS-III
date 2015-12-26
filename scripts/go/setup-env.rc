@@ -23,17 +23,17 @@
 #
 
 function go-env-setup() {
-    local ARG1=${1-dev}
-    if [[ $(echo $ARG1 | tr '[:upper:]' '[:lower:]') == 'gopath' ]]; then #cmd gopath
+    if [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == 'gopath' ]]; then #cmd gopath
         string-prepend-to-var GOPATH ${2-$PWD}
+        string-prepend-to-var PATH ${2-$PWD}/bin
         return
-    elif [[ $(echo $ARG1 | tr '[:upper:]' '[:lower:]') == '-gopath' ]]; then #cmd -gopath
+    elif [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == '-gopath' ]]; then #cmd -gopath
         string-remove-from-var GOPATH ${2-$PWD}
+        string-remove-from-var PATH ${2-$PWD}/bin
         return
-    else
-        local VERSION=$ARG1
     fi
 
+    go-env-off -silent
 
     case $(uname -m|tr '[:upper:]' '[:lower:]') in
         amd64|x84_64)
@@ -51,26 +51,50 @@ function go-env-setup() {
     esac
     export GOOS=$(uname -s|tr '[:upper:]' '[:lower:]')
 
-    if [[ $VERSION == "dev" ]]; then
+    if [[ $1 == "dev" ]]; then
         export GOROOT=$HOME/Work/opensrc/go
         string-prepend-to-var GOPATH "$HOME/Work/opensrc/go-tools"
         local SYSTEM_GO=$($DS3_HOME/auxil/find-versions.pl /usr/local/go- -max)
         [[ -n $SYSTEM_GO ]] && export GOROOT_BOOTSTRAP=$SYSTEM_GO
+        echo "[GO] dev enviroment is set!"
+    elif [[ -d /usr/local/go-$1 ]]; then
+        export GOROOT="/usr/local/go-$1"
     else
-        export GOROOT=/usr/local/go-$VERSION
+        local GO_ENV
+        echo "[GO] Please select a GOROOT:"
+        select GO_ENV in $HOME/Work/opensrc/go /usr/local/go-*; do
+            [[ $GO_ENV == $HOME/Work/opensrc/go ]] && { ds3 env go dev; return; }
+            [[ -d $GO_ENV ]] && { export GOROOT=$GO_ENV; break; }
+        done
     fi
 
     # add $GOROOT/bin to PATH
-    string-prepend-to-var PATH "$GOROOT/bin"
+    if [[ -n $GOROOT ]]; then
+        string-prepend-to-var PATH "$GOROOT/bin"
+        echo "[GO] using GOROOT $GOROOT"
+    else
+        go-env-off -silent
+        echo "[GO] no GOROOT is set, all GO env variables are unset."
+        return 1
+    fi
 }
 
 
 function go-env-off() {
-    string-remove-from-var PATH "$GOROOT/bin"
+    [[ -n $GOROOT ]] && string-remove-from-var PATH "$GOROOT/bin"
     unset GOARCH
     unset GOOS
     unset GOROOT
     unset GOROOT_BOOTSTRAP
+
+    SAVED_IFS="$IFS"
+    IFS=:
+    local GOPATH_ITEMS=($GOPATH)
+    IFS="$SAVED_IFS"
+    for ITEM in "${GOPATH_ITEMS[@]}"; do
+        string-remove-from-var PATH ${ITEM}/bin
+    done
     unset GOPATH
-    echo "[GO] Go env variables are unset."
+
+    [[ $1 == "-silent" ]] || echo "[GO] Go env variables are unset."
 }
