@@ -16,7 +16,7 @@
 #
 
 #
-#  ds3 env go <VERSION>
+#  ds3 env go [dev|version]
 #  ds3 env go gopath [PATH]
 #  ds3 env go -gopath [PATH]
 #  ds3 env off go
@@ -62,7 +62,8 @@ function go-env-setup() {
     else
         local GO_ENV
         echo "[GO] Please select a GOROOT:"
-        select GO_ENV in $HOME/Work/opensrc/go /usr/local/go-*; do
+        local SYS_GO=($(find /usr/local/ -mindepth 1 -maxdepth 1 -type d -name "go-*"))
+        select GO_ENV in $HOME/Work/opensrc/go "${SYS_GO[@]}"; do
             [[ $GO_ENV == $HOME/Work/opensrc/go ]] && { ds3 env go dev; return; }
             [[ -d $GO_ENV ]] && { export GOROOT=$GO_ENV; break; }
         done
