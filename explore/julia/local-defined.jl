@@ -1,17 +1,20 @@
 
 
-macro isdef_local(sym)
-    sym::Symbol
+macro isdef_local(sym::Symbol)
     quote
         begin
-            func = () -> $(sym)
-            string(func.env[1]) != "Box(#undef)"
+            func = () -> $(esc(sym))
+            length(func.env) == 1 && string(func.env[1]) != "Box(#undef)"
         end
     end
 end
 
 
-function test(b)
+function test_0()
+    (@isdef_local v1) && println("v1 is defined")
+end
+
+function test_1(b)
     if b
         v1 = 1
     else
@@ -21,6 +24,6 @@ function test(b)
     (@isdef_local v2) && println("v2 is defined")
 end
 
-
-test(false)
-test(true)
+test_0()
+test_1(false)
+test_1(true)
