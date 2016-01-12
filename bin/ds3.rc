@@ -35,7 +35,7 @@ function ds3() {
         return 254
     }
 
-    local CMD=$(tr [[:lower:]] [[:upper:]] <<< $1)
+    local CMD=$(tr [:lower:] [:upper:] <<< $1)
     shift 1
 
     case $CMD in

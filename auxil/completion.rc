@@ -72,7 +72,7 @@ function _ds3_auto_completion() {
 
     # argument-1
     if [[ $COMP_CWORD -ge 2 ]]; then
-        local CUR_CMD=$(tr [[:upper:]] [[:lower:]] <<< ${COMP_WORDS[1]})
+        local CUR_CMD=$(tr [:upper:] [:lower:] <<< ${COMP_WORDS[1]})
         _ds3_auto_completion_$CUR_CMD
         return
     fi
