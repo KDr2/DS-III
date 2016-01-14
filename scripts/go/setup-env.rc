@@ -24,12 +24,14 @@
 
 function go-env-setup() {
     if [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == 'gopath' ]]; then #cmd gopath
-        string-prepend-to-var GOPATH ${2-$PWD}
-        string-prepend-to-var PATH ${2-$PWD}/bin
+        local GP_ITEM=${2-$PWD}
+        string-prepend-to-var GOPATH ${GP_ITEM%/src/*}
+        string-prepend-to-var PATH ${GP_ITEM%/src/*}/bin
         return
     elif [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == '-gopath' ]]; then #cmd -gopath
-        string-remove-from-var GOPATH ${2-$PWD}
-        string-remove-from-var PATH ${2-$PWD}/bin
+        local GP_ITEM=${2-$PWD}
+        string-remove-from-var GOPATH ${GP_ITEM%/src/*}
+        string-remove-from-var PATH ${GP_ITEM%/src/*}/bin
         return
     fi
 
