@@ -1,0 +1,4 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+JUPYTER_CONFIG_DIR=$PWD jupyter notebook "$@" --config=$PWD/config.py
