@@ -1,0 +1,4 @@
+ipykernel/comm/comm.py
+ipykernel/comm/manager.py
+notebook/static/services/kernels/comm.js
+notebook/static/services/kernels/kernel.js

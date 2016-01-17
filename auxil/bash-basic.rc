@@ -12,7 +12,7 @@ HISTCONTROL=ignoreboth
 # window size 
 shopt -s checkwinsize
 # for ** expand
-shopt -s globstar
+shopt -s globstar &>/dev/null
 
 ### PS1
 case "$TERM" in
