@@ -1,0 +1,14 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+HERE=$(dirname $0)
+
+FILES=(
+    .htaccess
+    index.html
+    scripts
+)
+
+for FILE in "${FILES[@]}"; do
+    scp -r "$HERE/../$FILE" kdr2@kdr2.com:~/cxan
+done

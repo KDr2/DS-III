@@ -1,0 +1,6 @@
+# -*- mode: org; mode: auto-fill; -*-
+#+TITLE: cxan.kdr2.com
+#+AUTHOR: KDr2
+
+#+OPTIONS: num:nil
+#+OPTIONS:   ^:{}
