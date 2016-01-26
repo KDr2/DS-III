@@ -1,0 +1,18 @@
+#-*- mode: sh -*-
+
+function R-env-setup() {
+    local DEV_LIB=$HOME/.R-dev
+    local NOR_LIB=$HOME/.R-lib
+
+    if [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == 'dev' ]]; then # dev
+        string-remove-from-var R_LIBS_USER $NOR_LIB
+        string-prepend-to-var R_LIBS_USER $DEV_LIB
+    else
+        string-remove-from-var R_LIBS_USER $DEV_LIB
+        string-prepend-to-var R_LIBS_USER $NOR_LIB
+    fi
+}
+
+function R-env-off() {
+    echo "[R] R_LIBS_USER=${R_LIBS_USER}"
+}
