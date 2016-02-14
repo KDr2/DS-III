@@ -1,10 +1,10 @@
 #!/bin/bash
 # -*- mode: sh -*-
 
-[[ $- == *i* ]] || {
-    echo "ds3.rc must be run in interactive mode!"
-    exit 255
-}
+# [[ $- == *i* ]] || {
+#    echo "ds3.rc must be run in interactive mode!"
+#    exit 255
+# }
 
 function import-rcs() {
     local RC_SCRIPTS=(

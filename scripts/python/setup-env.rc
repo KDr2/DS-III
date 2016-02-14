@@ -1,7 +1,9 @@
 #-*- mode: sh -*-
 
 function python-env-setup() {
-    local CONDA_MAIN=($(find $HOME/programs  -mindepth 1 -maxdepth 1 -type d -name "anaconda*" 2>/dev/null))
+    local CONDA_USER=($(find $HOME/programs  -mindepth 1 -maxdepth 1 -type d -name "anaconda*" 2>/dev/null))
+    local CONDA_OPT=($(find /opt/programs  -mindepth 1 -maxdepth 1 -type d -name "anaconda*" 2>/dev/null))
+    local CONDA_MAIN=("${CONDA_OPT[@]}" "${CONDA_USER[@]}")
     local VIRTUALENV=($(find $HOME/.virtualenvs  -mindepth 1 -maxdepth 1 -type d 2>/dev/null))
 
     local _PYTHON_HOME
