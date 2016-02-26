@@ -1,12 +1,5 @@
 # brew install llvm36
 OPENBLAS_DYNAMIC_ARCH=0
 USE_SYSTEM_LLVM=1
-LLVM_CONFIG = /usr/local/bin/llvm-config-3.6
-#CC=gcc-4.9
-#CXX=g++-4.9
-#CFLAGS += -g
-#CFLAGS += -DGCTIME
-#CFLAGS += -DGC_FINAL_STATS
-#CFLAGS += -DMEMPROFILE
-#CFLAGS += -DOBJPROFILE
+LLVM_CONFIG = /usr/local/bin/llvm-config-3.3
 CXXFLAGS += -g
