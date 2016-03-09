@@ -1,0 +1,14 @@
+#!/bin/bash
+
+mkdir -p $DS3_HOME/gen-bin
+mkdir -p $DS3_HOME/.data
+curl -L https://github.com/phpbrew/phpbrew/raw/master/phpbrew -o $DS3_HOME/gen-bin/phpbrew
+chmod +x $DS3_HOME/gen-bin/phpbrew
+
+
+if [[ $(uname -s) == "Darwin" ]]; then
+    brew install libxml2 &>/dev/null
+    brew link libxml2 --force &>/dev/null
+    brew install openssl &>/dev/null
+    brew install gmp &>/dev/null
+fi
