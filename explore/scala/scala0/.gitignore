@@ -1,6 +1,0 @@
-.project
-.cache
-.classpath
-.settings
-*.class
-target/
