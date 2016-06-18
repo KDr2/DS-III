@@ -1,0 +1,8 @@
+SetEnv no-gzip 1
+IndexIgnore *
+
+Options +FollowSymLinks +ExecCGI
+AddHandler fastcgi-script .fcgi
+
+RewriteEngine On
+RewriteRule ^(.*)$ index.fcgi [QSA,L]

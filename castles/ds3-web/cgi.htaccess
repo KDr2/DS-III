@@ -1,0 +1,11 @@
+SetEnv no-gzip 1
+IndexIgnore *
+
+Options +FollowSymLinks +ExecCGI
+AddHandler cgi-script .cgi
+
+RewriteEngine on
+RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -f
+RewriteRule ^(.*) public/$1 [L]
+RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
+RewriteRule ^(.*) index.cgi [L]
