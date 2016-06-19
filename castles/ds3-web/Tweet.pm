@@ -57,11 +57,11 @@ sub strip_tags {
 
 sub html2json {
     my $text = shift;
-    my @tweets = split(qr#<hr/?>|<p.*?>.{0,1}</p>#, $text);
+    my @tweets = split(qr#<h\d.+?</h\d>|<hr/?>|<p.*?>.{0,1}</p>#, $text);
     @tweets = grep {!/^\s*$/} @tweets;
+    @tweets = grep {/^\d{8}[:：]/} @tweets;
     @tweets = map { s/^\s+|\s+$//g; $_ } @tweets;
     # @tweets = map { strip_tags($_) } @tweets;
-    shift @tweets;
     return @tweets;
 }
 
