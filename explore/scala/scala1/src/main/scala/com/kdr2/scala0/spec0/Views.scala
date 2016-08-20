@@ -27,5 +27,6 @@ object Views {
     //t1.i = 2;
     val t3 = new T3(10F);
     t3.f = 10.1F;
+    p(t1)
   }
 }
