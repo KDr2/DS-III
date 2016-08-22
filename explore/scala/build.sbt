@@ -1,5 +1,7 @@
 import sbt.Keys._
 
+resolvers += Resolver.typesafeIvyRepo("releases")
+
 val basicDepends = Build.libs(Seq(
   "org.scala-lang" % "scala-compiler" % "2.11.8",
   "org.scala-lang" % "scala-library" % "2.11.8",
@@ -9,6 +11,7 @@ val basicDepends = Build.libs(Seq(
 ))
 
 val sbtDepends = Build.libs(Seq(
+  "org.scala-sbt" % "main" % "0.13.11",
   "org.scala-sbt" % "interface" % "0.13.11",
   "org.scala-sbt" % "compiler-interface" % "0.13.11",
   "org.scala-sbt" % "compiler-integration" % "0.13.11",
