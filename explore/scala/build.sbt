@@ -44,6 +44,10 @@ lazy val jst = (project in file("scalajst")).settings(
   libraryDependencies ++= basicDepends
 ).enablePlugins(ScalaJSPlugin)
 
+Build.hello in s1 := {
+  (runMain in s1 in Compile).toTask(" com.kdr2.scala0.MainHello").value
+}
+
 Build.hello in jst := {
   println((name in jst).value)
   println("Hello!")

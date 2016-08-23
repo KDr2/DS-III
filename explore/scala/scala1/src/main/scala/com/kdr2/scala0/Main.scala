@@ -1,7 +1,6 @@
 package com.kdr2.scala0
 
-import com.kdr2.scala0.spec0.CallByName
-import com.kdr2.scala0.spec0.ATRunner
+import com.kdr2.scala0.spec0.{ATRunner, CallByName}
 
 object Main {
 
@@ -10,6 +9,15 @@ object Main {
     CallByName.call();
     ATRunner.run;
     spec0.say("message in package object");
+  }
+
+}
+
+
+object MainHello {
+
+  def main(args: Array[String]): Unit = {
+    println("Hello, Main!");
   }
 
 }
