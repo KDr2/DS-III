@@ -25,7 +25,7 @@ lazy val root = (project in file(".")).settings(
   scalaVersion := "2.11.8",
   libraryDependencies ++= sbtDepends,
   libraryDependencies ++= basicDepends
-)
+).aggregate(s1, jst) // make watchSources work for the sub--projects
 
 
 lazy val s1 = (project in file("scala1")).settings(
@@ -40,9 +40,19 @@ lazy val jst = (project in file("scalajst")).settings(
   name := "ScalaJST",
   version := "0.1",
   scalaVersion := "2.11.8",
-  libraryDependencies ++= Build.libs(Seq("org.scala-js" %%% "scalajs-dom" % "0.9.0")),
-  libraryDependencies ++= basicDepends
+  libraryDependencies ++= Build.libs(Seq(
+    "org.scala-js" %%% "scalajs-dom" % "0.9.0",
+    "be.doeraene" %%% "scalajs-jquery" % "0.9.0",
+    "org.singlespaced" %%% "scalajs-d3" % "0.3.3"
+  )),
+  libraryDependencies ++= basicDepends,
+  skip in packageJSDependencies := false,
+  jsDependencies ++= Seq(
+    "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
+    "org.webjars" % "d3js" % "3.5.16" / "3.5.16/d3.js"
+  )
 ).enablePlugins(ScalaJSPlugin)
+
 
 Build.hello in s1 := {
   (runMain in s1 in Compile).toTask(" com.kdr2.scala0.MainHello").value
