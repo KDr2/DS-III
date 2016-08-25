@@ -9,7 +9,7 @@ use JSON;
 
 get '/' => sub {
   my $c = shift;
-  $c->render(template => 'index');
+  $c->render(template => 'home');
 };
 
 get '/tweets' => sub {
@@ -36,5 +36,7 @@ __DATA__
 <!DOCTYPE html>
 <html>
   <head><title><%= title %></title></head>
-  <body><%= content %></body>
+  <body>
+  <%= content %>
+  </body>
 </html>

@@ -1,0 +1,2 @@
+Mojo::Server::FastCGI
+Mojolicious::Command::fastcgi

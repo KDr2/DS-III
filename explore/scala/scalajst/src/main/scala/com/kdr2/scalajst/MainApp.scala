@@ -1,5 +1,6 @@
 package com.kdr2.scalajst
 
+import com.kdr2.scalajst.ds3.Sphere
 import org.scalajs.dom.raw.HTMLDocument
 import org.singlespaced.d3js.Ops._
 import org.singlespaced.d3js.d3
@@ -7,11 +8,15 @@ import org.singlespaced.d3js.d3
 import scala.scalajs.js
 import scala.scalajs.js.JSApp
 
+class Rotate(var x: Int, var y: Int)
+
 object MainApp extends JSApp {
   def main(): Unit = {
     println("Hello world!")
-    DOMGlobalScope.alert("haha")
+    // DOMGlobalScope.alert("hello")
     drawBars()
+    val ball = new Sphere(310.0)
+    ball.draw()
   }
 
   def drawBars(): Unit = {

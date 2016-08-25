@@ -53,6 +53,20 @@ lazy val jst = (project in file("scalajst")).settings(
   )
 ).enablePlugins(ScalaJSPlugin)
 
+Build.ds3webJS in jst := {
+  (fullOptJS in jst in Compile).toTask.value
+  val files = Seq("scalajst-jsdeps.min.js", "scalajst-opt.js", "scalajst-opt.js.map")
+  val currentDir = new java.io.File(".").getCanonicalFile
+  val baseDir = currentDir.getParentFile.getParentFile
+  IO.copy(
+    files.map(file => (
+      baseDir / "explore/scala/scalajst/target/scala-2.11" / file,
+      baseDir / "castles/ds3-web/public/generated-js" / file
+      )),
+    true,
+    true
+  )
+}
 
 Build.hello in s1 := {
   (runMain in s1 in Compile).toTask(" com.kdr2.scala0.MainHello").value

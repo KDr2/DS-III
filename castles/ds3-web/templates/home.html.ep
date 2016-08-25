@@ -1,0 +1,39 @@
+% layout 'default';
+% title 'The Death Star III';
+
+<style>
+ path {
+     fill: none;
+ }
+
+ path.graticule {
+     stroke: #999;
+     stroke-width: .5px;
+ }
+
+ circle {
+     fill: none;
+     stroke: #999;
+     cursor: move;
+     pointer-events: all;
+ }
+
+ div.container {
+     margin: auto;
+     width: 400px;
+ }
+
+ .center {
+     text-align: center;
+ }
+</style>
+
+<script type="text/javascript" src="/generated-js/scalajst-jsdeps.min.js"></script>
+<script type="text/javascript" src="/generated-js/scalajst-opt.js"></script>
+<script type="text/javascript">
+ $(function(){
+     com.kdr2.scalajst.ds3.Exporter().sphere("div.container", 400.0);
+ });
+</script>
+<h2 class="center">The Death Star III is Still Under Construction!</h2>
+<div class="container"></div>
