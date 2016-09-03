@@ -48,8 +48,8 @@ lazy val jst = (project in file("scalajst")).settings(
   libraryDependencies ++= basicDepends,
   skip in packageJSDependencies := false,
   jsDependencies ++= Seq(
-    "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
-    "org.webjars" % "d3js" % "3.5.16" / "3.5.16/d3.js"
+    "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js" minified "2.1.4/jquery.min.js" ,
+    "org.webjars" % "d3js" % "3.5.16" / "3.5.16/d3.js" minified "3.5.16/d3.min.js"
   )
 ).enablePlugins(ScalaJSPlugin)
 
