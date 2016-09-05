@@ -53,6 +53,8 @@ lazy val jst = (project in file("scalajst")).settings(
   )
 ).enablePlugins(ScalaJSPlugin)
 
+lazy val chewbacca = (project in file("chewbacca"))
+
 Build.ds3webJS in jst := {
   (fullOptJS in jst in Compile).toTask.value
   val files = Seq("scalajst-jsdeps.min.js", "scalajst-opt.js", "scalajst-opt.js.map")
