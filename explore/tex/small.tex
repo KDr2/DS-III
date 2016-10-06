@@ -1,0 +1,60 @@
+% small.tex
+\documentclass[unicode]{beamer}
+\usepackage{CJKutf8}
+\usetheme{Madrid}
+\title{A Beamer Slider}
+%\usepackage[unicode,pdftex]{hyperref}
+
+\author{KDr2}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+
+  \maketitle{}
+
+  \section{Outline}
+  \begin{frame}
+    \frametitle{Outline}
+    \setcounter{tocdepth}{4}
+    \tableofcontents
+  \end{frame}
+
+  \section{A Sample Slide}
+  \begin{frame}{A sample slide}
+
+    A displayed formula:
+
+    \[
+    \int_{-\infty}^\infty e^{-x^2} \, dx = \sqrt{\pi}
+    \]
+
+    An itemized list:
+    \begin{itemize}
+    \item itemized item 1
+    \item itemized item 2
+    \item itemized item 3
+    \end{itemize}
+
+    \begin{theorem}
+      In a right triangle, the square of hypotenuse equals
+      the sum of squares of two other sides.
+    \end{theorem}
+  \end{frame}
+
+  \section{A Simple 示例}
+  \begin{frame}{A sample 示例}
+    Beamer示例
+    An itemized list:
+    \begin{itemize}
+    \item itemized item 1
+    \item itemized item 2
+    \item itemized item 3
+    \end{itemize}
+    \pause{}
+    \begin{theorem}
+      In a right triangle, the square of hypotenuse equals
+      the sum of squares of two other sides.
+    \end{theorem}
+  \end{frame}
+\end{CJK}
+\end{document}

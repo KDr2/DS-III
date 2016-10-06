@@ -1,0 +1,31 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{CJKutf8}
+\usepackage[unicode]{hyperref}
+
+\def\xvec{X_1, X_2, \ldots X_n}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+%\CJKfamily{Wenquanyi Micro Hei}
+\tableofcontents
+
+\section{中文}
+\Huge{中文}\normalsize
+$\xvec$
+\\
+\def\a{\b}
+\def\b{A\def\a{B\def\a{C\def\a{\b}}}}
+\def\puzzle{\a\a\a\a\a}
+\puzzle
+\\
+\def\func #1 #2 {func(#1,#2);}
+\def\row#1{(#1_1,\ldots,#1_n)}
+\TeX a
+\func ab `cd'
+$\row{\bf x}$
+\font\xtwot=cmr9 scaled 4000
+{\xtwot a}
+\newpage
+
+\end{CJK}
+\end{document}

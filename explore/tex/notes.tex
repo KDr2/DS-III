@@ -1,0 +1,31 @@
+% -*- mode: latex; mode: auto-fill -*-
+
+\documentclass[10pt,a4paper]{article}
+\usepackage{CJKutf8}
+\usepackage[unicode]{hyperref}
+\usepackage{graphicx}
+
+\title{这里是标题}
+\author{这里是作者}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+  \maketitle{}
+  \begin{abstract}
+    这里是摘要！
+  \end{abstract}
+
+  \tableofcontents{}
+  \setcounter{tocdepth}{2}
+
+  \newpage
+  %\chapter*{第一章}
+  \section{中文}
+  \subsection{第二节}
+  \subsubsection{Third}
+  \Huge{中文2}
+  \normalsize{} 哈哈，这里才识正文
+  \newpage
+
+\end{CJK}
+\end{document}
