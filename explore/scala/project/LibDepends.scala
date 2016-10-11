@@ -26,7 +26,7 @@ object LibDepends {
     "compiler-interface",
     "compiler-integration",
     "sbt"
-  ).map("org.scala-sbt" %% _ % "0.13.11"))
+  ).map("org.scala-sbt" % _ % "0.13.11"))
 
   val akkaDepends = libs(Seq(
     "akka-actor",
