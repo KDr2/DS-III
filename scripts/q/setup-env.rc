@@ -1,0 +1,20 @@
+#-*- mode: sh -*-
+
+function q-env-setup() {
+    if [[ -d $HOME/programs/q ]]; then
+        QHOME=$HOME/programs/q
+    else
+        echo "[KDB+/Q] q not found."
+        return 1
+    fi
+    export QHOME
+    alias q="rlwrap $QHOME/l32/q"
+    echo "[KDB+/Q] QHOME is set to $QHOME"
+}
+
+function q-env-off() {
+    string-remove-from-var PATH $JULIA_HOME
+    unset QHOME
+    unalias q
+    echo "[KDB+/Q] QHOME is unset."
+}
