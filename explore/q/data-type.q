@@ -2,6 +2,7 @@
 type_tab: ([t:`symbol$()]; type.id:`int$(); name:`symbol$(); size:`int$(); null.val:`symbol$(); literal:`symbol$())
 
 `type_tab insert (`b;     1; `boolean;  1; `$"";      `$"1b");
+`type_tab insert (`g ;    2; `guid;    16; `$"`0Ng";  `$"");
 `type_tab insert (`x;     4; `byte;     1; `$"";      `$"0xff");
 `type_tab insert (`h;     5; `short;    2; `$"0Nh";   `$"23h");
 `type_tab insert (`i;     6; `int;      4; `$"0N";    `$"23i");
@@ -17,6 +18,8 @@ type_tab: ([t:`symbol$()]; type.id:`int$(); name:`symbol$(); size:`int$(); null.
 `type_tab insert (`v;    18; `second;   4; `$"0Nv";   `$"08:32:53");
 `type_tab insert (`t;    19; `time;     4; `$"0Nt";   `$"09:10:35.023");
 `type_tab insert (`$"*"; 20; `enum;     4; `$"`s$.."; `$"`s$`b, where s:`a`b");
+`type_tab insert (`$"*"; 98; `table;    0; `$"";      `$"([]k:`a`b`c; d:1 2 3)");
+`type_tab insert (`$"*"; 99; `dict;     0; `$"";      `$"`a`b`c!1 2 3");
 
 -1 "-----------------------------------------------------";
 
