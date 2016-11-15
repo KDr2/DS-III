@@ -1,6 +1,6 @@
 [user]
 	name = KDr2
-	email = killy.draw@gmail.com
+	email = zhuo.dev@gmail.com
 [color]
 	ui = auto
 [alias]
@@ -12,7 +12,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
 [format]
-  pretty = format:'%h : %s - %aN'
-
+	pretty = format:'%h : %s - %aN'
 [push]
 	default = matching

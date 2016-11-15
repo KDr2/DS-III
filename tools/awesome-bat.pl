@@ -11,7 +11,7 @@ my $threshold = 23;
 # setup ENV
 my $wm_pid = `pgrep x-window-manage` =~ s/\s*//gr;
 my $dbus_session = `grep -z DBUS_SESSION_BUS_ADDRESS /proc/${wm_pid}/environ|cut -d= -f2-` =~ s/\s*//gr;
-$ENV{DBUS_SESSION_BUS_ADDRESS}=$dbus_session;
+$ENV{DBUS_SESSION_BUS_ADDRESS} = $dbus_session;
 
 # check battery status
 open(ACPITOOL, "-|", "acpitool");
