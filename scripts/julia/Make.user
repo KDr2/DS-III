@@ -24,12 +24,12 @@ USE_SYSTEM_MPFR=1
 # LLVM_CONFIG = /usr/bin/llvm-config-3.6
 LLVM_CONFIG = /usr/bin/llvm-config-3.8
 
-# CC=clang
-# CXX=clang++
+override CC = gcc-5
+override CXX = g++-5
+# override CXX=clang++
 # CFLAGS += -g
 # CFLAGS += -DGCTIME
 # CFLAGS += -DGC_FINAL_STATS
 # CFLAGS += -DMEMPROFILE
 # CFLAGS += -DOBJPROFILE
-
-CXXFLAGS += -g
+# CXXFLAGS += -g
