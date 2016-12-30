@@ -9,9 +9,34 @@ if [[ ! -d $GOROOT ]]; then
     git clone git@github.com:golang/go.git $GOROOT
 fi
 
-export GO_TOOL_PATH=$HOME/Work/opensrc/go-tools
 
-if [[ ! -d $GO_TOOL_PATH/src/golang.org/x/tools ]]; then
-    mkdir -p $GO_TOOL_PATH/src/golang.org/x/tools
-    git clone git@github.com:golang/tools.git $GO_TOOL_PATH/src/golang.org/x/tools
-fi
+# deal sub repos
+# https://golang.org/pkg/#subrepo
+# benchmarks — benchmarks to measure Go as it is developed.
+# blog — blog.golang.org's implementation.
+# build — build.golang.org's implementation.
+# crypto — additional cryptography packages.
+# debug — an experimental debugger for Go.
+# image — additional imaging packages.
+# mobile — experimental support for Go on mobile platforms.
+# net — additional networking packages.
+# sys — packages for making system calls.
+# text — packages for working with text.
+# tools — godoc, goimports, gorename, and other tools.
+# tour — tour.golang.org's implementation.
+# exp — experimental and deprecated packages (handle with care; may change without warning).
+
+# list I need:
+export GO_X_SPACE=$HOME/Work/opensrc/gospace
+
+XREPOS=(benchmarks crypto debug image mobile net sys text tools exp)
+for XREPO in ${XREPOS[@]}; do
+    if [[ ! -d $GO_X_SPACE/src/golang.org/x/$XREPO ]]; then
+        mkdir -p $GO_X_SPACE/src/golang.org/x/$XREPO
+        git clone git@github.com:golang/$XREPO.git $GO_X_SPACE/src/golang.org/x/$XREPO
+    else
+        cd $GO_X_SPACE/src/golang.org/x/$XREPO
+        git pull
+        cd -
+    fi
+done
