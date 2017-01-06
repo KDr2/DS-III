@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
 use Encode qw(encode decode);
-use Tweet;
+use TextSharing;
 use JSON;
 
 # Documentation browser under "/perldoc"
@@ -15,7 +15,7 @@ get '/' => sub {
 get '/tweets' => sub {
     my $c = shift;
     my $cb = $c->param("callback");
-    my $tweets = Tweet->get_tweets;
+    my $tweets = TextSharing->get_tweets;
     if (!$cb) {
         $c->render(json => $tweets);
     } else {
