@@ -38,8 +38,13 @@ sub entry_to_text {
     my $entry = shift;
     my $summary = $_->property("summary")->[0]->value();
     my $desc = $_->property("description")->[0]->value();
+    my $url = $_->property("url") ? $_->property("url")->[0]->value() : undef;
     my $date = substr($_->property("dtstart")->[0]->value(), 0, 8);
-    return "$date: $desc";
+    $summary = $summary ? ", $summary" : "";
+    $desc = $desc? ": $desc" : "";
+    $url = $url ? " [$url]" : "";
+
+    return $date . $summary . $desc . $url;
 }
 
 
