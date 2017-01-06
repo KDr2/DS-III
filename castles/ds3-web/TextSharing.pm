@@ -11,7 +11,8 @@ use Data::Dumper;
 use Mojo::UserAgent;
 use Data::ICal;
 
-my $ical = "https://calendar.zoho.com/ical/6d016b5000420299bb074a12ade0806db28849a820781988902c70c49eff786e48be18500888ced649addd66ff58b76c";
+my $ical = "https://calendar.zoho.com/ical/" .
+    "6d016b5000420299bb074a12ade0806db28849a820781988902c70c49eff786e48be18500888ced649addd66ff58b76c";
 
 sub fetch_data_mojo {
     my $ua = Mojo::UserAgent->new;
@@ -50,6 +51,3 @@ sub get_tweets {
 }
 
 1;
-
-
-
