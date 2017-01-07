@@ -57,16 +57,16 @@ sub strip_tags {
 
 sub html2json {
     my $text = shift;
-    my @tweets = split(qr#<h\d.+?</h\d>|<hr/?>|<p.*?>.{0,1}</p>#, $text);
-    @tweets = grep {!/^\s*$/} @tweets;
-    @tweets = map { s/^\s+|\s+$//g; $_ } @tweets;
-    @tweets = grep {/^<p.+?>\d{8}[:\x{ff1a}]/} @tweets;
-    # @tweets = map { strip_tags($_) } @tweets;
-    return @tweets;
+    my @moments = split(qr#<h\d.+?</h\d>|<hr/?>|<p.*?>.{0,1}</p>#, $text);
+    @moments = grep {!/^\s*$/} @moments;
+    @moments = map { s/^\s+|\s+$//g; $_ } @moments;
+    @moments = grep {/^<p.+?>\d{8}[:\x{ff1a}]/} @moments;
+    # @moments = map { strip_tags($_) } @moments;
+    return @moments;
 }
 
 
-sub get_tweets {
+sub get_moments {
     return [html2json(get_html($tweet_doc_id))];
 }
 

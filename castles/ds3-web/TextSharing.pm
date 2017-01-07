@@ -48,7 +48,7 @@ sub entry_to_text {
 }
 
 
-sub get_tweets {
+sub get_moments {
     my $calendar = Data::ICal->new(data => fetch_data(), rfc_strict => 1, vcal10 => 0);
     my $entries = $calendar->entries();
     my @texts = map { entry_to_text($_) } @{$entries};

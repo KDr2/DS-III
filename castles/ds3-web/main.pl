@@ -12,14 +12,14 @@ get '/' => sub {
   $c->render(template => 'home');
 };
 
-get '/tweets' => sub {
+get '/moments' => sub {
     my $c = shift;
     my $cb = $c->param("callback");
-    my $tweets = TextSharing->get_tweets;
+    my $moments = TextSharing->get_moments;
     if (!$cb) {
-        $c->render(json => $tweets);
+        $c->render(json => $moments);
     } else {
-        my $text = $cb . "(" . decode('UTF-8', encode_json($tweets)) . ")";
+        my $text = $cb . "(" . decode('UTF-8', encode_json($moments)) . ")";
         $c->render(text => $text);
     }
 };
