@@ -7,7 +7,7 @@ curl -L https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch
      -o $DS3_HOME/.data/sbt-launch.jar
 cat > $DS3_HOME/gen-bin/sbt <<EOF
 #!/bin/bash
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled"
+SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -Dsbt.override.build.repos=true"
 java \$SBT_OPTS -jar \$DS3_HOME/.data/sbt-launch.jar "\$@"
 EOF
 

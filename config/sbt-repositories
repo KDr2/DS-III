@@ -1,0 +1,13 @@
+#
+# link me to $HOME/.sbt/repositories 
+#
+
+[repositories]
+local
+repox-maven:  http://repox.gtan.com:8078/
+repox-ivy:  http://repox.gtan.com:8078/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]
+# uk: http://uk.maven.org/maven2/
+typesafe: http://repo.typesafe.com/typesafe/ivy-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext], bootOnly
+sonatype-oss-releases
+maven-central
+sonatype-oss-snapshots
