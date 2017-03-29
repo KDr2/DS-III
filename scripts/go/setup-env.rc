@@ -25,6 +25,8 @@
 function go-env-setup() {
     if [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == 'gopath' ]]; then #cmd gopath
         local GP_ITEM=${2-$PWD}
+        string-remove-from-var GOPATH ${GP_ITEM%/src/*}
+        string-remove-from-var PATH ${GP_ITEM%/src/*}/bin
         string-prepend-to-var GOPATH ${GP_ITEM%/src/*}
         string-prepend-to-var PATH ${GP_ITEM%/src/*}/bin
         return
@@ -66,8 +68,8 @@ function go-env-setup() {
         echo "[GO] Please select a GOROOT:"
         local SYS_GO=($($DS3_HOME/auxil/find-versions.pl /usr/local/go-))
         local SYS_GO_MACOSX_BREW=($($DS3_HOME/auxil/find-versions.pl "/usr/local/Cellar/go/"))
-        select GO_ENV in $HOME/Work/opensrc/go "${SYS_GO[@]}" "${SYS_GO_MACOSX_BREW[@]}"; do
-            [[ $GO_ENV == $HOME/Work/opensrc/go ]] && { ds3 env go dev; return; }
+        select GO_ENV in $HOME/Work/golang/go "${SYS_GO[@]}" "${SYS_GO_MACOSX_BREW[@]}"; do
+            [[ $GO_ENV == $HOME/Work/golang/go ]] && { ds3 env go dev; return; }
             [[ -d $GO_ENV ]] && { export GOROOT=$GO_ENV; break; }
         done
     fi
@@ -75,6 +77,8 @@ function go-env-setup() {
     # add $GOROOT/bin to PATH
     if [[ -n $GOROOT ]]; then
         string-prepend-to-var PATH "$GOROOT/bin"
+        string-prepend-to-var GOPATH $HOME/Work/golang
+        string-prepend-to-var PATH $HOME/Work/golang/bin
         echo "[GO] using GOROOT $GOROOT"
     else
         go-env-off -silent

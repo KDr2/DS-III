@@ -5,7 +5,7 @@ use warnings;
 
 my $prefix = $ARGV[0];
 exit 1 unless $prefix =~ m/^(.+?)\/([^\/]*)$/i;
-my @versions = `find $1 -mindepth 1 -maxdepth 1 -name "$2*"`;
+my @versions = `find $1 -mindepth 1 -maxdepth 1 -name "$2*" 2>/dev/null`;
 exit 1 unless @versions;
 
 @versions = map { s/\Q$prefix\E//r } @versions;
