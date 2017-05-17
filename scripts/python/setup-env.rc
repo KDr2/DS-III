@@ -1,42 +1,22 @@
 #-*- mode: sh -*-
 
 function python-env-setup() {
-    local CONDA_USER=($(find $HOME/programs  -mindepth 1 -maxdepth 1 -type d -name "anaconda*" 2>/dev/null))
-    local CONDA_OPT=($(find /opt/programs  -mindepth 1 -maxdepth 1 -type d -name "anaconda*" 2>/dev/null))
-    local CONDA_MAIN=("${CONDA_OPT[@]}" "${CONDA_USER[@]}")
-    local VIRTUALENV=($(find $HOME/.virtualenvs  -mindepth 1 -maxdepth 1 -type d 2>/dev/null))
-
-    local _PYTHON_HOME
-    echo "[PYTHON] Please select a env:"
-    python-env-off silent
-    select _PYTHON_HOME in "${CONDA_MAIN[@]}" "${VIRTUALENV[@]}"; do
-        [[ -d $_PYTHON_HOME ]] && {
-            if [[ "$_PYTHON_HOME" == "$HOME/.virtualenvs" ]]; then
-                source $_PYTHON_HOME/bin/activate
-            else
-                #break;
-                local ENV
-                if [[ -z "$1" ]]; then
-                    ENV="$_PYTHON_HOME"
-                else
-                    #ENV="$_PYTHON_HOME/envs/$1"
-                    ENV="$1"
-                fi
-                source $_PYTHON_HOME/bin/activate $ENV && {
-                    echo "[PYTHON] Using python env: $ENV."
-                }
-                return;
-            fi
-        }
-    done
-    echo "[JAVA] JAVA_HOME is not set or changed."
+    if [ -z $PYENV_ROOT ]; then
+        export PYENV_ROOT="$HOME/.pyenv"
+        string-prepend-to-var PATH $PYENV_ROOT/bin
+        string-prepend-to-var PATH $PYENV_ROOT/libexec
+        eval "$(pyenv init -)"
+    fi
+    echo "[PYTHON] pyenv has been setup."
     return 1
 }
 
+
 function python-env-off() {
-    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-        source deactivate &>/dev/null
-    fi
-    deactivate &>/dev/null
-    [[ "$1" != "silent" ]] && echo "[PYTHON] Python env variables are unset."
+    string-remove-from-var PATH $PYENV_ROOT/bin
+    string-remove-from-var PATH $PYENV_ROOT/libexec
+    unset PYENV_ROOT
+    echo "[PYTHON] pyenv is now disabled."
 }
+
+#env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.4.2
