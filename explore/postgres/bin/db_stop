@@ -1,0 +1,6 @@
+#!/bin/bash
+
+BIN_DIR=$(dirname $0)
+source $BIN_DIR/env.sh
+
+pg_ctl stop -D ${DATA_DIR} -p {PORT} -m fast
