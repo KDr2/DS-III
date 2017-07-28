@@ -1,2 +1,6 @@
+Mojolicious
 Mojo::Server::FastCGI
 Mojolicious::Command::fastcgi
+LWP::UserAgent
+JSON
+Data::ICal
