@@ -1,8 +1,10 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
 use Encode qw(encode decode);
-use TextSharing;
 use JSON;
+
+use TextSharing;
+use OpenSanctum;
 
 # Documentation browser under "/perldoc"
 # plugin 'PODRenderer';
@@ -11,6 +13,7 @@ get '/' => sub {
   my $c = shift;
   $c->render(template => 'home');
 };
+
 
 get '/moments' => sub {
     my $c = shift;
@@ -23,6 +26,27 @@ get '/moments' => sub {
         $c->render(text => $text);
     }
 };
+
+
+get '/open-sanctum/*page' => sub {
+    my $c = shift;
+    my $page = $c->stash('page');
+
+    my $perm = OpenSanctum::permission($c, $page);
+    if ($perm == 0) {
+        $c->res->headers->www_authenticate('Basic realm="The Open Part of KDr2\'s Workspace"');
+        $c->render(text => "", status => 401);
+        return;
+    } elsif ($perm == 2) {
+        $c->render(text => "Forbidden", status => 403);
+        return;
+    } elsif ($perm == 3) {
+        $c->render(text => "File Not Found", status => 404);
+        return;
+    }
+    $c->render(text => OpenSanctum::file_content($page), format=> $page =~ s/.*\.([^.]+)/$1/r);
+};
+
 
 app->start;
 __DATA__

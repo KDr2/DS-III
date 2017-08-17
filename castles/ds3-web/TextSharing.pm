@@ -1,6 +1,6 @@
 package TextSharing;
 
-use v5.16;
+use v5.22;
 use strict;
 use warnings;
 
