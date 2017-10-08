@@ -11,6 +11,7 @@ use File::Slurp;
 # plugin 'PODRenderer';
 
 my @ROOT = qw{
+                 /home/kdr2/Work/mine/sanctum/output/
                  /mnt/hgfs/D/work/mine/sanctum/output/
                  /home/kdr2/sanctum/
                  /mnt/d/work/mine/sanctum/
