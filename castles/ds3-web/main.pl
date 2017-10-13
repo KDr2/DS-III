@@ -4,6 +4,7 @@ use Encode qw(encode decode);
 use JSON;
 
 use TextSharing;
+use MomentsQuip;
 use OpenSanctum;
 
 # Documentation browser under "/perldoc"
@@ -19,6 +20,7 @@ get '/moments' => sub {
     my $c = shift;
     my $cb = $c->param("callback");
     my $moments = TextSharing->get_moments;
+    # my $moments = MomentsQuip->get_moments;
     if (!$cb) {
         $c->render(json => $moments);
     } else {
