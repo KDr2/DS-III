@@ -1,4 +1,4 @@
-package Tweet;
+package MomentsQuip;
 
 use v5.16;
 use strict;
@@ -11,7 +11,7 @@ use Data::Dumper;
 use HTML::TreeBuilder;
 use Mojo::UserAgent;
 
-use WebConfig;
+use Vault;
 
 sub fetch_data_mojo {
     state $host = 'https://platform.quip.com/1/threads/';
@@ -67,7 +67,7 @@ sub html2json {
 
 
 sub get_moments {
-    return [html2json(get_html($tweet_doc_id))];
+    return [html2json(get_html($moments_doc_id))];
 }
 
 1;

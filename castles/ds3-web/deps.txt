@@ -1,2 +1,9 @@
+Mojolicious
 Mojo::Server::FastCGI
 Mojolicious::Command::fastcgi
+LWP::UserAgent
+JSON
+Data::ICal
+LWP::Protocol::https
+HTML::TreeBuilder
+Smart::Comments

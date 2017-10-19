@@ -22,7 +22,8 @@ USE_SYSTEM_MPFR=1
 
 # LLVM_CONFIG = /usr/bin/llvm-config-3.5
 # LLVM_CONFIG = /usr/bin/llvm-config-3.6
-LLVM_CONFIG = /usr/bin/llvm-config-3.8
+# LLVM_CONFIG = /usr/bin/llvm-config-3.8
+LLVM_CONFIG = /usr/bin/llvm-config-3.9
 
 override CC = gcc-5
 override CXX = g++-5
