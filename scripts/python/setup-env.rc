@@ -6,6 +6,8 @@ function python-env-setup() {
         string-prepend-to-var PATH $PYENV_ROOT/bin
         string-prepend-to-var PATH $PYENV_ROOT/libexec
         eval "$(pyenv init -)"
+        eval "$(pyenv virtualenv-init -)"
+        export PYENV_VIRTUALENV_DISABLE_PROMPT=1
     fi
     echo "[PYTHON] pyenv has been setup."
     return 1
@@ -16,7 +18,6 @@ function python-env-off() {
     string-remove-from-var PATH $PYENV_ROOT/bin
     string-remove-from-var PATH $PYENV_ROOT/libexec
     unset PYENV_ROOT
+    unset PYENV_VIRTUALENV_DISABLE_PROMPT
     echo "[PYTHON] pyenv is now disabled."
 }
-
-#env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.4.2
