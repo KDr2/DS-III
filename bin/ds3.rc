@@ -63,6 +63,14 @@ function init() {
     string-prepend-to-var PATH $DS3_HOME/gen-bin
     string-prepend-to-var PATH $DS3_HOME/xbin
     string-prepend-to-var PATH $DS3_HOME/bin
+
+    if [ -d $HOME/programs/bin ]; then
+        string-prepend-to-var PATH $HOME/programs/bin
+    fi
+
+    if [ -d $HOME/local/bin ]; then
+        string-prepend-to-var PATH $HOME/local/bin
+    fi
 }
 
 echo ${DS3_HOME?variable not set.} &>/dev/null && init
