@@ -4,6 +4,7 @@ gen-bin/
 
 # Compiled Object files
 *.exe
+*.bin
 *.slo
 *.lo
 *.o
