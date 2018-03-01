@@ -15,3 +15,5 @@
 	pretty = format:'%h : %s - %aN'
 [push]
 	default = matching
+[github]
+	user = KDr2
