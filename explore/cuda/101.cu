@@ -26,6 +26,9 @@ int main() {
     VecAdd<<<1, N>>>(dA, dB, dC);
 
     cudaMemcpy(C, dC, N * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(dA);
+    cudaFree(dB);
+    cudaFree(dC);
 
     for(int i=0; i<N; i++) {
         printf("%d: %f\n", i, *(C+i));
@@ -33,5 +36,6 @@ int main() {
 
     free(C);
 
+    getchar();
     return 0;
 }
