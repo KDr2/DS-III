@@ -1,29 +1,15 @@
-JULIA_THREADS=1
-
-USE_SYSTEM_LLVM=1
-# USE_SYSTEM_LIBGIT2=1
-USE_SYSTEM_LIBUNWIND=1
-USE_SYSTEM_READLINE=1
-# USE_SYSTEM_PCRE=1
-USE_SYSTEM_LIBM=1
-USE_SYSTEM_BLAS=1
-USE_BLAS64=0
-# LIBBLAS=-lopenblas
-# LDFLAGS=-Wl,-rpath /usr/lib/openblas-base
-# LIBBLASNAME=libopenblas
+# packages in deps/srccache but not in deps/patches:
+USE_SYSTEM_PCRE=1
 USE_SYSTEM_LAPACK=1
-USE_SYSTEM_FFTW=1
-USE_SYSTEM_GMP=1
-USE_SYSTEM_ARPACK=1
-# USE_SYSTEM_MBEDTLS=1
-USE_SYSTEM_SUITESPARSE=0
-USE_SYSTEM_ZLIB=1
-USE_SYSTEM_MPFR=1
+USE_SYSTEM_BLAS=1
+USE_SYSTEM_MBEDTLS=1
+USE_SYSTEM_SUITESPARSE=1
 
-# LLVM_CONFIG = /usr/bin/llvm-config-3.5
-# LLVM_CONFIG = /usr/bin/llvm-config-3.6
-# LLVM_CONFIG = /usr/bin/llvm-config-3.8
-LLVM_CONFIG = /usr/bin/llvm-config-3.9
+# system LLVM is not supported
+USE_SYSTEM_LLVM=0
+# LLVM_CONFIG=/usr/bin/llvm-config-3.9
+# LLVM_CONFIG=/usr/bin/llvm-config-4.0
+# LLVM_CONFIG=/usr/bin/llvm-config-5.0
 
 override CC = gcc-5
 override CXX = g++-5
