@@ -1,0 +1,31 @@
+# -*- mode: perl -*-
+use lib './lib';
+use Rex -feature => ['1.5'];
+use Rex::Misc::ShellBlock;
+
+user "kdr2";
+group dh => "kdr2.com";
+
+task "uptime", group => "dh", sub {
+    my $output = run "uptime";
+    say $output;
+};
+
+task "pack_jl_deps", group => "dh", sub {
+    my $script = <<EOF;
+#!/bin/bash
+git -C Work/julia/ pull
+# rm Work/julia/deps/srccache/*
+make -C Work/julia/deps/ getall
+tar -C Work/julia/ -cf depot/pkg/julia/julia-deps-srcache-\$(date +%Y%m%d%H%M).tar deps/srccache/
+echo "done!"
+EOF
+
+    my $rnd_file = "/home/kdr2/" . get_random(8, 'a' .. 'z') . ".tmp.sh";
+
+    file $rnd_file, content => $script, mode => 755;
+    my $ret = run "$rnd_file 2>&1";
+    file $rnd_file, ensure => "absent"; # remove it
+
+    say $ret;
+};
