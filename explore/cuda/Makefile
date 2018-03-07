@@ -9,3 +9,6 @@ uva.bin: uva.cu
 
 mat_mul.bin: mat_mul.cu
 	$(NVCC) -gencode arch=compute_60,code=sm_60 mat_mul.cu -o mat_mul.bin
+
+mat_mul_shm.bin: mat_mul_shm.cu
+	$(NVCC) -gencode arch=compute_60,code=sm_60 $< -o $@
