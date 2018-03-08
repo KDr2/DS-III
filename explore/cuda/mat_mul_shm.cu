@@ -55,13 +55,15 @@ void MatMul(const Matrix A, const Matrix B, Matrix C)
 {
     // Load A and B to device memory
     Matrix d_A;
-    d_A.width = d_A.stride = A.width; d_A.height = A.height;
+    d_A.width = d_A.stride = A.width;
+    d_A.height = A.height;
     size_t size = A.width * A.height * sizeof(float);
     cudaMalloc(&d_A.elements, size);
     cudaMemcpy(d_A.elements, A.elements, size,
                cudaMemcpyHostToDevice);
     Matrix d_B;
-    d_B.width = d_B.stride = B.width; d_B.height = B.height;
+    d_B.width = d_B.stride = B.width;
+    d_B.height = B.height;
     size = B.width * B.height * sizeof(float);
     cudaMalloc(&d_B.elements, size);
     cudaMemcpy(d_B.elements, B.elements, size,
@@ -69,14 +71,14 @@ void MatMul(const Matrix A, const Matrix B, Matrix C)
 
     // Allocate C in device memory
     Matrix d_C;
-    d_C.width = d_C.stride = C.width; d_C.height = C.height;
+    d_C.width = d_C.stride = C.width;
+    d_C.height = C.height;
     size = C.width * C.height * sizeof(float);
     cudaMalloc(&d_C.elements, size);
 
     // Invoke kernel
-    dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
-    // dim3 dimGrid(B.width / dimBlock.x, A.height / dimBlock.y);
-    dim3 dimGrid((B.width + dimBlock.x -1) / dimBlock.x, (A.height + dimBlock.y -1) / dimBlock.y); // 2x2
+    dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE); // 16x16
+    dim3 dimGrid((B.width + dimBlock.x -1) / dimBlock.x, (A.height + dimBlock.y -1) / dimBlock.y); // ceil to 2x2
     MatMulKernel<<<dimGrid, dimBlock>>>(d_A, d_B, d_C);
 
     // Read C from device memory
@@ -107,6 +109,13 @@ void MatMul(const Matrix A, const Matrix B, Matrix C)
     int row = threadIdx.y;
     int col = threadIdx.x;
 
+    // warps divergence, this thread if not in the matrix
+    if(blockCol * blockDim.x + col >= A.width) return;
+
+    // Shared memory used to store Asub and Bsub respectively
+    __shared__ float As[BLOCK_SIZE][BLOCK_SIZE];
+    __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE];
+
     // Loop over all the sub-matrices of A and B that are
     // required to compute Csub
     // Multiply each pair of sub-matrices together
@@ -120,10 +129,6 @@ void MatMul(const Matrix A, const Matrix B, Matrix C)
         // Get sub-matrix Bsub of B
         Matrix Bsub = GetSubMatrix(B, m, blockCol);
 
-        // Shared memory used to store Asub and Bsub respectively
-        __shared__ float As[BLOCK_SIZE][BLOCK_SIZE];
-        __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE];
-
         // Load Asub and Bsub from device memory to shared memory
         // Each thread loads one element of each sub-matrix
         As[row][col] = GetElement(Asub, row, col);
@@ -133,8 +138,8 @@ void MatMul(const Matrix A, const Matrix B, Matrix C)
         // before starting the computation
         __syncthreads();
         // Multiply Asub and Bsub together
-        //((steps - m < 1) ? BLOCK_SIZE : A.width % BLOCK_SIZE)
-        for (int e = 0; e < BLOCK_SIZE; ++e) {
+        int width = (steps - m > 1) ? BLOCK_SIZE : A.width % BLOCK_SIZE;
+        for (int e = 0; e < width; ++e) {
             Cvalue += As[row][e] * Bs[e][col];
         }
 
