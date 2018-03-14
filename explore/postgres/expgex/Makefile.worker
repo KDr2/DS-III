@@ -1,8 +1,8 @@
-MODULE_big = expgex
-OBJS = expgex.o
+MODULE_big = exworker
+OBJS = exworker.o
 # LDFLAGS = exs.a
 
-# SHLIB_LINK = y/y.a
+SHLIB_LINK = y/y.a
 
 EXTENSION = expgex
 # DATA = expgex--1.0.sql expgex-2--1.0.sql
