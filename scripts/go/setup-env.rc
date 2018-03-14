@@ -22,6 +22,8 @@
 #  ds3 env off go
 #
 
+GO_X_SPACE=${GO_X_SPACE:-/data/kdr2/golang}
+
 function go-env-setup() {
     if [[ $(echo $1 | tr '[:upper:]' '[:lower:]') == 'gopath' ]]; then #cmd gopath
         local GP_ITEM=${2-$PWD}
@@ -56,8 +58,8 @@ function go-env-setup() {
     export GOOS=$(uname -s|tr '[:upper:]' '[:lower:]')
 
     if [[ $1 == "dev" ]]; then
-        export GOROOT=$HOME/Work/opensrc/go
-        string-prepend-to-var GOPATH "$HOME/Work/opensrc/go-tools"
+        export GOROOT=$GO_X_SPACE/go
+        string-prepend-to-var GOPATH "$GO_X_SPACE"
         local SYSTEM_GO=$($DS3_HOME/auxil/find-versions.pl /usr/local/go- -max)
         [[ -n $SYSTEM_GO ]] && export GOROOT_BOOTSTRAP=$SYSTEM_GO
         echo "[GO] dev enviroment is set!"
@@ -68,8 +70,8 @@ function go-env-setup() {
         echo "[GO] Please select a GOROOT:"
         local SYS_GO=($($DS3_HOME/auxil/find-versions.pl /usr/local/go-))
         local SYS_GO_MACOSX_BREW=($($DS3_HOME/auxil/find-versions.pl "/usr/local/Cellar/go/"))
-        select GO_ENV in $HOME/Work/golang/go "${SYS_GO[@]}" "${SYS_GO_MACOSX_BREW[@]}"; do
-            [[ $GO_ENV == $HOME/Work/golang/go ]] && { ds3 env go dev; return; }
+        select GO_ENV in $GO_X_SPACE/go "${SYS_GO[@]}" "${SYS_GO_MACOSX_BREW[@]}"; do
+            [[ $GO_ENV == $GO_X_SPACE/go ]] && { ds3 env go dev; return; }
             [[ -d $GO_ENV ]] && { export GOROOT=$GO_ENV; break; }
         done
     fi
@@ -77,8 +79,8 @@ function go-env-setup() {
     # add $GOROOT/bin to PATH
     if [[ -n $GOROOT ]]; then
         string-prepend-to-var PATH "$GOROOT/bin"
-        string-prepend-to-var GOPATH $HOME/Work/golang
-        string-prepend-to-var PATH $HOME/Work/golang/bin
+        string-prepend-to-var GOPATH $GO_X_SPACE
+        string-prepend-to-var PATH $GO_X_SPACE/bin
         echo "[GO] using GOROOT $GOROOT"
     else
         go-env-off -silent

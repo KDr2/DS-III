@@ -3,7 +3,9 @@
 
 source $DS3_HOME/lib/bash/common.bash
 
-GOROOT=$HOME/Work/golang/go
+
+GO_X_SPACE=${GO_X_SPACE:-/data/kdr2/golang}
+GOROOT=$GO_X_SPACE/go
 
 if [[ ! -d $GOROOT ]]; then
     git clone git@github.com:golang/go.git $GOROOT
@@ -27,7 +29,6 @@ fi
 # exp — experimental and deprecated packages (handle with care; may change without warning).
 
 # list I need:
-export GO_X_SPACE=$HOME/Work/golang
 
 XREPOS=(benchmarks crypto debug image mobile net sys text tools exp)
 for XREPO in ${XREPOS[@]}; do
@@ -40,3 +41,7 @@ for XREPO in ${XREPOS[@]}; do
         cd -
     fi
 done
+
+# cd $GO_X_SPACE
+# ds3 env go gopath
+# go get -u github.com/nsf/gocode
