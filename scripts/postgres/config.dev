@@ -8,6 +8,7 @@ echo ${PG_DEST_DIR:=$HOME/work/db/pgdev} &>/dev/null
 cd $PG_SRC_ROOT
 $PG_SRC_ROOT/configure --prefix=$PG_DEST_DIR \
                        --enable-debug --enable-profiling \
-                       --with-perl
+                       --with-perl \
+                       --with-llvm
 # other options
 # --with-uuid=ossp # cd contrib/uuid-ossp; make; make install
