@@ -4,4 +4,5 @@
 # toolkit: gtk/gtk2/gtk3/... \
 ../configure --prefix=$HOME/programs/emacs.dev \
   --with-x --with-xft --with-x-toolkit=gtk3 --with-xwidgets \
-  --without-selinux
+  --with-modules \
+  --without-pop --without-selinux

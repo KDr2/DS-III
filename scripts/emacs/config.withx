@@ -1,6 +1,9 @@
 #!/bin/sh
 #-*- mode: sh -*-
-# toolkit: gtk/gtk2/gtk3/... \
+# toolkit: gtk/gtk2/gtk3/...
+# xwidgets depends on libwebkit2gtk-4.0-dev
+
 ./configure --prefix=$HOME/programs/emacs \
-  --with-x --with-xft --with-x-toolkit=gtk2 \
-  --without-selinux
+  --with-x --with-xft --with-xwidgets --with-x-toolkit=gtk3 \
+  --with-modules \
+  --without-pop --without-selinux

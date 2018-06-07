@@ -1,8 +1,8 @@
 #!/bin/sh
 #-*- mode: sh -*-
 ./configure --prefix=${PREFIX-/data0/usr/local/emacs} \
-            --with-x-toolkit=no \
-            --without-x \
-            --without-makeinfo \
-            --without-selinux \
-            --with-modules
+            --with-modules \
+            --without-x --with-x-toolkit=no \
+            --without-pop --without-selinux
+
+# --without-makeinfo \
