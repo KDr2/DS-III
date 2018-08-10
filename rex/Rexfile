@@ -14,11 +14,13 @@ task "uptime", group => "dh", sub {
 task "pack_jl_deps", group => "dh", sub {
     my $script = <<EOF;
 #!/bin/bash
+git -C Work/julia/ checkout master
 git -C Work/julia/ pull
-# rm Work/julia/deps/srccache/*
+rm Work/julia/deps/srccache/*
 make -C Work/julia/deps/ getall
-tar -C Work/julia/ -cf depot/pkg/julia/julia-deps-srcache-\$(date +%Y%m%d%H%M).tar deps/srccache/
-echo "done!"
+OUTPUT=pkg/julia/julia-deps-srcache-\$(date +%Y%m%d%H%M).tar
+tar -C Work/julia/ -cf depot/\$OUTPUT deps/srccache/
+echo "PKG-URL: http://depot.kdr2.com/\$OUTPUT"
 EOF
 
     my $rnd_file = "/home/kdr2/" . get_random(8, 'a' .. 'z') . ".tmp.sh";
