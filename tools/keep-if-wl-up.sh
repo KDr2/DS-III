@@ -3,6 +3,13 @@
 DEV=${1-wlan0}
 WPA_CONF=/etc/wpa_supplicant/wpa-$DEV.conf
 
+# content of the conf file:
+# network={
+#   ssid="SSID"
+#   psk="PASSWORD"
+#   key_mgmt=WPA-PSK
+# }
+
 if [ $(ifconfig $DEV|grep "inet\s"|wc -l) -ge 1 ]; then
     echo "$DEV is connected."
 else
