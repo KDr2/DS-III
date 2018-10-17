@@ -5,7 +5,7 @@ export VDE_USER=kdr2
 export VDE_GROUP=kdr2
 export VDE_COMMDIR=/tmp/switch.kdr2
 
-ifconfig $TAP_DEV 2&>1 > /dev/null
+ifconfig $TAP_DEV  >/dev/null 2>&1
 if [ $? != 0 ]; then
     vde_tunctl -u $VDE_USER -t $TAP_DEV
 fi

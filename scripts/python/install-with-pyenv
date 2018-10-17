@@ -1,4 +1,4 @@
 #!/bin/bash
 # -*- mode: sh -*-
-export PYTHON_CONFIGURE_OPTS="--enable-shared"
+export PYTHON_CONFIGURE_OPTS="--enable-shared --with-dtrace"
 pyenv install ${1-3.6.3}
