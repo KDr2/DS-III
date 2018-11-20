@@ -6,8 +6,12 @@ WPA_CONF=/etc/wpa_supplicant/wpa-$DEV.conf
 # content of the conf file:
 # network={
 #   ssid="SSID"
-#   psk="PASSWORD"
+#   scan_ssid=1
+#   proto=WPA RSN
 #   key_mgmt=WPA-PSK
+#   pairwise=CCMP TKIP
+#   group=CCMP TKIP
+#   psk="PASSWORD"
 # }
 
 if [ $(ifconfig $DEV|grep "inet\s"|wc -l) -ge 1 ]; then

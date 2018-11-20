@@ -70,7 +70,7 @@ def parse_config(config):
     #endfor
 
     #kernel
-    k = config.get("kernel", {})
+    k = config.get("kernel", {}) or {}
     if k.get("outside", False):
         ret.append("-kernel")
         ret.append(k.get("image"))
