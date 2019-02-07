@@ -12,4 +12,15 @@ python tools/git-sync-deps
 # list all arguments:
 # = bin/gn args out/Debug --list
 
+# some useful args:
+cat > /dev/null <<EOF
+is_official_build=true
+is_component_build=true
+skia_use_system_icu=false
+skia_use_system_libjpeg_turbo=false
+skia_use_system_libpng=false
+skia_use_system_libwebp=false
+EOF
+
+
 bin/gn gen out/Shared --args='is_official_build=true is_component_build=true'
