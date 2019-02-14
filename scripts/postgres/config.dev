@@ -1,8 +1,8 @@
 #!/bin/bash
 #-*- mode: sh -*-
 
-echo ${PG_SRC_ROOT:=$HOME/work/db/postgres} &>/dev/null
-echo ${PG_DEST_DIR:=$HOME/work/db/pgdev} &>/dev/null
+echo ${PG_SRC_ROOT:=$HOME/Work/db/postgres} &>/dev/null
+echo ${PG_DEST_DIR:=$HOME/Work/db/pgdev} &>/dev/null
 
 
 cd $PG_SRC_ROOT
