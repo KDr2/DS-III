@@ -29,7 +29,7 @@ PDFium_URL='https://github.com/KDr2/PDFium.git' # or git@github.com:KDr2/PDFium.
 DepotTools_URL='https://chromium.googlesource.com/chromium/tools/depot_tools.git'
 DepotTools_DIR="$TOP_DIR/depot_tools"
 
-PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out"
+PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/Default"
 PDFium_CI_DIR="$PDFium_SOURCE_DIR/ci-build"
 PDFium_CMAKE_CONFIG="$PDFium_CI_DIR/PDFiumConfig.cmake"
 PDFium_ARGS="$PDFium_CI_DIR/args/$OS.args.gn"
