@@ -24,12 +24,13 @@ fi
 # Input
 PDFium_SOURCE_REVIISON=unknown
 CONFIGURATION='Release'
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 PDFium_URL='https://github.com/KDr2/PDFium.git' # or git@github.com:KDr2/PDFium.git
 DepotTools_URL='https://chromium.googlesource.com/chromium/tools/depot_tools.git'
 DepotTools_DIR="$TOP_DIR/depot_tools"
 
-PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/Default"
+PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/$BRANCH"
 PDFium_CI_DIR="$PDFium_SOURCE_DIR/ci-build"
 PDFium_CMAKE_CONFIG="$PDFium_CI_DIR/PDFiumConfig.cmake"
 PDFium_ARGS="$PDFium_CI_DIR/args/$OS.args.gn"
@@ -69,7 +70,7 @@ cat > "$PDFium_BUILD_DIR/args.gn" <<EOF
 is_component_build = false
 pdf_enable_v8 = false
 pdf_is_standalone = true
-use_custom_libcxx=true
+use_custom_libcxx = false
 EOF
 
 [ "$CONFIGURATION" == "Release" ] && echo 'is_debug=false' >> "$PDFium_BUILD_DIR/args.gn"
