@@ -81,6 +81,7 @@ gn gen "$PDFium_BUILD_DIR"
 # Build
 ninja -C "$PDFium_BUILD_DIR" pdfium
 
+exit 0
 # Install
 cp "$PDFium_SOURCE_DIR/LICENSE" "$PDFium_STAGING_DIR"
 rm -rf "$PDFium_INCLUDE_DIR"
