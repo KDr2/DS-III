@@ -71,6 +71,8 @@ is_component_build = false
 pdf_enable_v8 = false
 pdf_is_standalone = true
 use_custom_libcxx = false
+is_clang = false
+# use_sysroot = false
 EOF
 
 [ "$CONFIGURATION" == "Release" ] && echo 'is_debug=false' >> "$PDFium_BUILD_DIR/args.gn"
