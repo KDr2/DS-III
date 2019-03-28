@@ -12,60 +12,48 @@ MINGW*)
   ;;
 esac
 
-# determine the directory
-if [[ -d public && -d core && -d fpdfsdk ]]; then
-    TOP_DIR=$PWD/..
-    PDFium_SOURCE_DIR=$PWD
-else
-    TOP_DIR=$PWD
-    PDFium_SOURCE_DIR=$PWD/pdfium
-fi
-
-# Input
-PDFium_SOURCE_REVIISON=unknown
-CONFIGURATION='Release'
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
-PDFium_URL='https://github.com/KDr2/PDFium.git' # or git@github.com:KDr2/PDFium.git
-DepotTools_URL='https://chromium.googlesource.com/chromium/tools/depot_tools.git'
-DepotTools_DIR="$TOP_DIR/depot_tools"
-
-PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/$BRANCH"
-PDFium_CI_DIR="$PDFium_SOURCE_DIR/ci-build"
-PDFium_CMAKE_CONFIG="$PDFium_CI_DIR/PDFiumConfig.cmake"
-PDFium_ARGS="$PDFium_CI_DIR/args/$OS.args.gn"
-
-# Output
-PDFium_STAGING_DIR="$TOP_DIR/lib-pdfium"
-PDFium_INCLUDE_DIR="$PDFium_STAGING_DIR/include"
-PDFium_LIB_DIR="$PDFium_STAGING_DIR/lib"
-
-# Download depot_tools
-if [ ! -e "$DepotTools_DIR" ]; then
-    git clone "$DepotTools_URL" "$DepotTools_DIR"
+# setup google's depot_tools
+DEPOT_TOOLS_REPO='https://chromium.googlesource.com/chromium/tools/depot_tools.git'
+DEPOT_TOOLS=/home/kdr2/Work/opensrc/P/depot_tools
+if [[ ! -d $DEPOT_TOOLS ]]; then
+    git clone "$DEPOT_TOOLS_REPO" "$DEPOT_TOOLS"
 else
     :
-    # git -C "$DepotTools_DIR" pull
+    # git -C "$DEPOT_TOOLS" pull
 fi
-export PATH="$DepotTools_DIR:$PATH"
+export PATH="$DEPOT_TOOLS:$PATH"
 
-# Clone
-if [ ! -e "$PDFium_SOURCE_DIR" ]; then
-    gclient config --unmanaged "$PDFium_URL" --name=pdfium
+# Input
+PDFium_REPO='https://github.com/KDr2/PDFium.git' # or git@github.com:KDr2/PDFium.git
+PDFium_SOURCE_DIR=$PWD
+PDFium_SOURCE_REVISON=$(git rev-parse --short HEAD)
+PDFium_SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/$PDFium_SOURCE_BRANCH"
+CONFIGURATION='Release'
+if [[ $(getopt -q d $@) = *-d* ]]; then
+    CONFIGURATION='Debug'
 fi
-# gclient sync
 
-# Prepare directories
+# sync code
+# gclient config --unmanaged "$PDFium_URL" --name=pdfium
+cat > ../pdfium.gclient <<EOF
+solutions = [
+  { "name"        : "pdfium",
+    "url"         : "git@github.com:KDr2/PDFium.git",
+    "deps_file"   : "DEPS",
+    "managed"     : False,
+    "custom_deps" : {
+    },
+    "custom_vars": {},
+  },
+]
+EOF
+if [[ $(getopt -q s $@) == *-s* ]]; then
+    gclient sync --gclientfile=pdfium.gclient
+fi
+
 mkdir -p "$PDFium_BUILD_DIR"
-mkdir -p "$PDFium_STAGING_DIR"
-mkdir -p "$PDFium_LIB_DIR"
-
-# Checkout to target branch
-cd "$PDFium_SOURCE_DIR"
-PDFium_SOURCE_REVIISON=$(git rev-parse --short HEAD)
-# gclient sync
-
-# Configure
+# Configure GN args
 cat > "$PDFium_BUILD_DIR/args.gn" <<EOF
 is_component_build = false
 pdf_enable_v8 = false
@@ -74,16 +62,23 @@ use_custom_libcxx = false
 is_clang = false
 # use_sysroot = false
 EOF
-
 [ "$CONFIGURATION" == "Release" ] && echo 'is_debug=false' >> "$PDFium_BUILD_DIR/args.gn"
 
-# Generate Ninja files
+# Generate Ninja files then build
 gn gen "$PDFium_BUILD_DIR"
-
-# Build
 ninja -C "$PDFium_BUILD_DIR" pdfium
 
-exit 0
+# ====== #
+exit 0   #
+# ====== #
+
+# Output
+PDFium_STAGING_DIR="$PDFium_SOURCE_DIR/../lib-pdfium"
+PDFium_INCLUDE_DIR="$PDFium_STAGING_DIR/include"
+PDFium_LIB_DIR="$PDFium_STAGING_DIR/lib"
+mkdir -p "$PDFium_STAGING_DIR"
+mkdir -p "$PDFium_LIB_DIR"
+
 # Install
 cp "$PDFium_SOURCE_DIR/LICENSE" "$PDFium_STAGING_DIR"
 rm -rf "$PDFium_INCLUDE_DIR"
@@ -91,5 +86,5 @@ cp -R "$PDFium_SOURCE_DIR/public" "$PDFium_INCLUDE_DIR"
 rm -f "$PDFium_INCLUDE_DIR/DEPS"
 rm -f "$PDFium_INCLUDE_DIR/README"
 rm -f "$PDFium_INCLUDE_DIR/PRESUBMIT.py"
-[ "$OS" == "linux" ] && mv "$PDFium_BUILD_DIR/libpdfium.so" "$PDFium_LIB_DIR"
-[ "$OS" == "darwin" ] && mv "$PDFium_BUILD_DIR/libpdfium.dylib" "$PDFium_LIB_DIR"
+[ "$OS" == "linux" ] && cp "$PDFium_BUILD_DIR/libpdfium.so" "$PDFium_LIB_DIR"
+[ "$OS" == "darwin" ] && cp "$PDFium_BUILD_DIR/libpdfium.dylib" "$PDFium_LIB_DIR"
