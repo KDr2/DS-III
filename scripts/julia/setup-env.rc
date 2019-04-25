@@ -16,14 +16,14 @@ function julia-env-setup() {
             return 1
         fi
     fi
-    string-remove-from-var PATH $JULIA_HOME/bin
+    [[ -d $JULIA_HOME ]] && string-remove-from-var PATH $JULIA_HOME/bin
     export JULIA_HOME=$NEW_JULIA_HOME
     string-prepend-to-var PATH $JULIA_HOME/bin
     echo "[JULIA] JULIA_HOME is set to $JULIA_HOME"
 }
 
 function julia-env-off() {
-    string-remove-from-var PATH $JULIA_HOME/bin
+    [[ -d $JULIA_HOME ]] && string-remove-from-var PATH $JULIA_HOME/bin
     unset JULIA_HOME
     echo "[JULIA] JULIA_HOME is unset."
 }
