@@ -1,0 +1,7 @@
+[trigger]
+issue_url = "https://github.com/KDr2/DS-III/issues/2"
+comment_url = "https://github.com/KDr2/DS-III/issues/2#issuecomment-492114982"
+user = "KDr2"
+
+[benchmark]
+branches = ["master", "issue-725"]
