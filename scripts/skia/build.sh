@@ -20,6 +20,7 @@ skia_use_system_icu=false
 skia_use_system_libjpeg_turbo=false
 skia_use_system_libpng=false
 skia_use_system_libwebp=false
+skia_use_system_harfbuzz=false
 extra_cflags=["-static-libstdc++", "-static-libgcc"]
 EOF
 
