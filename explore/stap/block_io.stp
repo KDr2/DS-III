@@ -1,0 +1,22 @@
+#!/usr/bin/env stap
+
+// usage: stap block_io.stp 10
+
+global blockio;
+
+probe begin{
+    printf("%24s   (r+w) %12s bytes\n","process-name", "NNN")
+}
+
+
+probe ioblock_trace.request{
+    blockio[execname()] += size;
+}
+
+probe timer.s($1){
+    printf("----block io per %d seconds--------------\n", $1);
+    foreach(k in blockio- limit 20){
+        printf("%24s   (r+w) %12d bytes\n", k, blockio[k]);
+    }
+    delete blockio;
+}
