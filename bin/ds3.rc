@@ -64,13 +64,21 @@ function init() {
     string-prepend-to-var PATH $DS3_HOME/xbin
     string-prepend-to-var PATH $DS3_HOME/bin
 
-    if [ -d $HOME/programs/bin ]; then
-        string-prepend-to-var PATH $HOME/programs/bin
-    fi
-
     if [ -d $HOME/local/bin ]; then
         string-prepend-to-var PATH $HOME/local/bin
     fi
+
+    local PROGRAMS_BIN=(
+        bin
+        local/bin
+        depot_tools
+        google-cloud-sdk/bin
+    )
+    for BIN in ${PROGRAMS_BIN[*]}; do
+        if [ -d $HOME/programs/$BIN ]; then
+            string-prepend-to-var PATH $HOME/programs/$BIN
+        fi
+    done
 }
 
 echo ${DS3_HOME?variable not set.} &>/dev/null && init
