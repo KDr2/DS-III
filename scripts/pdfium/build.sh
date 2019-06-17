@@ -12,17 +12,6 @@ MINGW*)
   ;;
 esac
 
-# setup google's depot_tools
-DEPOT_TOOLS_REPO='https://chromium.googlesource.com/chromium/tools/depot_tools.git'
-DEPOT_TOOLS=/home/kdr2/Work/opensrc/P/depot_tools
-if [[ ! -d $DEPOT_TOOLS ]]; then
-    git clone "$DEPOT_TOOLS_REPO" "$DEPOT_TOOLS"
-else
-    :
-    # git -C "$DEPOT_TOOLS" pull
-fi
-export PATH="$DEPOT_TOOLS:$PATH"
-
 # Input
 PDFium_REPO='https://github.com/KDr2/PDFium.git' # or git@github.com:KDr2/PDFium.git
 PDFium_SOURCE_DIR=$PWD
@@ -51,6 +40,10 @@ EOF
 if [[ $(getopt -q s $@) == *-s* ]]; then
     gclient sync --gclientfile=pdfium.gclient
 fi
+
+perl -p -i.bak \
+     -e 's#//build/config/gcc:symbol_visibility_hidden#//build/config/gcc:symbol_visibility_default#gi' \
+     PDFium_SOURCE_DIR/build/config/BUILDCONFIG.gn
 
 mkdir -p "$PDFium_BUILD_DIR"
 # Configure GN args
