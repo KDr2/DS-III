@@ -1,4 +1,4 @@
-package MomentsQuip;
+package Moments;
 
 use v5.16;
 use strict;
@@ -13,39 +13,35 @@ use Mojo::UserAgent;
 
 use Vault;
 
+my $PAGE_URL = "https://www.notion.so/zhuoql/What-is-happening-3fa589c95cb8497fb9a70fec96675db1";
+
 sub fetch_data_mojo {
-    state $host = 'https://platform.quip.com/1/threads/';
-    my ($thread_id) = @_;
     my $ua = Mojo::UserAgent->new;
-    my $data = $ua->get($host . $thread_id => {"Authorization" => $quip_auth_key})->res->body;
+    my $data = $ua->get($PAGE_URL)->res->body;
     return $data;
 }
 
 sub fetch_data_lwp {
-    state $host = 'https://platform.quip.com/1/threads/';
-    my ($thread_id) = @_;
     my $user_agent = LWP::UserAgent->new("Mozilla Firefox");
-    $user_agent->default_header(
-        "Authorization" => $quip_auth_key
-    );
-    my $response = $user_agent->get($host . $thread_id);
+    # $user_agent->default_header(
+    #     "Authorization" => "..."
+    # );
+    my $response = $user_agent->get($PAGE_URL);
     my $data = $response->decoded_content;
     return $data;
 }
 
 sub fetch_data {
-    my ($thread_id) = @_;
     if (defined($ENV{GATEWAY_INTERFACE}) && $ENV{GATEWAY_INTERFACE} =~ /^CGI\/.*/) {
-        return fetch_data_lwp($thread_id);
+        return fetch_data_lwp();
     }
-    return fetch_data_mojo($thread_id);
+    return fetch_data_mojo();
 }
 
 sub get_html {
-    my ($thread_id) = @_;
-    my $json_str = fetch_data($thread_id);
-    my $json_obj = from_json($json_str, { utf8  => 1 } );
-    return $json_obj->{html};
+    my $html = fetch_data();
+    print($html);
+    return $html;
 }
 
 sub strip_tags {
@@ -67,7 +63,23 @@ sub html2json {
 
 
 sub get_moments {
-    return [html2json(get_html($moments_doc_id))];
+    return [get_html()];
 }
+
+sub moments {
+    my $c = shift;
+    my $format = $c->param("format") // "json";
+    my $cb = $c->param("callback");
+    my $moments = get_moments;
+
+    return $c->render(text => $moments->[0]) if $format eq "html";
+    if (!$cb) {
+        $c->render(json => $moments);
+    } else {
+        my $text = $cb . "(" . decode('UTF-8', encode_json($moments)) . ")";
+        $c->render(text => $text);
+    }
+};
+
 
 1;

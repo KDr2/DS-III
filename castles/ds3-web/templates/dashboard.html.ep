@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>DS3: Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <div class="wrapper">
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+  <div id="main">
+    <div class="wrapper">
+      <div class="addr_list">
+        <a href="/board/command" class="btn">Command Board</a>
+        <a href="" class="btn">Button 2</a>
+        <a href="" class="btn">Button 3</a>
+        <a href="" class="btn">Button 4</a>
+        <a href="" class="btn">Button 5</a>
+        <a href="" class="btn">Button 6</a>
+        <a href="" class="btn">Button 1</a>
+        <a href="" class="btn">Button 2</a>
+        <a href="" class="btn">Button 3</a>
+        <a href="" class="btn">Button 4</a>
+        <a href="" class="btn">Button 5</a>
+        <a href="" class="btn">Button 6</a>
+        <a href="" class="btn">Button 1</a>
+        <a href="" class="btn">Button 2</a>
+        <a href="" class="btn">Button 3</a>
+        <a href="" class="btn">Button 4</a>
+        <a href="" class="btn">Button 5</a>
+        <a href="" class="btn">Button 6</a>
+        <a href="" class="btn">Button 1</a>
+        <a href="" class="btn">Button 2</a>
+        <a href="" class="btn">Button 3</a>
+        <a href="" class="btn">Button 4</a>
+        <a href="" class="btn">Button 5</a>
+        <a href="" class="btn">Button 6</a>
+        <a href="" class="btn">Button 1</a>
+        <a href="" class="btn">Button 2</a>
+        <a href="" class="btn">Button 3</a>
+        <a href="" class="btn">Button 4</a>
+        <a href="" class="btn">Button 5</a>
+        <a href="" class="btn">Button 6</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
