@@ -9,14 +9,14 @@
 <body>
   <nav>
     <div class="wrapper">
-      <a href="/logout">Logout</a> <a href="/dashboard">Dashboard</a>
+      | <a href="/logout">Logout</a> | <a href="/dashboard">Dashboard</a> |
     </div>
   </nav>
   <div id="main">
     <div class="wrapper">
       <div class="output_content">
         <ul class="output_list">
-          <% foreach my $label (keys %$commands) { %>
+          <% foreach my $label (sort keys %$commands) { %>
           <li>
             <form action="" method="post">
               <div class="text"><%= $label %></div>
@@ -30,6 +30,7 @@
           <pre>
 <%= $cmd_label %>
 <%= $command %>
+=> <%= $return_code %>
 
 <%= $stdout %>
           </pre>

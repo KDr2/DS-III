@@ -9,7 +9,7 @@
 <body>
   <nav>
     <div class="wrapper">
-      <a href="/logout">Logout</a>
+      | <a href="/logout">Logout</a> |
     </div>
   </nav>
   <div id="main">
