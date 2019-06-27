@@ -2,17 +2,11 @@ using Flux
 using Flux.Tracker
 using Flux.Optimise
 
-function limitation_delta(e)
-    if abs(e) > 0 && abs(e) < 1
-        (log(exp(8), e / (1 - e)))^2
-    else
-        1.0E8
-    end
-end
+inv_sigmoid(e) =  (e > 0 && e < 1) ? (log(exp(8), e / (1 - e)))^2 : 1.0E8
 
 function loss(predict, X, Y)
     E = predict(X, Y)
-    # E2 = 1 .- E .+ limitation_delta.(E)
+    # E2 = 1 .- E .+ inv_sigmoid.(E)
     E2 = (1 .- E) .^ 2
     return sum(E2)
 end
@@ -91,18 +85,11 @@ function train(model::CDEA)
     model.eff_factor[] = maxE.data
 end
 
-function is_resloved(model::CDEA)
-    E = model.predict(model.X, model.Y)
-    all(E .<= 1.0) && all(E .>= 0)
-end
-
-
 function resovle(X, Y)
     results = Array{CDEA, 1}()
     while true
         m = create_cdea(X, Y)
         train(m)
-        # is_resloved(m) &&
         push!(results, m)
         size(results)[1] >= 3 && break
     end
