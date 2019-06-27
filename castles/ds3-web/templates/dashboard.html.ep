@@ -9,7 +9,7 @@
 <body>
   <nav>
     <div class="wrapper">
-      | <a href="/logout">Logout</a> |
+      DS3 &gt; Dashboard <a href="/logout" class="right">Logout</a>
     </div>
   </nav>
   <div id="main">
