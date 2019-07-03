@@ -9,3 +9,4 @@ RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -f
 RewriteRule ^(.*) public/$1 [L]
 RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
 RewriteRule ^(.*) index.cgi [L]
+RewriteRule ^(.*) index.cgi [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]

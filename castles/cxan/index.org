@@ -4,3 +4,6 @@
 
 #+OPTIONS: num:nil
 #+OPTIONS:   ^:{}
+
+If you find any dead link to this site or missing files, please mail
+me: [ zhuoql@@html:&#x01F4E7;@@zoho.com ].

@@ -67,4 +67,23 @@ sub file_content {
     return $text;
 };
 
+sub open_page {
+    my $c = shift;
+    my $page = $c->stash('page');
+
+    my $perm = OpenSanctum::permission($c, $page);
+    if ($perm == 0) {
+        $c->res->headers->www_authenticate('Basic realm="The Open Part of KDr2\'s Workspace"');
+        $c->render(text => "", status => 401);
+        return;
+    } elsif ($perm == 2) {
+        $c->render(text => "Forbidden", status => 403);
+        return;
+    } elsif ($perm == 3) {
+        $c->render(text => "File Not Found", status => 404);
+        return;
+    }
+    $c->render(text => OpenSanctum::file_content($page), format=> $page =~ s/.*\.([^.]+)/$1/r);
+};
+
 1;

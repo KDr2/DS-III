@@ -1,0 +1,5 @@
+#!/usr/bin/env stap
+
+probe kernel.function("*sys_clone"){
+    printf("%s\n",execname())
+}
