@@ -33,7 +33,6 @@ my %COMMANDS = (
     "gcloud compute instances stop instance-3 --zone=asia-east1-b",
     GCP_Boot_Instance3 =>
     "gcloud compute instances start instance-3 --zone=asia-east1-b",
-
 );
 
 

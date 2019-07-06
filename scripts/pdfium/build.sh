@@ -43,7 +43,7 @@ fi
 
 perl -p -i.bak \
      -e 's#//build/config/gcc:symbol_visibility_hidden#//build/config/gcc:symbol_visibility_default#gi' \
-     PDFium_SOURCE_DIR/build/config/BUILDCONFIG.gn
+     $PDFium_SOURCE_DIR/build/config/BUILDCONFIG.gn
 
 mkdir -p "$PDFium_BUILD_DIR"
 # Configure GN args
@@ -55,6 +55,7 @@ use_custom_libcxx = false
 is_clang = false
 # use_sysroot = false
 EOF
+
 [ "$CONFIGURATION" == "Release" ] && echo 'is_debug=false' >> "$PDFium_BUILD_DIR/args.gn"
 
 # Generate Ninja files then build
