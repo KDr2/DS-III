@@ -1,34 +1,30 @@
+using Logging
+
 using Flux
 using Flux.Tracker
 using Flux.Optimise
 
-inv_sigmoid(e) =  (e > 0 && e < 1) ? (log(exp(8), e / (1 - e)))^2 : 1.0E8
 
-function loss(predict, X, Y)
-    E = predict(X, Y)
-    # E2 = 1 .- E .+ inv_sigmoid.(E)
-    E2 = (1 .- E) .^ 2
-    return sum(E2)
-end
+log_level =  Logging.Debug # Logging.Info | Logging.Warn | Logging.Error
+global_logger(SimpleLogger(stdout, log_level))
 
 mutable struct CDEA{T}
     X::Matrix{T}
     Y::Matrix{T}
     U::TrackedArray{T, 2}
     V::TrackedArray{T, 2}
-    eff_factor::Ref{Float64}
+    eff_factor::Ref{Float64} # Max(E)
     predict::Function
 end
 
 function create_cdea(x::Matrix{Float64}, y::Matrix{Float64})
-    size(x)[2] == size(y)[2] || throw("DMU Number Missmatch")
+    size(x)[2] == size(y)[2] || throw("DMU Count Missmatch")
     n_DMU = size(x)[2]
     n_INPUT = size(x)[1]
     n_OUTPUT = size(y)[1]
 
-    U = rand(1, n_INPUT)
-    V = rand(1, n_OUTPUT)
-    U = param(U); V=param(V);
+    U = rand(1, n_INPUT); U = param(U)
+    V = rand(1, n_OUTPUT); V=param(V)
     F = Ref(1.0)
 
     predict(x, y) = (sigmoid.(V) * y) ./ (sigmoid.(U) * x .* F[])
@@ -41,15 +37,20 @@ function reset_cdea(model::CDEA)
     n_INPUT = size(model.X)[1]
     n_OUTPUT = size(model.Y)[1]
 
-    U = rand(1, n_INPUT)
-    V = rand(1, n_OUTPUT)
-    U = param(U); V=param(V);
+    U = rand(1, n_INPUT); U = param(U)
+    V = rand(1, n_OUTPUT); V=param(V)
     model.U = U; model.V =V; model.eff_factor[] = 1.0;
 
     predict(x, y) = (sigmoid.(V) * y) ./ (sigmoid.(U) * x .* model.eff_factor[])
     model.predict = predict
 
     model
+end
+
+function loss(predict, X, Y)
+    E = predict(X, Y)
+    E2 = (1 .- E) .^ 2
+    return sum(E2)
 end
 
 function train(model::CDEA)
@@ -64,20 +65,20 @@ function train(model::CDEA)
         Tracker.update!(opt, model.U, grads[model.U])
         Tracker.update!(opt, model.V, grads[model.V])
         loss_value = loss(model.predict, model.X, model.Y)
-        @show loop_count, loss_value
+        @debug loop_count, loss_value
         if last_loss_value == loss_value || loop_count > 1.0E5
             break
         end
         last_loss_value = loss_value
-        @show sigmoid.(model.U)
-        @show sigmoid.(model.V)
-        @show model.predict(model.X, model.Y)
+        @debug sigmoid.(model.U)
+        @debug sigmoid.(model.V)
+        @debug model.predict(model.X, model.Y)
     end
 
-    @show last_loss_value
-    @show sigmoid.(model.U)
-    @show sigmoid.(model.V)
-    @show model.predict(model.X, model.Y)
+    @debug last_loss_value
+    @debug sigmoid.(model.U)
+    @debug sigmoid.(model.V)
+    @debug model.predict(model.X, model.Y)
 
     # normalize
     E = model.predict(model.X, model.Y)
@@ -98,6 +99,19 @@ function resovle(X, Y)
     end
     results[argmax(E)]
 end
+
+function summary(m::CDEA)
+    Dict{Symbol, Matrix{Float64}}(
+        :U => sigmoid.(m.U).data .* m.eff_factor[],
+        :V => sigmoid.(m.V).data,
+        :E => m.predict(m.X, m.Y).data,
+    )
+end
+
+
+##################
+# RUN
+##################
 
 X1 = [4 15 27;
       15 4 5;
@@ -126,6 +140,4 @@ Y3 = [169 119;
 m = resovle(X1, Y1)
 # m = resovle(X2, Y2)
 # m = resovle(X3, Y3)
-@show sigmoid.(m.U)
-@show sigmoid.(m.V)
-@show m.predict(m.X, m.Y)
+@info summary(m)
