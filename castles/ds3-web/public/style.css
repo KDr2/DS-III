@@ -159,5 +159,13 @@ nav .logo {
   }
 }
 @media (max-width: 679px) {
-
+  .login_page .logo {
+    top: 20px;
+  }
+  .addr_list .btn {
+    float: none;
+    display: block;
+    width: auto;
+    margin: 0 0 10px;
+  }
 }
