@@ -7,15 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav>
-    <div class="wrapper">
-      DS3 &gt; Dashboard <a href="/logout" class="right">Logout</a>
+  <nav class="clearfix">
+    <div class="logo">
+      <img src="/images/ds3_sketch.png" alt="Dearth Star 3" width="100%" height="auto">
+    </div>
+    <div class="user">
+      <a class="logout" href="/logout">Logout</a>
+    </div>
+    <div class="breadcrumb">
+      <span class="current">Dashboard</span>
     </div>
   </nav>
   <div id="main">
     <div class="wrapper">
-      <div class="addr_list">
-        <a href="/board/command" class="btn">Command Board</a>
+      <div class="addr_list clearfix">
+        <a href="/board/command" class="btn">Command Board: GCP</a>
         <a href="" class="btn">Button 2</a>
         <a href="" class="btn">Button 3</a>
         <a href="" class="btn">Button 4</a>

@@ -7,15 +7,22 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <nav>
-    <div class="wrapper">
-      DS3 &gt; <a href="/dashboard">Dashboard</a> &gt; Command Board <a href="/logout" class="right">Logout</a>
+  <nav class="clearfix">
+    <div class="logo">
+      <img src="/images/ds3_sketch.png" alt="Dearth Star 3" width="100%" height="auto">
+    </div>
+    <div class="user">
+      <a class="logout" href="/logout">Logout</a>
+    </div>
+    <div class="breadcrumb">
+      <a href="/dashboard">Dashboard</a> &gt;
+      <span class="current">Command Board: GCP</span>
     </div>
   </nav>
-  <div id="main">
+ <div id="main">
     <div class="wrapper">
-      <div class="output_content">
-        <ul class="output_list">
+      <div class="command_content">
+        <ul class="command_list">
           <% foreach my $label (sort keys %$commands) { %>
           <li>
             <form action="" method="post">
@@ -26,12 +33,12 @@
           </li>
           <% } %>
         </ul>
-        <div class="output_demo">
+        <div class="command_output">
           <pre>
 <%= $cmd_label %>
 <%= $command %>
-=> <%= $return_code %>
-
+ExitCode: <%= $return_code %>
+------------------------------------------
 <%= $stdout %>
           </pre>
         </div>

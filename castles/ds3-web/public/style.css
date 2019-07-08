@@ -8,6 +8,7 @@ a{text-decoration:none}
 img{border:0}
 strong{font-weight:800}
 ol,ul,li{list-style:none}
+.clearfix:after{content:"";display:block;clear:both;}
 /* Basic */
 body {
   color: #666;
@@ -39,6 +40,13 @@ a:hover {
   cursor: pointer;
 }
 /* Login Form */
+.login_page .logo {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  width: 120px;
+  margin-left: -60px;
+}
 .login {
   max-width: 520px;
   margin: 20% auto 0;
@@ -75,58 +83,81 @@ fieldset {
 }
 /* List page */
 .addr_list .btn {
-  width: 22%;
-  margin: 0 10px 10px 0;
+  float: left;
+  width: 24%;
+  margin: 0 1% 10px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* Output page */
-.output_list li {
+/* Command page */
+.command_list {
+  max-height: 256px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+.command_list li {
   position: relative;
   margin: 0 auto 20px;
   padding-right: 100px;
 }
-.output_list .text {
+.command_list li:last-child {
+  margin-bottom: 0;
+}
+.command_list .text {
   display: inline-block;
   width: 100%;
   padding: 8px 16px;
   margin-right: 20px;
   border: #747d8c solid 1px;
 }
-.output_list .btn {
+.command_list .btn {
   position: absolute;
   right: 0;
   top: 0;
   padding: 9px 16px;
 }
-.output_demo pre {
+.command_output pre {
+  overflow-x: auto;
   border: #747d8c solid 1px;
   padding: 8px 16px;
   font: 14px/1.5 Monaco, Lucida Console, Consolas, monospace;
 }
 /* LAYOUT */
+.wrapper {
+  padding: 10px;
+}
+nav {
+  position: relative;
+  padding: 10px;
+  border-bottom: #ccc solid 1px;
+}
+nav .user {
+  position: absolute;
+  top: 29px;
+  right: 10px;
+}
+nav .logo {
+  float: left;
+  width: 60px;
+  margin: 0 20px 0 0;
+}
+.logo a, .logo img {
+  display: block;
+}
+.breadcrumb {
+  margin: 19px 0 0;
+}
+.breadcrumb .current {
+  font-weight: bold;
+}
+
 @media (min-width: 680px) {
-  nav {
-    margin: 10% 0 20px;
-  }
   .wrapper {
     max-width: 960px;
     margin: 0 auto;
   }
 }
 @media (max-width: 679px) {
-  nav {
-    margin: 20px 0 0;
-  }
-  .wrapper {
-    padding: 10px;
-  }
-  .login {
-    padding: 20px 10px;
-  }
-}
 
-nav .right {
-    float: right;
 }
