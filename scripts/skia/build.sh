@@ -1,6 +1,7 @@
 #/bin/bash
 
 # for build tool and third-party libraries
+# need a https_proxy in China mainland
 python tools/git-sync-deps
 
 # for system provided libraries

@@ -37,10 +37,15 @@ solutions = [
   },
 ]
 EOF
+
+# make the repo clean before sync
+git -C $PDFium_SOURCE_DIR/build checkout .
+
 if [[ $(getopt -q s $@) == *-s* ]]; then
     gclient sync --gclientfile=pdfium.gclient
 fi
 
+# set visibility to default
 perl -p -i.bak \
      -e 's#//build/config/gcc:symbol_visibility_hidden#//build/config/gcc:symbol_visibility_default#gi' \
      $PDFium_SOURCE_DIR/build/config/BUILDCONFIG.gn
