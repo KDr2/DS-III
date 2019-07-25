@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+cat > /dev/null <<EOF
+options:
+- --shared: build shared lib
+- --static: build static lib
+- --skia: build with skia
+- --debug: build in DEBUG mode
+- -s: sync before building
+EOF
+
 set -ex
 
 OS=$(uname)
@@ -18,9 +27,9 @@ PDFium_SOURCE_DIR=$PWD
 PDFium_SOURCE_REVISON=$(git rev-parse --short HEAD)
 PDFium_SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/$PDFium_SOURCE_BRANCH"
-CONFIGURATION='Release'
-if [[ $(getopt -q d $@) = *-d* ]]; then
-    CONFIGURATION='Debug'
+BUILD_MODE='RELEASE'
+if [[ $(getopt -q -l debug -- $@) = *--denug* ]]; then
+    BUILD_MODE='DEBUG'
 fi
 
 # sync code
@@ -39,9 +48,10 @@ solutions = [
 EOF
 
 # make the repo clean before sync
+git -C $PDFium_SOURCE_DIR/ checkout BUILD.gn
 git -C $PDFium_SOURCE_DIR/build checkout .
 
-if [[ $(getopt -q s $@) == *-s* ]]; then
+if [[ $(getopt -q -o s -- $@) == *-s* ]]; then
     gclient sync --gclientfile=pdfium.gclient
 fi
 
@@ -49,6 +59,12 @@ fi
 perl -p -i.bak \
      -e 's#//build/config/gcc:symbol_visibility_hidden#//build/config/gcc:symbol_visibility_default#gi' \
      $PDFium_SOURCE_DIR/build/config/BUILDCONFIG.gn
+
+if [[ $(getopt -q -l shared -- $@) == *--shared* ]]; then
+    perl -p -i.bak \
+         -e 's#jumbo_component("pdfium") {#shared_library("pdfium") {#gi' \
+         $PDFium_SOURCE_DIR/BUILD.gn
+fi
 
 mkdir -p "$PDFium_BUILD_DIR"
 # Configure GN args
@@ -61,7 +77,19 @@ is_clang = false
 # use_sysroot = false
 EOF
 
-[ "$CONFIGURATION" == "Release" ] && echo 'is_debug=false' >> "$PDFium_BUILD_DIR/args.gn"
+if [[ $(getopt -q -l skia -- $@) == *--skia* ]]; then
+    # use cxx14, for skia
+    echo 'use_cxx11 = false' >> "$PDFium_BUILD_DIR/args.gn"
+    echo 'pdf_use_skia = true' >> "$PDFium_BUILD_DIR/args.gn"
+fi
+
+if [[ $(getopt -q -l static -- $@) == *--static* ]]; then
+    echo 'pdf_is_complete_lib = true' >> "$PDFium_BUILD_DIR/args.gn"
+fi
+
+[ "$BUILD_MODE" == "RELEASE" ] && echo 'is_debug = false' >> "$PDFium_BUILD_DIR/args.gn"
+[ "$BUILD_MODE" == "DEBUG" ] && echo 'is_debug = true' >> "$PDFium_BUILD_DIR/args.gn"
+
 
 # Generate Ninja files then build
 gn gen "$PDFium_BUILD_DIR"
