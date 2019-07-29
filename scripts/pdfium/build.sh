@@ -60,7 +60,7 @@ perl -p -i.bak \
      -e 's#//build/config/gcc:symbol_visibility_hidden#//build/config/gcc:symbol_visibility_default#gi' \
      $PDFium_SOURCE_DIR/build/config/BUILDCONFIG.gn
 
-if [[ $(getopt -q -l shared -- $@) == *--shared* ]]; then
+if [[ $(getopt -q -l shared -o n -- $@) == *--shared* ]]; then
     perl -p -i.bak \
          -e 's#jumbo_component("pdfium") {#shared_library("pdfium") {#gi' \
          $PDFium_SOURCE_DIR/BUILD.gn
@@ -77,13 +77,13 @@ is_clang = false
 # use_sysroot = false
 EOF
 
-if [[ $(getopt -q -l skia -- $@) == *--skia* ]]; then
+if [[ $(getopt -q -l skia -o n -- $@) == *--skia* ]]; then
     # use cxx14, for skia
     echo 'use_cxx11 = false' >> "$PDFium_BUILD_DIR/args.gn"
     echo 'pdf_use_skia = true' >> "$PDFium_BUILD_DIR/args.gn"
 fi
 
-if [[ $(getopt -q -l static -- $@) == *--static* ]]; then
+if [[ $(getopt -q -l static -o n -- $@) == *--static* ]]; then
     echo 'pdf_is_complete_lib = true' >> "$PDFium_BUILD_DIR/args.gn"
 fi
 
