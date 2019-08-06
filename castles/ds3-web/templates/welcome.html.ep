@@ -11,7 +11,7 @@
   <div id="main">
     <div class="wrapper">
       <div class="logo">
-        <img src="/images/ds3_sketch.png" alt="Dearth Star 3" width="100%" height="auto">
+        <img src="/images/logo-ds3.png" alt="Dearth Star 3" width="100%" height="auto">
       </div>
       <form action="/" class="login" method="POST">
         <fieldset>
