@@ -1,5 +1,6 @@
 using Logging
 
+using CSV
 using Flux
 using Flux.Tracker
 using Flux.Optimise
@@ -91,10 +92,11 @@ function resovle(X, Y)
 end
 
 function summary(m::GD_DEA)
-    Dict{Symbol, Matrix{Float64}}(
+    Dict{Symbol, Any}(
         :V => sigmoid.(m.V_).data .* m.maxH[],
         :U => sigmoid.(m.U_).data,
         :H => m.predict(m.X, m.Y).data,
+        :maxH => m.maxH[]
     )
 end
 
@@ -130,4 +132,13 @@ Y3 = [169 119;
 m = resovle(X1, Y1)
 # m = resovle(X2, Y2)
 # m = resovle(X3, Y3)
+
+# input = CSV.read("/home/kdr2/Input.csv")
+# XR = convert(Matrix, input[:, 2:end])'
+# output = CSV.read("/home/kdr2/Output.csv")
+# YR = convert(Matrix, output[:, 2:end])'
+# @show XR
+# @show YR
+# m = resovle(XR, YR)
+
 @info summary(m)
