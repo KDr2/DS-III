@@ -7,6 +7,7 @@ include_once("file.inc.php");
 
 function create_()
 {
+    if(!check_auth()) return "ERROR: Auth error.";
     $dest = $_REQUEST['dest'];
     if(empty($dest)) return "ERROR: No `dest`.";
     $dest[0] != '/' and $dest = '/' . $dest;
