@@ -1,0 +1,16 @@
+#!/usr/bin/env stap
+
+/*
+  Example:
+  inspect function in kernel source
+*/
+
+probe kernel.function("*@fork.c").call {
+    s = sprintf("%s -> %s\n", thread_indent(4), probefunc());
+    printf("%s", s)
+}
+
+probe kernel.function("*@fork.c").return{
+    s = sprintf("%s <- %s\n", thread_indent(-4), probefunc());
+    printf("%s",s)
+}

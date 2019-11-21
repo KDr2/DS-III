@@ -1,0 +1,20 @@
+#!/usr/bin/env stap
+/*
+  %{
+  #include <linux/in.h>
+  #include <linux/ip.h>
+  %}
+*/
+
+probe begin {
+    printf("=========================\n")
+}
+
+/*
+  @1=/bin/ls @2=_init
+  see: stap -L 'process("ls").function("*")'
+ */
+probe process(@1).function(@2) { 
+    printf("%s\n", ubacktrace());
+    print_ubacktrace();
+}

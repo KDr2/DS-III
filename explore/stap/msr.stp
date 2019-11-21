@@ -1,0 +1,24 @@
+
+function rdmsr:long(n:long) %{
+    long i = STAP_ARG_n;
+    long ret=0;
+    unsigned int d, a;
+    __asm__("rdmsr\n\t":
+            "=a"(a),"=d"(d):
+            "c"(i)
+            );
+    ret = d;
+    ret = ret << 32;
+    ret = ret | a;
+    STAP_RETVALUE = ret;
+    // or STAP_RETURN(ret);
+%}
+
+probe timer.s(1)
+{
+    printf("ops0=%lu\n", rdmsr(8));
+    printf("ops1=%lu\n", rdmsr(9));
+    printf("ops2=%lu\n", rdmsr(10));
+    printf("ops3=%lu\n", rdmsr(11));
+}
+probe begin { println(":)") }
