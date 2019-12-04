@@ -1,0 +1,48 @@
+
+global a, b;
+
+probe begin{
+    // b = gettimeofday_s();
+    b = "a b c";
+    printf("=>[%s]\n", b);
+    a = tokenize(b, " ")
+    while(a != ""){
+        //x = tokenize(a, " ")
+        printf("->%s | %s\n", x, a)
+        a = tokenize("", " ");
+    }
+}
+
+function cstate:long() %{
+    struct task_struct *c = current;
+    int stack = (int)c->stack;
+    STAP_RETVALUE = stack;
+    //struct thread_info* ti = (struct thread_info*)(stack & 0xfffff000);
+    //STAP_RETVALUE = ((int)ti)-(int)(c->stack);
+%}
+
+/*
+probe timer.ms(200){
+    a <<< gettimeofday_s() - b;
+    printf("%d\n", cstate());
+    if(gettimeofday_s()-b>20)
+        exit();
+}
+
+probe end{
+    print(@hist_linear(a, 0, 24, 2))
+}
+*/
+
+/*
+probe syscall.open{
+    printf("%s open file %s\n",execname(), argstr);
+}
+*/
+
+/*
+probe kernel.function("sys_open").return{
+    printf("%s\n", $$vars)
+    printf("%-20s -open- %-20s\n", execname(), user_string($filename))
+}
+*/

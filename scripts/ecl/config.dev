@@ -1,9 +1,0 @@
-#!/bin/sh
-
-export buildir=./build/dev
-export CC=gcc-4.4
-./configure \
-    --prefix=$HOME/programs/ecl \
-    --with-system-gmp \
-    --enable-threads \
-    --with-x
