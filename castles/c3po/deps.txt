@@ -1,0 +1,11 @@
+Bot::BasicBot
+DBD::SQLite
+DateTime
+Dir::Self
+experimental
+File::Slurp
+LWP::UserAgent
+IO::CaptureOutput
+POE::Kernel
+POE::Session
+YAML
