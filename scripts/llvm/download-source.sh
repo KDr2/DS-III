@@ -1,8 +1,8 @@
 #!/bin/bash
 
-URL=https://github.com/llvm-mirror/llvm.git
+URL=https://github.com/llvm/llvm-project.git
 # BRANCH=master
-BRANCH=release_60 # release_70/80/90
-DIST=llvm
+BRANCH=release/8.x # release/<N>.x
+DIST=llvm-project
 
 git clone $URL --depth 1 --branch $BRANCH $DIST
