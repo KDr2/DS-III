@@ -1,0 +1,3 @@
+#!/bin/bash
+# -*- mode: sh -*-
+rsync -avr ${1-$HOME/Documents/Books/} kdr2@kdr2.com:private/Books/
