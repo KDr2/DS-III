@@ -32,11 +32,14 @@ gen-bin/
 *.pyc
 *.pyo
 
-#luajit
+# luajit
 *.dasc.h
 *.dasc.c
 *.dash.h
 *.dash.c
 
-#clojure
+# clojure
 .nrepl-port
+
+# ecl
+*.fas
