@@ -8,6 +8,6 @@
 URL=https://git.savannah.gnu.org/git/emacs.git
 # BRANCH=master
 BRANCH=emacs-26 # emacs-25
-DIST=emacs
+DEST=emacs
 
-git clone $URL --depth 1 --branch $BRANCH $DIST
+git clone $URL --depth 1 --branch $BRANCH $DEST

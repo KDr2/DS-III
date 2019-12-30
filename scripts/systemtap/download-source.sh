@@ -6,6 +6,6 @@
 
 # URL=https://sourceware.org/git/systemtap.git
 URL=git://sourceware.org/git/systemtap.git
-DIST=systemtap
+DEST=systemtap
 
-git clone $URL $DIST
+git clone $URL $DEST

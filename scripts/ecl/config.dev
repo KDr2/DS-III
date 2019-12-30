@@ -1,0 +1,7 @@
+#!/bin/sh
+
+./configure \
+    --prefix=$HOME/programs/ecl \
+    --enable-threads \
+    --enable-gmp=system \
+    --with-x

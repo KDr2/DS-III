@@ -5,6 +5,6 @@
 
 URL=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 BRANCH=linux-4.19.y
-DIST=linux
+DEST=linux
 
-git clone $URL --depth 1 --branch $BRANCH $DIST
+git clone $URL --depth 1 --branch $BRANCH $DEST
