@@ -73,9 +73,10 @@
          (gobject:g-signal-connect search-button "clicked" #'on-search-clicked))
        (gtk:widget-show window)))))
 
+#+sbcl
 (sb-ext:save-lisp-and-die "gtk.exe"
                           :executable t
                           :purify t
                           :toplevel #'run)
-#-sbcl
+#+ecl
 (run)
