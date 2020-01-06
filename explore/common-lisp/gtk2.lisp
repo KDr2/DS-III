@@ -73,10 +73,19 @@
          (gobject:g-signal-connect search-button "clicked" #'on-search-clicked))
        (gtk:widget-show window)))))
 
-#+sbcl
-(sb-ext:save-lisp-and-die "gtk.exe"
-                          :executable t
-                          :purify t
-                          :toplevel #'run)
-#+ecl
-(run)
+(defun build ()
+  #+sbcl
+  (sb-ext:save-lisp-and-die "gtk-example.exe"
+                            :executable t
+                            :purify t
+                            :toplevel #'run)
+  #+ecl
+  (progn
+    (require 'asdf)
+    (asdf:defsystem #:gtk-example
+      :serial t
+      :depends-on (#:cl-gtk2-gtk)
+      :components ((:file "gtk2")))
+    (asdf:make-build :gtk-example :type :fasb))) ;; fasb or program
+
+;; (run)
