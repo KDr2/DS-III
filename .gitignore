@@ -43,3 +43,7 @@ gen-bin/
 
 # ecl
 *.fas
+
+# racket
+*.rkt-mod.c
+
