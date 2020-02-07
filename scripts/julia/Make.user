@@ -6,14 +6,15 @@
 # USE_SYSTEM_SUITESPARSE=1
 
 # system LLVM is not supported
-USE_SYSTEM_LLVM=0
+# USE_SYSTEM_LLVM=0
+# USE_BINARYBUILDER_LLVM=1
 # LLVM_CONFIG=/usr/bin/llvm-config-3.9
 # LLVM_CONFIG=/usr/bin/llvm-config-4.0
 # LLVM_CONFIG=/usr/bin/llvm-config-5.0
 
-override CC = gcc-5
-override CXX = g++-5
-# override CXX=clang++
+# override CC = gcc-5
+# override CXX = g++-5
+# override CXX = clang++
 # CFLAGS += -g
 # CFLAGS += -DGCTIME
 # CFLAGS += -DGC_FINAL_STATS
