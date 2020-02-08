@@ -7,7 +7,7 @@ ECL = $(ECL_HOME)/bin/ecl
 all: ecl-cmd
 
 ecl-cmd: ecl-cmd.lisp
-	$(ECL) -load build.lisp
+	$(ECL) -load ecl-cmd-build.lisp
 
 clean:
 	-rm -f *.fas

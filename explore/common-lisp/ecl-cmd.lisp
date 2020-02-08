@@ -5,8 +5,8 @@ from a lisp prompt:
 (compile-file "ecl-cmd.lisp" :output-file "ecl-cmd.o" :system-p t)
 (c::build-program "ecl-cmd.exe" :lisp-files '("ecl-cmd.o"))
 
-NOTE: The content of this file must match the example in the
-      documentation.
+See: https://common-lisp.net/project/ecl/static/manual/rn01re61.html
+
 |#
 
 #-:ecl
@@ -26,18 +26,18 @@ ecl-cmd.exe usage:
       (print (type-of args)))
   (format t "~S~%" args))
 
-(defconstant +ls-rules+
+(defconstant +app-rules+
   '(("--help" 0 (progn (princ ext:*help-message* *standard-output*) (ext:quit 0)))
     ("-?" 0 (progn (princ ext:*help-message* *standard-output*) (ext:quit 0)))
     ("*DEFAULT*" 1 (default-behaviour 1) :stop)))
 
 (let ((ext:*lisp-init-file-list* NIL)) ; No initialization files
-  (handler-case (ext:process-command-args :rules +ls-rules+)
+  (handler-case (ext:process-command-args :rules +app-rules+)
     (error (c)
       (princ ext:*help-message* *error-output*)
-      (ext:quit 1))))
+      (ext:quit 2))))
 
 (if (<= (length (si::command-args)) 1)
     (progn (princ ext:*help-message* *standard-output*)
-           (ext:quit 0)))
+           (ext:quit 1)))
 (ext:quit 0)
