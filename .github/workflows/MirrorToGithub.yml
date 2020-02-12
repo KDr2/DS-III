@@ -13,7 +13,7 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v1.0.0
-      - name: Run a simple command
+      - name: Mirror Repositories
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_ACCESS_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
