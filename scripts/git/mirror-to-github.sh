@@ -12,7 +12,7 @@ function github_repo {
 
 function mirror {
     SOURCE_URL=$1
-    TARGET_REPO=$2
+    TARGET_URL=$2
     shift 2
     REPO_DIR=$(mktemp -p . -d -u)
 
