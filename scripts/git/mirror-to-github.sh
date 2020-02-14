@@ -21,8 +21,14 @@ function mirror {
 
     git remote add mrepo $TARGET_URL
 
+    # push specified branches
     for BRANCH in "$@"; do
         git push mrepo origin/$BRANCH:$BRANCH
+    done
+
+    # push all tags
+    for TAG in $(git tag); do
+        git push mrepo $TAG
     done
 }
 
