@@ -41,6 +41,6 @@ mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git)
 mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) master
 mirror https://pdfium.googlesource.com/pdfium $(github_repo KDr2 PDFium.git) master
 
-mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master
+mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master maint
 
 mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master

@@ -25,14 +25,6 @@ my %COMMANDS = (
     "gcloud compute instances set-machine-type instance-1 --machine-type=n1-highmem-2 --zone=asia-east1-b",
     GCP_Resize_Instance1_n1_highmem4 =>
     "gcloud compute instances set-machine-type instance-1 --machine-type=n1-highmem-4 --zone=asia-east1-b",
-    GCP_Stop_Instance2 =>
-    "gcloud compute instances stop instance-2 --zone=us-central1-a",
-    GCP_Boot_Instance2 =>
-    "gcloud compute instances start instance-2 --zone=us-central1-a",
-    GCP_Stop_Instance3 =>
-    "gcloud compute instances stop instance-3 --zone=asia-east1-b",
-    GCP_Boot_Instance3 =>
-    "gcloud compute instances start instance-3 --zone=asia-east1-b",
 );
 
 
