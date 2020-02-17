@@ -13,6 +13,10 @@ my %COMMANDS = (
     "gcloud compute instances stop instance-1 --zone=asia-east1-b",
     GCP_Boot_Instance1 =>
     "gcloud compute instances start instance-1 --zone=asia-east1-b",
+    GCP_Stop_Instance2 =>
+    "gcloud compute instances stop instance-2 --zone=asia-east1-b",
+    GCP_Boot_Instance2 =>
+    "gcloud compute instances start instance-2 --zone=asia-east1-b",
     GCP_Resize_Instance1_f1_micro =>
     "gcloud compute instances set-machine-type instance-1 --machine-type=f1-micro --zone=asia-east1-b",
     GCP_Resize_Instance1_g1_small =>
