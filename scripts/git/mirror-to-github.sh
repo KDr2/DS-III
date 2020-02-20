@@ -23,13 +23,17 @@ function mirror {
 
     # push specified branches
     for BRANCH in "$@"; do
-        git push mrepo origin/$BRANCH:$BRANCH
+        git push --tags mrepo origin/$BRANCH:$BRANCH
+        if [[ $? -ne 0 ]]; then
+            git checkout -b $BRANCH origin/$BRANCH
+            git push --tags mrepo $BRANCH
+        fi
     done
 
-    # push all tags
-    for TAG in $(git tag); do
-        git push mrepo $TAG
-    done
+    # # push all tags
+    # for TAG in $(git tag); do
+    #    git push mrepo $TAG
+    # done
 }
 
 # Julia
