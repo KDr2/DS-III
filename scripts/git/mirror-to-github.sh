@@ -16,6 +16,8 @@ function mirror {
     shift 2
     REPO_DIR=$(mktemp -p . -d -u)
 
+    echo "Mirroring [$SOURCE_URL] to [$TARGET_URL]"
+
     git clone $SOURCE_URL $REPO_DIR
     cd $REPO_DIR
 
@@ -23,17 +25,27 @@ function mirror {
 
     # push specified branches
     for BRANCH in "$@"; do
-        git push --tags mrepo origin/$BRANCH:$BRANCH
+        git push mrepo origin/$BRANCH:$BRANCH
         if [[ $? -ne 0 ]]; then
-            git checkout -b $BRANCH origin/$BRANCH
-            git push --tags mrepo $BRANCH
+            CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+            if [[ $CUR_BRANCH != $BRANCH ]]; then
+                git checkout -b $BRANCH origin/$BRANCH
+            fi
+            git push mrepo $BRANCH
         fi
     done
 
-    # # push all tags
-    # for TAG in $(git tag); do
-    #    git push mrepo $TAG
-    # done
+    # push all tags
+    #   We don't use `push --tags` because we don't want to push all tags, and
+    #   push some tags will invite an error (in the SBCL repo)
+    for TAG in $(git tag); do
+        NUMBERS=$(echo $TAG | perl -p -e 's/\D//g')
+        # try to eliminate non-version tags
+        if [[ (${#TAG} -gt 24) || (${#NUMBERS} -lt 3) ]]; then
+            continue
+        fi
+        git push mrepo $TAG
+    done
 }
 
 # Julia
