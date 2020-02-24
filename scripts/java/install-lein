@@ -4,5 +4,5 @@ mkdir -p $DS3_HOME/gen-bin
 mkdir -p $DS3_HOME/.data
 curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o $DS3_HOME/gen-bin/lein
 chmod +x $DS3_HOME/gen-bin/lein
-export https_proxy=socks5://127.0.0.1:8866
+# export https_proxy=socks5://127.0.0.1:8866
 lein -v

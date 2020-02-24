@@ -66,3 +66,6 @@ mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
 mirror https://gitlab.com/embeddable-common-lisp/ecl.git $(github_repo KDr2 ECL.git) develop master # develop is the main master
 # mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
 mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master maint
+
+# ML
+mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) master
