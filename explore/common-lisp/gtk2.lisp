@@ -1,5 +1,6 @@
 ;; (ql:quickload 'cl-gtk2-gtk)
-(asdf:operate 'asdf:load-op 'cl-gtk2-gtk)
+;; (asdf:operate 'asdf:load-op 'cl-gtk2-gtk)
+(require 'cl-gtk2-gtk)
 
 (defun run ()
   (let ((output *standard-output*))
