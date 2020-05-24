@@ -7,3 +7,7 @@
 
 If you find any dead link to this site or missing files, please mail
 me: [ zhuoql@@html:&#x01F4E7;@@zoho.com ].
+
+- [[http://cxan.kdr2.com/pdfium][PDFium]]
+- [[http://cxan.kdr2.com/julia][Julia]]
+- [[http://cxan.kdr2.com/skia][Skia]]
