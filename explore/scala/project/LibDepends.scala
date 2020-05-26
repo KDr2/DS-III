@@ -3,7 +3,6 @@ import sbt._
 
 object LibDepends {
 
-
   def libs(modules: Seq[ModuleID]): Seq[ModuleID] = {
     if (System.getenv("ENV") == null || System.getenv("ENV") == "DEV") {
       modules.map(_.withSources())
@@ -13,20 +12,18 @@ object LibDepends {
   }
 
   val basicDepends = libs(Seq(
-    "org.scala-lang" % "scala-compiler" % "2.11.8",
-    "org.scala-lang" % "scala-library" % "2.11.8",
-    "org.scala-lang" % "scala-reflect" % "2.11.8",
-    "org.scala-lang.modules" %% "scala-xml" % "1.0.4",
-    "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
+    "org.scala-lang" % "scala-compiler" % "2.13.2",
+    "org.scala-lang" % "scala-library" % "2.13.2",
+    "org.scala-lang" % "scala-reflect" % "2.13.2",
+    "org.scala-lang.modules" %% "scala-xml" % "latest.integration",
+    "org.scalatest" % "scalatest_2.13" % "3.1.2" % "test",
   ))
 
   val sbtDepends = libs(Seq(
     "main",
-    "interface",
     "compiler-interface",
-    "compiler-integration",
     "sbt"
-  ).map("org.scala-sbt" % _ % "0.13.11"))
+  ).map("org.scala-sbt" % _ % "1.3.4"))
 
   val akkaDepends = libs(Seq(
     "akka-actor",
@@ -48,12 +45,5 @@ object LibDepends {
     "akka-stream",
     "akka-stream-testkit",
     "akka-testkit",
-    "akka-distributed-data-experimental",
-    "akka-typed-experimental",
-    "akka-http-experimental",
-    "akka-http-jackson-experimental",
-    "akka-http-spray-json-experimental",
-    "akka-http-xml-experimental",
-    "akka-persistence-query-experimental"
-  ).map("com.typesafe.akka" %% _ % "2.4.9"))
+  ).map("com.typesafe.akka" %% _ % "latest.integration"))
 }

@@ -5,7 +5,7 @@ import com.kdr2.scala0.spec0.Generator
 import com.kdr2.scala0.spec0.Views
 
 object Runner {
-  def main(args: Array[String]) {
+  def main(args: Array[String]) : Unit = {
 
     //cn1.printNodeS(i2); //wrong
     //testFunctionClazz;

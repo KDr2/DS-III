@@ -4,10 +4,11 @@ class CallByName {
 
   def cbn(code: => Unit) = {
     var var_a = 1
-    println("in cbn:"+var_a);
+    println("in cbn:" + var_a);
     code
     code
   }
+
 }
 
 object CallByName {
@@ -24,4 +25,5 @@ object CallByName {
       println(var_a)
     };
   }
+
 }

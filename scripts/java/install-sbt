@@ -3,14 +3,12 @@
 mkdir -p $DS3_HOME/gen-bin
 mkdir -p $DS3_HOME/.data
 
-curl -L https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar \
-     -o $DS3_HOME/.data/sbt-launch.jar
-cat > $DS3_HOME/gen-bin/sbt <<EOF
-#!/bin/bash
-SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -Dsbt.override.build.repos=true"
-java \$SBT_OPTS -jar \$DS3_HOME/.data/sbt-launch.jar "\$@"
-EOF
+curl -L https://piccolo.link/sbt-1.3.4.zip \
+     -o $DS3_HOME/.data/sbt.zip
 
-chmod +x $DS3_HOME/gen-bin/sbt
-sbt console < /dev/null
-rm -fr target
+cd $DS3_HOME/.data/
+unzip sbt.zip
+
+ln -sf $DS3_HOME/.data/sbt/bin/sbt $DS3_HOME/gen-bin/
+$DS3_HOME/gen-bin/sbt console < /dev/null
+$DS3_HOME/gen-bin/sbt console < /dev/null

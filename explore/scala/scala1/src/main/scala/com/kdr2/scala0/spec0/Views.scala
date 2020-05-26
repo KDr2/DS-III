@@ -15,7 +15,7 @@ object Views {
   object T2 {
     implicit def t1tot2(t: T1): T2 = {
       println("T1->T2");
-      return new T2(t.i);
+      return new T2(t.i.toFloat);
     }
   }
 
