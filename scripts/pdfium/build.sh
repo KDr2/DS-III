@@ -49,7 +49,7 @@ EOF
 
 # make the repo clean before sync
 git -C $PDFium_SOURCE_DIR/ checkout BUILD.gn
-git -C $PDFium_SOURCE_DIR/build checkout .
+[[ -d $PDFium_SOURCE_DIR/build ]] && git -C $PDFium_SOURCE_DIR/build checkout .
 
 if [[ $(getopt -q -o s -- $@) == *-s* ]]; then
     gclient sync --gclientfile=pdfium.gclient
@@ -62,7 +62,7 @@ perl -p -i.bak \
 
 if [[ $(getopt -q -l shared -o n -- $@) == *--shared* ]]; then
     perl -p -i.bak \
-         -e 's#jumbo_component("pdfium") {#shared_library("pdfium") {#gi' \
+         -e 's#jumbo_component\("pdfium"\) \{#shared_library("pdfium") \{#gi' \
          $PDFium_SOURCE_DIR/BUILD.gn
 fi
 
@@ -73,7 +73,7 @@ is_component_build = false
 pdf_enable_v8 = false
 pdf_is_standalone = true
 use_custom_libcxx = false
-is_clang = false
+# is_clang = false
 # use_sysroot = false
 EOF
 

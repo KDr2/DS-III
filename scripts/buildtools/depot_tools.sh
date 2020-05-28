@@ -9,5 +9,3 @@ if [[ ! -d $DEPOT_TOOLS_DIR ]]; then
 else
     git -C "$DEPOT_TOOLS_DIR" pull
 fi
-
-string-append-to-var PATH "$DEPOT_TOOLS_DIR"

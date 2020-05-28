@@ -3,21 +3,23 @@
 
 DEFAULT_VERSION=5.22.1
 
-[[ -f ~/perl5/perlbrew/etc/bashrc ]] || {
+export PERLBREW_ROOT=$HOME/.perl5 # default ~/perl5/perlbrew
+
+[[ -f $PERLBREW_ROOT/etc/bashrc ]] || {
     \curl -L http://install.perlbrew.pl | bash
-    source ~/perl5/perlbrew/etc/bashrc
+    source $PERLBREW_ROOT/etc/bashrc
     perlbrew install $DEFAULT_VERSION --thread
     perlbrew alias create perl-$DEFAULT_VERSION default
     perlbrew lib create default@default
     perlbrew install-cpanm
 }
 
-[[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
+[[ -f $PERLBREW_ROOT/etc/bashrc ]] && source $PERLBREW_ROOT/etc/bashrc
 
 # No use now, use $DS3_HOME/bin/ds3.rc
 function init-bashrc() {
-    [[ -f ~/perl5/perlbrew/etc/bashrc ]] &&
-        ! grep  "~/perl5/perlbrew/etc/bashrc" ~/.bash_profile && {
-            echo -e "\nsource ~/perl5/perlbrew/etc/bashrc" >> ~/.bash_profile
+    [[ -f $PERLBREW_ROOT/etc/bashrc ]] &&
+        ! grep  "$PERLBREW_ROOT/etc/bashrc" ~/.bash_profile && {
+            echo -e "\nsource $PERLBREW_ROOT/etc/bashrc" >> ~/.bash_profile
         }
 }

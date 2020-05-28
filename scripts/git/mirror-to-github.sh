@@ -57,7 +57,7 @@ mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git)
 
 # Google
 mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) master
-mirror https://pdfium.googlesource.com/pdfium $(github_repo KDr2 PDFium.git) master
+mirror https://pdfium.googlesource.com/pdfium $(github_repo KDr2 pdfium.git) master
 
 # Lisp
 mirror https://git.savannah.gnu.org/git/guile.git $(github_repo KDr2 guile.git) master
