@@ -1,0 +1,16 @@
+#-*- mode: sh -*-
+
+PORT=${1-1087}
+
+function proxy-env-setup() {
+    export http_proxy=http://127.0.0.1:$PORT/
+    export https_proxy=$http_proxy
+    echo "http_proxy  is set to $http_proxy"
+    echo "https_proxy is set to $https_proxy"    
+}
+
+function proxy-env-off() {
+    unset http_proxy
+    unset https_proxy
+    echo "http_proxy and https_proxy are unset."
+}
