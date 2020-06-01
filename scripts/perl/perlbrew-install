@@ -8,7 +8,7 @@ export PERLBREW_ROOT=$HOME/.perl5 # default ~/perl5/perlbrew
 [[ -f $PERLBREW_ROOT/etc/bashrc ]] || {
     \curl -L http://install.perlbrew.pl | bash
     source $PERLBREW_ROOT/etc/bashrc
-    perlbrew install $DEFAULT_VERSION --thread
+    perlbrew install $DEFAULT_VERSION -j 6 -n --thread -Duseshrplib
     perlbrew alias create perl-$DEFAULT_VERSION default
     perlbrew lib create default@default
     perlbrew install-cpanm
