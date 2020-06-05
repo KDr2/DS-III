@@ -1,4 +1,11 @@
 #!/bin/bash
 # -*- mode: sh -*-
+
+# ensure dependencies are installed:
+# - libsqlite3-dev
+# - libssl-dev
+# - libbz2-dev
+# - systemtap-sdt-dev
+# - ...
 export PYTHON_CONFIGURE_OPTS="--enable-shared --with-dtrace"
-pyenv install ${1-3.6.3}
+pyenv install ${1-3.8.3}

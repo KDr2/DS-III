@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export CPY_SRC_ROOT=$HOME/Work/opensrc/cpython
+export CPY_SRC_ROOT=$PWD
 export CPY_DEST_DIR=$HOME/programs/python-dev
 
 $CPY_SRC_ROOT/configure --prefix=$CPY_DEST_DIR/$VERSION \
