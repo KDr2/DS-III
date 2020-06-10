@@ -2,7 +2,7 @@ import sbt.Keys._
 
 ThisBuild / scalaVersion := "2.13.2"
 
-resolvers += Resolver.typesafeIvyRepo("releases")
+// resolvers += Resolver.typesafeIvyRepo("releases")
 
 lazy val root = (project in file(".")).settings(
   name := "ScalaExplore",
