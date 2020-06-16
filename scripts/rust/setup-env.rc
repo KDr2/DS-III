@@ -1,0 +1,16 @@
+#-*- mode: sh -*-
+
+
+function rust-env-setup() {
+    export CARGO_HOME=$HOME/.cargo
+    export RUSTUP_HOME=$HOME/.rustup
+
+    string-prepend-to-var PATH "$CARGO_HOME/bin"
+}
+
+function rust-env-off() {
+    string-remove-from-var PATH "$CARGO_HOME/bin"
+
+    unset CARGO_HOME
+    unset RUSTUP_HOME
+}
