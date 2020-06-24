@@ -41,7 +41,7 @@ function mirror {
     for TAG in $(git tag); do
         NUMBERS=$(echo $TAG | perl -p -e 's/\D//g')
         # try to eliminate non-version tags
-        if [[ (${#TAG} -gt 24) || (${#NUMBERS} -lt 3) ]]; then
+        if [[ (${#TAG} -gt 24) || (${#NUMBERS} -lt 3) || ${TAG} = *rc* ]]; then
             continue
         fi
         git push mrepo $TAG
