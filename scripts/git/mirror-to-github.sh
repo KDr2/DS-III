@@ -68,3 +68,4 @@ mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git
 
 # ML
 mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) master
+mirror https://github.com/stan-dev/math.git $(github_repo KDr2 stan-math.git) develop
