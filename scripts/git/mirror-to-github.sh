@@ -60,7 +60,8 @@ mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) master
 mirror https://pdfium.googlesource.com/pdfium $(github_repo KDr2 pdfium.git) master
 
 # Lisp
-mirror https://git.savannah.gnu.org/git/guile.git $(github_repo KDr2 guile.git) master
+mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
+# mirror https://git.savannah.gnu.org/git/guile.git $(github_repo KDr2 guile.git) master
 mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
 mirror https://gitlab.com/embeddable-common-lisp/ecl.git $(github_repo KDr2 ECL.git) develop master # develop is the main master
 mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
