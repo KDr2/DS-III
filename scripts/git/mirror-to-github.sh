@@ -44,7 +44,7 @@ function mirror {
         if [[ (${#TAG} -gt 24) || (${#NUMBERS} -lt 3) || ${TAG} = *rc* ]]; then
             continue
         fi
-        git push mrepo $TAG
+        git push -f mrepo $TAG
     done
 }
 
