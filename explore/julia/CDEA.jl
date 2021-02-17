@@ -1,19 +1,25 @@
+# Packages:
+# Julia 1.5.3
+# Flux = v0.11.6
+# CSV = 0.8.3
+# DataFrames = 0.22.5
+
 using Logging
 
 using CSV
-using Flux # Flux=v0.9.0
-using Flux.Tracker
+using DataFrames
+using Flux
 using Flux.Optimise
 
 
 log_level =  Logging.Debug # Logging.Info | Logging.Warn | Logging.Error
 global_logger(SimpleLogger(stdout, log_level))
 
-mutable struct GD_DEA{T}
+mutable struct CDEA{T}
     X::Matrix{T}
     Y::Matrix{T}
-    V_::TrackedArray{T, 2}
-    U_::TrackedArray{T, 2}
+    V_::Array{T, 2}
+    U_::Array{T, 2}
     maxH::Ref{Float64} # Max(H)
     predict::Function
 end
@@ -24,27 +30,23 @@ function create_gd_dea(x::Matrix{Float64}, y::Matrix{Float64})
     n_INPUT = size(x)[1]
     n_OUTPUT = size(y)[1]
 
-    V_ = rand(1, n_INPUT); V_ = param(V_)
-    U_ = rand(1, n_OUTPUT); U_ = param(U_)
-
-    # V_ = [0.47741 0.634996 -2.2673 0.164418]
-    # U_ = reshape([1.1603], (1, 1))
-    # V_ = param(V_); U_ = param(U_)
+    V_ = rand(1, n_INPUT)
+    U_ = rand(1, n_OUTPUT)
 
     maxH = Ref(1.0)
 
     predict(x, y) = (sigmoid.(U_) * y) ./ (sigmoid.(V_) * x .* maxH[])
 
-    GD_DEA{Float64}(x, y, V_, U_, maxH, predict)
+    CDEA{Float64}(x, y, V_, U_, maxH, predict)
 end
 create_gd_dea(x, y) = create_gd_dea(float.(x), float.(y))
 
-function reset_gd_dea(model::GD_DEA)
+function reset_gd_dea(model::CDEA)
     n_INPUT = size(model.X)[1]
     n_OUTPUT = size(model.Y)[1]
 
-    V_ = rand(1, n_INPUT); V_ = param(V_)
-    U_ = rand(1, n_OUTPUT); U_ = param(U_)
+    V_ = rand(1, n_INPUT);
+    U_ = rand(1, n_OUTPUT);
     model._U = _U; model._V =_V; model.maxH[] = 1.0;
 
     predict(x, y) = (sigmoid.(U_) * y) ./ (sigmoid.(V_) * x .* model.maxH[])
@@ -58,18 +60,20 @@ function loss(predict, X, Y)
     return sum((1 .- H) .^ 2)
 end
 
-function train(model::GD_DEA)
+function train(model::CDEA)
     last_loss_value = 1.0E8
     loop_count = 0
-    opt = Descent(0.001)
+    opt = Descent(0.05)
     while true
         loop_count += 1
-        grads = Tracker.gradient(
+        grads = gradient(
             () -> loss(model.predict, model.X, model.Y),
             Flux.params(model.V_, model.U_)
         )
-        Tracker.update!(opt, model.V_, grads[model.V_])
-        Tracker.update!(opt, model.U_, grads[model.U_])
+        # model.V_ .-= Flux.Optimise.apply!(opt, model.V_, grads[model.V_])
+        # model.U_ .-= Flux.Optimise.apply!(opt, model.U_, grads[model.U_])
+        Optimise.update!(opt, model.V_, grads[model.V_])
+        Optimise.update!(opt, model.U_, grads[model.U_])
         loss_value = loss(model.predict, model.X, model.Y)
         if last_loss_value == loss_value || loop_count > 1.0E5
             break
@@ -84,11 +88,11 @@ function train(model::GD_DEA)
     # normalize
     H = model.predict(model.X, model.Y)
     maxH = maximum(H)
-    model.maxH[] = maxH.data
+    model.maxH[] = maxH
 end
 
 function resovle(X, Y)
-    results = Array{GD_DEA, 1}()
+    results = Array{CDEA, 1}()
     while true
         m = create_gd_dea(X, Y)
         train(m)
@@ -101,11 +105,11 @@ function resovle(X, Y)
     results[argmax(H)]
 end
 
-function summary(m::GD_DEA)
+function summary(m::CDEA)
     Dict{Symbol, Any}(
-        :V => sigmoid.(m.V_).data .* m.maxH[],
-        :U => sigmoid.(m.U_).data,
-        :H => m.predict(m.X, m.Y).data,
+        :V => sigmoid.(m.V_) .* m.maxH[],
+        :U => sigmoid.(m.U_),
+        :H => m.predict(m.X, m.Y),
         :maxH => m.maxH[]
     )
 end
@@ -143,9 +147,9 @@ Y3 = [169 119;
 # m = resovle(X2, Y2)
 # m = resovle(X3, Y3)
 
-input = CSV.read("/home/kdr2/wukong/input-30.csv")
+input = CSV.read("/home/kdr2/wukong/data-20201106-input.txt", DataFrame)
 XR = convert(Matrix, input[:, 2:end])'
-output = CSV.read("/home/kdr2/wukong/output-30.csv")
+output = CSV.read("/home/kdr2/wukong/data-20201106-output.txt", DataFrame)
 YR = convert(Matrix, output[:, 2:end])'
 @show XR
 @show YR
