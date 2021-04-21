@@ -1,6 +1,5 @@
 #!/bin/bash
-
-curl -sSf https://sh.rustup.rs -o /tmp/rustup.sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh
 chmod +x /tmp/rustup.sh
 
 # /tmp/rustup.sh --no-modify-path --profile complete # [minimal|default|complete]
