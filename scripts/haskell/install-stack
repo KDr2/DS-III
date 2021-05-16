@@ -1,0 +1,21 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+#
+# see https://docs.haskellstack.org/en/stable/install_and_upgrade/#linux
+#
+
+TMP_PLACE=/tmp/install-stack
+
+mkdir -p $DS3_HOME/gen-bin
+mkdir $TMP_PLACE
+
+
+cd $TMP_PLACE
+curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz \
+     -o stack.tar.gz
+tar zxvf stack.tar.gz
+mv stack-*/stack $DS3_HOME/gen-bin/
+
+cd -
+rm -rf $TMP_PLACE
