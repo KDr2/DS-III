@@ -22,13 +22,13 @@ MINGW*)
 esac
 
 # Input
-PDFium_REPO='https://github.com/KDr2/PDFium.git' # or git@github.com:KDr2/PDFium.git
+PDFium_REPO='https://github.com/PaodingAI/pdfium.git'
 PDFium_SOURCE_DIR=$PWD
 PDFium_SOURCE_REVISON=$(git rev-parse --short HEAD)
 PDFium_SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 PDFium_BUILD_DIR="$PDFium_SOURCE_DIR/out/$PDFium_SOURCE_BRANCH"
 BUILD_MODE='RELEASE'
-if [[ $(getopt -q -l debug -- $@) = *--denug* ]]; then
+if [[ $(getopt -q -l debug -- $@) = *--debug* ]]; then
     BUILD_MODE='DEBUG'
 fi
 
@@ -37,7 +37,7 @@ fi
 cat > ../pdfium.gclient <<EOF
 solutions = [
   { "name"        : "pdfium",
-    "url"         : "git@github.com:KDr2/PDFium.git",
+    "url"         : "git@github.com:PaodingAI/pdfium.git",
     "deps_file"   : "DEPS",
     "managed"     : False,
     "custom_deps" : {
