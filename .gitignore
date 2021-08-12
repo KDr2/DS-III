@@ -48,3 +48,5 @@ gen-bin/
 # racket
 *.rkt-mod.c
 
+# haskell
+*.hi
