@@ -71,7 +71,7 @@ mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) maste
 
 # ML
 mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) master
-mirror https://github.com/stan-dev/math.git $(github_repo KDr2 stan-math.git) develop
+# mirror https://github.com/stan-dev/math.git $(github_repo KDr2 stan-math.git) develop
 
 # Google
 # mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) master
