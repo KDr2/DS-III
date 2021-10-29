@@ -1,8 +1,7 @@
-import math
-
 import torch
 from torch import optim
 import pandas as pd
+
 
 class GDDEA:
     def __init__(self, X, Y):
@@ -35,19 +34,22 @@ class GDDEA:
                 # end if
 
                 # loss 2: all H in [0, 1]
-                constraints +=  torch.max(torch.tensor(0, dtype=torch.float), (2 * H_i - 1).pow(2) - 1)
+                constraints += torch.max(
+                    torch.tensor(0, dtype=torch.float),
+                    (2 * H_i - 1).pow(2) - 1,
+                )
 
         # H_sum *= (self.n_DMU - 1)
-        loss_val =  H_sum + constraints
+        loss_val = H_sum + constraints
         if log:
             with torch.no_grad():
                 print(loss_val, "=", H_sum, "+", constraints)
         return loss_val
 
     def train(self):
-        last_loss_val = -1
+        # last_loss_val = -1
         loop_count = 0
-        rate = 50.0 # / math.log(loop_count + 10, 10)
+        rate = 50.0  # / math.log(loop_count + 10, 10)
 
         while True:
             loop_count += 1
@@ -69,7 +71,6 @@ class GDDEA:
 
             if loop_count > 1e8:
                 break
-
 
     def predict(self):
         H = []
@@ -100,8 +101,10 @@ class GDDEA:
 
 
 ###
-X1 = torch.tensor(pd.read_csv("input.csv", delimiter="\t").values, dtype=torch.float).t()
-Y1 = torch.tensor(pd.read_csv("output.csv", delimiter="\t").values, dtype=torch.float).t()
+X1 = torch.tensor(pd.read_csv("input.csv", delimiter="\t").values,
+                  dtype=torch.float).t()
+Y1 = torch.tensor(pd.read_csv("output.csv", delimiter="\t").values,
+                  dtype=torch.float).t()
 m = GDDEA(X1, Y1)
 
 m.train()
