@@ -118,17 +118,36 @@ end
 function Base.show(io::IO, tf::TapedFunction)
     buf = IOBuffer()
     println(buf, "TapedFunction:")
-    println(buf, "  .func => $(tf.func)")
-    println(buf, "  .ir   => $(tf.ir)")
-    println(buf, "  .tape => $(tf.tape)")
+    println(buf, "* .func => $(tf.func)")
+    println(buf, "* .ir   =>")
+    println(buf, "------------------")
+    println(buf, tf.ir)
+    println(buf, "------------------")
+    println(buf, "* .tape =>")
+    println(buf, "------------------")
+    println(buf, tf.tape)
+    println(buf, "------------------")
     print(io, String(take!(buf)))
 end
+
+box_args() = nothing
+box_args(x) = x
+box_args(args...) = args
 
 macro tapedfunction(expr)
     d = MacroTools.splitdef(expr)
     f = esc(d[:name])
     new_f_name = gensym(d[:name])
     d[:name] = new_f_name
+    args = d[:args]
+    arg_box_expr = if length(args) == 0
+        :(box_args())
+    elseif length(args) == 1
+        Expr(:(=), args[1], :(box_args($(args[1]))))
+    else
+        Expr(:(=), Expr(:tuple, args...), :(box_args($(args...))))
+    end
+    pushfirst!(d[:body].args, arg_box_expr)
     origin_func = MacroTools.combinedef(d)
 
     return quote
@@ -140,12 +159,26 @@ end
 ### Testing
 
 f1(x) = x + 1
-f2(x) = x * 2, x + 2
-f3(x) = x * 3
+f2(x, y) = x + y
+f3(x) = x + 1, x - 1
 
-@tapedfunction function t1(x)
+@tapedfunction function t0() # 0-args
+    a1 = f1(2)
+    a2, a3 = f3(a1)
+    a2
+end
+
+@show t0
+println()
+@show t0()
+println()
+@show t0
+println()
+@show t0()
+
+@tapedfunction function t1(x) # 1-args
     a1 = f1(x)
-    a2, a3 = f2(a1)
+    a2, a3 = f3(a1)
     a2
 end
 
@@ -156,3 +189,17 @@ println()
 @show t1
 println()
 @show t1(3)
+
+@tapedfunction function t2(x, y) # 2-args
+    a1 = f2(x, y)
+    a2, a3 = f3(a1)
+    a2
+end
+
+@show t2
+println()
+@show t2(2, 2)
+println()
+@show t2
+println()
+@show t2(3, 2)
