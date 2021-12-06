@@ -1,0 +1,13 @@
+#-*- mode: sh -*-
+
+PROGRAMS_DIR=$HOME/programs
+
+function emscripten-env-setup() {
+    cd $PROGRAMS_DIR/emsdk
+    source ./emsdk_env.sh
+    echo "[EMSCRIPTEN] Emscripten is setup."
+}
+
+function emscripten-env-off() {
+    echo "[EMSCRIPTEN] Emscripten cannot be unset."
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Interactions between C++ and JS in WASM</title>
+    </head>
+    <body>
+        <script>
+         var dummy_func = function () {};
+         function func_in_js_a(i) {
+             console.log("[JS] func_in_js_a is called");
+             return 2 * i;
+         }
+         var memory = new WebAssembly.Memory({ initial: 10, maximum: 100 });
+
+         const importObject = {
+             env: {
+                 consoleLog: console.log,
+                 func_in_js_a: func_in_js_a,
+             },
+             wasi_snapshot_preview1: {
+                 proc_exit : dummy_func,
+                 /*
+                    setModuleInstance : dummy_func,
+                    environ_sizes_get : dummy_func,
+                    args_sizes_get : dummy_func,
+                    environ_get : dummy_func,
+                    args_get : dummy_func,
+                    poll_oneoff : dummy_func,
+                    fd_close : dummy_func,
+                    fd_seek : dummy_func,
+                    fd_read : dummy_func,
+                    fd_prestat_get : dummy_func,
+                    fd_fdstat_get : dummy_func,
+                    fd_write : dummy_func,
+                    fd_prestat_dir_name : dummy_func,
+                  */
+             },
+             // js: { mem: memory }
+         };
+
+         WebAssembly.instantiateStreaming(
+             fetch('interact.wasm'),
+             importObject
+         ).then(result => {
+             console.log(result);
+             const fc = result.instance.exports.func_in_cpp_a;
+             console.log(fc(4, 5));
+             console.log(fc(10, 10));
+         });
+        </script>
+    </body>
+</html>
