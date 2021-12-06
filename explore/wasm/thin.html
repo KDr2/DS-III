@@ -11,7 +11,6 @@
              console.log("[JS] func_in_js_a is called");
              return 2 * i;
          }
-         var memory = new WebAssembly.Memory({ initial: 10, maximum: 100 });
 
          const importObject = {
              env: {
@@ -36,11 +35,10 @@
                     fd_prestat_dir_name : dummy_func,
                   */
              },
-             // js: { mem: memory }
          };
 
          WebAssembly.instantiateStreaming(
-             fetch('interact.wasm'),
+             fetch('thin.wasm'),
              importObject
          ).then(result => {
              console.log(result);

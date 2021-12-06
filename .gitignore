@@ -53,3 +53,5 @@ gen-bin/
 
 # wasm
 *.wasm
+*.waso.html
+*.waso.js

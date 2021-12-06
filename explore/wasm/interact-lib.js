@@ -16,6 +16,7 @@ if (typeof mergeInto !== 'undefined') {
     mergeInto(LibraryManager.library, {
         // we just a dummy function, and we will
         // define the real function somewhere else.
-        func_in_js_a: dummy_func,
+        // func_in_js_a: dummy_func,
+        func_in_js_a: func_in_js_a,
     });
 }
