@@ -10,6 +10,27 @@ function func_in_js_a(i) {
     return 2 * i;
 }
 
+function func_in_js_b(dest, l) {
+    console.log("[JS] func_in_js_b is called");
+    var d = new Uint8Array(l);
+    d[0] = 97;
+    d[1] = 98;
+    d[2] = 99;
+    HEAP8.set(d, dest);
+}
+
+function func_in_js_c(dest) {
+    console.log("[JS] func_in_js_c is called");
+    var d = new Uint8Array(4);
+    var n = 123128;
+    d[3] = n >> 24 & 0xff;
+    d[2] = n >> 16 & 0xff;
+    d[1] = n >> 8  & 0xff;
+    d[0] = n >> 0  & 0xff;
+
+    HEAP8.set(d, dest);
+}
+
 var dummy_func = function () {};
 
 if (typeof mergeInto !== 'undefined') {
@@ -18,5 +39,7 @@ if (typeof mergeInto !== 'undefined') {
         // define the real function somewhere else.
         // func_in_js_a: dummy_func,
         func_in_js_a: func_in_js_a,
+        func_in_js_b: func_in_js_b,
+        func_in_js_c: func_in_js_c,
     });
 }
