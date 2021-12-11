@@ -17,20 +17,28 @@ extern "C" {
     extern int func_in_js_a(int x);
     extern int func_in_js_b(void* dest, int x);
     extern int func_in_js_c(void* p);
+    extern int func_in_js_d(void* p);
 
     int main()
     {
 #ifdef FAT
         std::cout << "[CPP] Hello From C++!\n";
+        // primitive value
         std::cout << "[CPP] Value from JS: " << func_in_js_a(1) << "\n";
 
+        // mem buffer
         char *data = (char*) malloc(8);
         func_in_js_b(data, 8);
-        std::cout << "[CPP] Memory from JS: " << data[1] << data[2] << "\n";
+        std::cout << "[CPP] Memory from JS: "
+                  << data[0] << data[1]<< data[2] << data[3]
+                  << "\n";
 
+        // int
         size_t z = 0;
         func_in_js_c(&z);
-        std::cout << "[CPP] size_t from JS: " << z << "\n";
+        std::cout << "[CPP] size_t from JS c: " << z << "\n";
+        func_in_js_d(&z);
+        std::cout << "[CPP] size_t from JS d: " << z << "\n";
 #endif
         return 0;
     }

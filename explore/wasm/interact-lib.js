@@ -16,6 +16,7 @@ function func_in_js_b(dest, l) {
     d[0] = 97;
     d[1] = 98;
     d[2] = 99;
+    d[3] = 100;
     HEAP8.set(d, dest);
 }
 
@@ -31,6 +32,13 @@ function func_in_js_c(dest) {
     HEAP8.set(d, dest);
 }
 
+function func_in_js_d(dest) {
+    console.log("[JS] func_in_js_d is called");
+    var d = new Uint32Array(1);
+    d[0] = 123128;
+    HEAP8.set(d, dest);
+}
+
 var dummy_func = function () {};
 
 if (typeof mergeInto !== 'undefined') {
@@ -41,5 +49,6 @@ if (typeof mergeInto !== 'undefined') {
         func_in_js_a: func_in_js_a,
         func_in_js_b: func_in_js_b,
         func_in_js_c: func_in_js_c,
+        func_in_js_d: func_in_js_d,
     });
 }
