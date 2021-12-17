@@ -3,8 +3,7 @@
 PROGRAMS_DIR=$HOME/programs
 
 function emscripten-env-setup() {
-    cd $PROGRAMS_DIR/emsdk
-    source ./emsdk_env.sh
+    source $PROGRAMS_DIR/emsdk/emsdk_env.sh
     echo "[EMSCRIPTEN] Emscripten is setup."
 }
 
