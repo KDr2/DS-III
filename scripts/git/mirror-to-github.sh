@@ -48,18 +48,11 @@ function mirror {
     done
 }
 
-# Julia
+# Compiler + Lang
 mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
-# mirror https://github.com/FluxML/Flux.jl.git $(github_repo KDr2 Flux.jl.git) master
-
-# Rust
 mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
-
-# Haskell
 mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
-
-# Database
-mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git) master
+mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
 
 # Lisp
 mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
@@ -70,10 +63,14 @@ mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) maste
 # mirror https://gitlab.com/embeddable-common-lisp/ecl.git $(github_repo KDr2 ECL.git) develop master # develop is the main master
 mirror https://git.code.sf.net/p/maxima/code $(github_repo KDr2 maxima.git) master
 
+# Database
+mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git) master
+
 # ML
 mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) master
 # mirror https://github.com/stan-dev/math.git $(github_repo KDr2 stan-math.git) develop
+# mirror https://github.com/FluxML/Flux.jl.git $(github_repo KDr2 Flux.jl.git) master
 
-# Google
-# mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) master
+# Layout and Renderer
+mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
 mirror https://pdfium.googlesource.com/pdfium $(github_repo PaodingAI pdfium.git) master
