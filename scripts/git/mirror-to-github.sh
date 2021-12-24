@@ -53,14 +53,15 @@ mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) mast
 mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
 mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
 mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
+mirror https://github.com/emscripten-core/emscripten.git $(github_repo KDr2 emscripten.git) main
+# mirror https://github.com/microsoft/TypeScript.git $(github_repo KDr2 TypeScript.git) main
+# mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
 
 # Lisp
 mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
 mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master maint
 mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
-# mirror https://git.savannah.gnu.org/git/guile.git $(github_repo KDr2 guile.git) master
 # mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
-# mirror https://gitlab.com/embeddable-common-lisp/ecl.git $(github_repo KDr2 ECL.git) develop master # develop is the main master
 mirror https://git.code.sf.net/p/maxima/code $(github_repo KDr2 maxima.git) master
 
 # Database
@@ -68,8 +69,6 @@ mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git)
 
 # ML
 mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) master
-# mirror https://github.com/stan-dev/math.git $(github_repo KDr2 stan-math.git) develop
-# mirror https://github.com/FluxML/Flux.jl.git $(github_repo KDr2 Flux.jl.git) master
 
 # Layout and Renderer
 mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
