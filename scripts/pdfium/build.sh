@@ -80,7 +80,7 @@ esac
 # Input
 PDFIUM_REPO='https://github.com/PaodingAI/pdfium.git'
 PDFIUM_SOURCE_DIR=$PWD
-PDFIUM_SOURCE_REVISON=$(git rev-parse --short HEAD)
+PDFIUM_SOURCE_REVISION=$(git rev-parse --short HEAD)
 PDFIUM_SOURCE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 BUILD_MODE='RELEASE'
 if [[ $OPT_DEBUG == YES ]]; then
@@ -88,16 +88,20 @@ if [[ $OPT_DEBUG == YES ]]; then
 fi
 
 # sync code
+# !!! HERE, I suppose I am already in the source dir of pdfium
+#     otherwise I should clone the repo first.
+#     Considering it's a private build script for myself, it is
+#     unlikely that I am not in the source dir.
+
 # gclient config --unmanaged "$PDFium_URL" --name=pdfium
 cat > ../pdfium.gclient <<EOF
 solutions = [
   { "name"        : "pdfium",
-    "url"         : "git@github.com:PaodingAI/pdfium.git",
+    "url"         : "$PDFIUM_REPO",
     "deps_file"   : "DEPS",
     "managed"     : False,
-    "custom_deps" : {
-    },
-    "custom_vars": {},
+    "custom_deps" : {},
+    "custom_vars" : {},
   },
 ]
 EOF

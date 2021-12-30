@@ -54,8 +54,7 @@ mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master
 mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
 mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
 mirror https://github.com/emscripten-core/emscripten.git $(github_repo KDr2 emscripten.git) main
-# mirror https://github.com/microsoft/TypeScript.git $(github_repo KDr2 TypeScript.git) main
-# mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
+mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
 
 # Lisp
 mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
