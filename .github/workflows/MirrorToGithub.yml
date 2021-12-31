@@ -1,9 +1,9 @@
 name: Mirror Repositories
 
 on:
-  push:
+  # push:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 */12 * * *'
 
 jobs:
   build:

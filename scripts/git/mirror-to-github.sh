@@ -32,20 +32,27 @@ function mirror {
                 git checkout -b $BRANCH origin/$BRANCH
             fi
             git push mrepo $BRANCH
+
+            if [[ $? -ne 0 ]]; then
+                git push mrepo origin/$BRANCH:$BRANCH -f
+            fi
         fi
     done
 
     # push all tags
     #   We don't use `push --tags` because we don't want to push all tags, and
     #   push some tags will invite an error (in the SBCL repo)
-    for TAG in $(git tag); do
-        NUMBERS=$(echo $TAG | perl -p -e 's/\D//g')
-        # try to eliminate non-version tags
-        if [[ (${#TAG} -gt 24) || (${#NUMBERS} -lt 3) || ${TAG} = *rc* ]]; then
-            continue
-        fi
-        git push -f mrepo $TAG
-    done
+
+    git push mrepo --tags
+
+    # for TAG in $(git tag); do
+    #     NUMBERS=$(echo $TAG | perl -p -e 's/\D//g')
+    #     # try to eliminate non-version tags
+    #     if [[ (${#TAG} -gt 24) || (${#NUMBERS} -lt 3) || ${TAG} = *rc* ]]; then
+    #         continue
+    #     fi
+    #     git push -f mrepo $TAG
+    # done
 }
 
 
@@ -61,11 +68,11 @@ fi
 
 ### Lisp
 if [[ $1 == 'lisp' ]]; then
-mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
-mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master maint
-mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
-# mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
-mirror https://git.code.sf.net/p/maxima/code $(github_repo KDr2 maxima.git) master
+    mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
+    mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master maint
+    mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
+    # mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
+    mirror https://git.code.sf.net/p/maxima/code $(github_repo KDr2 maxima.git) master
 fi
 
 ### Others
