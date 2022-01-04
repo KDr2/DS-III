@@ -16,10 +16,14 @@ function mirror {
     shift 2
     REPO_DIR=$(mktemp -p . -d -u)
 
-    echo "Mirroring [$SOURCE_URL] to [$TARGET_URL]"
+    echo "Mirroring [$SOURCE_URL] to [$TARGET_URL]..."
 
     git clone $SOURCE_URL $REPO_DIR
     cd $REPO_DIR
+    if [[ $? -ne 0 ]]; then
+        echo "### !!! Failed to clone [$SOURCE_URL]."
+        return
+    fi
 
     git remote add mrepo $TARGET_URL
 
@@ -69,7 +73,7 @@ fi
 ### Lisp
 if [[ $1 == 'lisp' ]]; then
     mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
-    mirror https://code.orgmode.org/bzg/org-mode.git $(github_repo KDr2 org-mode.git) master maint
+    mirror https://git.savannah.gnu.org/git/emacs/org-mode.git $(github_repo KDr2 org-mode.git) main maint
     mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
     # mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
     mirror https://git.code.sf.net/p/maxima/code $(github_repo KDr2 maxima.git) master
