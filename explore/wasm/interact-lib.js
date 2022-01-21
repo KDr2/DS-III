@@ -39,7 +39,7 @@ function func_in_js_d(dest) {
     HEAP8.set(d, dest);
 }
 
-var dummy_func = function () {};
+var dummy_func = function() {};
 
 if (typeof mergeInto !== 'undefined') {
     mergeInto(LibraryManager.library, {
@@ -50,5 +50,15 @@ if (typeof mergeInto !== 'undefined') {
         func_in_js_b: func_in_js_b,
         func_in_js_c: func_in_js_c,
         func_in_js_d: func_in_js_d,
+    });
+}
+
+// add this function into the html page
+async function async_js_sleep(t) {
+    console.log("[JS] Sleeping in JS!");
+    return await new Promise(resolve => {
+        setTimeout(() => {
+            resolve(999);
+        }, 1000 * t);
     });
 }

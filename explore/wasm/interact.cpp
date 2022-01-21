@@ -14,6 +14,12 @@
 extern "C" {
 #endif
 
+#ifdef FAT
+    EM_ASYNC_JS(int, func_in_js_sleep, (int t), {
+            return await async_js_sleep(t);
+        });
+#endif
+
     extern int func_in_js_a(int x);
     extern int func_in_js_b(void* dest, int x);
     extern int func_in_js_c(void* p);
@@ -33,6 +39,9 @@ extern "C" {
                   << data[0] << data[1]<< data[2] << data[3]
                   << "\n";
 
+        std::cout << "[CPP] Sleep in JS\n";
+        int s = func_in_js_sleep(2);
+        std::cout << "[CPP] Wake up from JS: " << s << "\n";
         // int
         size_t z = 0;
         func_in_js_c(&z);
