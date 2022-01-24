@@ -94,10 +94,11 @@ fi
 #     unlikely that I am not in the source dir.
 
 # gclient config --unmanaged "$PDFium_URL" --name=pdfium
+# !!! NOTE: The url in gclient file must be a `git@host` one. !!!
 cat > ../pdfium.gclient <<EOF
 solutions = [
   { "name"        : "pdfium",
-    "url"         : "$PDFIUM_REPO",
+    "url"         : "git@github.com:PaodingAI/pdfium.git",
     "deps_file"   : "DEPS",
     "managed"     : False,
     "custom_deps" : {},
