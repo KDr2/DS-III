@@ -55,3 +55,7 @@ gen-bin/
 *.wasm
 *.waso.html
 *.waso.js
+
+# agda
+*.agdai
+MAlonzo/

@@ -1,0 +1,11 @@
+#-*- mode: sh -*-
+
+function haskell-env-setup() {
+    string-prepend-to-var PATH "$HOME/.cabal/bin"
+    echo "[Haskell] Added [$HOME/.cabal/bin] to PATH"
+}
+
+function haskell-env-off() {
+    string-remove-from-var PATH "$HOME/.cabal/bin"
+    echo "[Haskell] Removed [$HOME/.cabal/bin] from PATH"
+}
