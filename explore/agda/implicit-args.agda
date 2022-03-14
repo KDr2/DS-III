@@ -23,5 +23,11 @@ stringify'' { s } x = s
 a : Name "Hello"
 a = init
 
+f : ( s : String) -> Name s
+f x = init
+
 main : Main
-main = run (putStrLn (stringify'' (dot (dot a))))
+main = run
+   do
+     s <- getLine
+     putStrLn (stringify'' (dot (dot (f s))))
