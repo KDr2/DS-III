@@ -12,7 +12,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         cat:
-          - lang
+          - lang-0
+          - lang-1
           - lisp
           - others
     steps:

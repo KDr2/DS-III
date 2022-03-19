@@ -61,14 +61,19 @@ function mirror {
 
 
 ### Compiler + Lang
-if [[ $1 == 'lang' ]]; then
+if [[ $1 == 'lang-0' ]]; then
     mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
     mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
-    mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
     mirror https://github.com/WebAssembly/binaryen.git $(github_repo KDr2 binaryen.git) main
     mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
     mirror https://github.com/emscripten-core/emscripten.git $(github_repo KDr2 emscripten.git) main
     mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
+fi
+
+if [[ $1 == 'lang-1' ]]; then
+    mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
+    mirror https://github.com/agda/agda.git $(github_repo KDr2 agda.git) master
+    mirror https://github.com/agda/agda-stdlib.git $(github_repo KDr2 agda-stdlib.git) master
 fi
 
 ### Lisp
