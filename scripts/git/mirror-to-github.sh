@@ -74,7 +74,7 @@ if [[ $1 == 'lang-1' ]]; then
     mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
     mirror https://github.com/agda/agda.git $(github_repo KDr2 agda.git) master
     mirror https://github.com/agda/agda-stdlib.git $(github_repo KDr2 agda-stdlib.git) master
-    mirror https://github.com/idris-lang/Idris2.git $(github_repo KDr2 Idris2.git) master
+    mirror https://github.com/idris-lang/Idris2.git $(github_repo KDr2 Idris2.git) main
 fi
 
 ### Lisp
