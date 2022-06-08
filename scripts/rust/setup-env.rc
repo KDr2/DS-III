@@ -1,6 +1,5 @@
 #-*- mode: sh -*-
 
-
 function rust-env-setup() {
     export CARGO_HOME=$HOME/.cargo
     export RUSTUP_HOME=$HOME/.rustup
