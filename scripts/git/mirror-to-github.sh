@@ -82,8 +82,6 @@ if [[ $1 == 'lisp' ]]; then
     mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
     mirror https://git.savannah.gnu.org/git/emacs/org-mode.git $(github_repo KDr2 org-mode.git) main maint
     mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
-    # mirror https://git.code.sf.net/p/sbcl/sbcl $(github_repo KDr2 SBCL.git) master
-    mirror https://git.code.sf.net/p/maxima/code $(github_repo KDr2 maxima.git) master
 fi
 
 ### Others
@@ -96,5 +94,5 @@ if [[ $1 == 'others' ]]; then
 
     # Layout and Renderer
     mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
-    mirror https://pdfium.googlesource.com/pdfium $(github_repo PaodingAI pdfium.git) master
+    mirror https://pdfium.googlesource.com/pdfium $(github_repo PaodingAI pdfium.git) main
 fi
