@@ -14,7 +14,7 @@ backend: GTKCairo
 # GDK     png jpg tiff ...        raster graphics – the Gimp Drawing Kit
 
 # BACKENDS:
-# GTKAgg 	    Agg rendering to a GTK 2.x canvas (requires PyGTK)
+# GTKAgg 	  Agg rendering to a GTK 2.x canvas (requires PyGTK)
 # GTK3Agg     Agg rendering to a GTK 3.x canvas (requires PyGObject)
 # GTK         GDK rendering to a GTK 2.x canvas (not recommended) (requires PyGTK)
 # GTKCairo    Cairo rendering to a GTK 2.x canvas (requires PyGTK and pycairo)
