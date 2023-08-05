@@ -1,0 +1,15 @@
+#!/bin/bash
+# -*- sh -*-
+BB_PROJECT=$DS3_HOME/babashka
+
+if [[ $# == 0 ]]; then
+    bb
+else
+    FILE=$BB_PROJECT/$1.clj
+    if [[ -f $FILE ]]; then
+        shift
+        bb -f $FILE "$@"
+    else
+        bb --config $BB_PROJECT/bb.edn "$@"
+    fi
+fi
