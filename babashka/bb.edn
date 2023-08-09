@@ -4,8 +4,9 @@
          task-demo {:doc "a demo task"
                     :task (shell "echo I am a task in babashka.")}
          kd-pub {:doc "publish kdr2.com"
-                 :task (shell (str "make -C"
-                                   (System/getenv "HOME")
-                                   "/Work/mine/kdr2-on-web"))}
+                 :task (shell
+                        {:extra-env (klib/emacs-env)}
+                        (str "make -C"
+                             (klib/home-path "/Work/mine/kdr2-on-web")))}
          k0 (klib/show)}
  }
