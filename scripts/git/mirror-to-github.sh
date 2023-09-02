@@ -90,7 +90,7 @@ if [[ $1 == 'others' ]]; then
     mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git) master
 
     # ML
-    mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) master
+    mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) main main
 
     # Layout and Renderer
     mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
