@@ -45,7 +45,7 @@ function mirror {
 
     # push all tags
     #   We don't use `push --tags` because we don't want to push all tags, and
-    #   push some tags will invite an error (in the SBCL repo)
+    #   push some tags will invite an error (e.g. in the SBCL repo)
 
     git push mrepo --tags
 
@@ -61,16 +61,20 @@ function mirror {
 
 
 ### Compiler + Lang
-if [[ $1 == 'lang-0' ]]; then
-    mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
+if [[ $1 == 'lang-native' ]]; then
     mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
-    mirror https://github.com/WebAssembly/binaryen.git $(github_repo KDr2 binaryen.git) main
     mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
     mirror https://github.com/emscripten-core/emscripten.git $(github_repo KDr2 emscripten.git) main
-    mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
+    mirror https://github.com/WebAssembly/binaryen.git $(github_repo KDr2 binaryen.git) main
 fi
 
-if [[ $1 == 'lang-1' ]]; then
+if [[ $1 == 'lang-app' ]]; then
+    mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
+    mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
+    # TODO: add TypeScript, Python
+fi
+
+if [[ $1 == 'lang-theory' ]]; then
     mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
     mirror https://github.com/agda/agda.git $(github_repo KDr2 agda.git) master
     mirror https://github.com/agda/agda-stdlib.git $(github_repo KDr2 agda-stdlib.git) master
@@ -78,10 +82,11 @@ if [[ $1 == 'lang-1' ]]; then
 fi
 
 ### Lisp
-if [[ $1 == 'lisp' ]]; then
+if [[ $1 == 'lang-lisp' ]]; then
     mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
     mirror https://git.savannah.gnu.org/git/emacs/org-mode.git $(github_repo KDr2 org-mode.git) main maint
     mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
+    # TODO: add Clojure
 fi
 
 ### Others
@@ -90,9 +95,10 @@ if [[ $1 == 'others' ]]; then
     mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git) master
 
     # ML
-    mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) main main
+    mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) main
 
     # Layout and Renderer
     mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
+    # TODO: remove PDFium
     mirror https://pdfium.googlesource.com/pdfium $(github_repo PaodingAI pdfium.git) main
 fi
