@@ -1,12 +1,18 @@
 {:paths ["."] ;; classpath
  :deps {}
  :tasks {:requires ([klib])
-         task-demo {:doc "a demo task"
-                    :task (shell "echo I am a task in babashka.")}
+         ns {:doc "nix-shell starter"
+             :task (shell (klib/nix-shell-cmd (first *command-line-args*)))}
+         dev-full {:doc "full nix-shell for development"
+                   :task (shell (klib/nix-shell-cmd "dev-full"))}
          kd-pub {:doc "publish kdr2.com"
                  :task (shell
                         {:extra-env (klib/emacs-env)}
                         (str "make -C"
                              (klib/home-path "/Work/mine/kdr2-on-web")))}
-         k0 (klib/show)}
+         task-demo {:doc "a demo task"
+                    :task (shell "echo I am a task in babashka.")}
+         k0 (klib/show)
+         k1 (prn *command-line-args*)
+         }
  }

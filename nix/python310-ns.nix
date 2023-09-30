@@ -6,11 +6,11 @@ in with pkgs;
     packages = [
       python310Full
       python310Packages.virtualenv
-      # python310Packages.ipython
+      python310Packages.ipython
       # python310Packages.numpy
     ];
     buildInputs = [];
     shellHook = ''
-      export PS1="(${name})$PS1"
+      export PS1="=>(${name})$PS1"
     '';
   }
