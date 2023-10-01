@@ -1,6 +1,0 @@
-*.E
-*.P
-*.S
-*.core
-*.dis
-*_yecc_parser.erl
