@@ -2,9 +2,9 @@
  :deps {}
  :tasks {:requires ([klib])
          ns {:doc "nix-shell starter"
-             :task (shell (klib/nix-shell-cmd (first *command-line-args*)))}
+             :task (klib/nix-shell (first *command-line-args*))}
          dev-full {:doc "full nix-shell for development"
-                   :task (shell (klib/nix-shell-cmd "dev-full"))}
+                   :task (klib/nix-shell "dev-full")}
          kd-pub {:doc "publish kdr2.com"
                  :task (shell
                         {:extra-env (klib/emacs-env)}

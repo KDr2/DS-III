@@ -3,9 +3,9 @@ let chs = import ./_channels.nix {};
     pkgs = import path {};
 in with pkgs;
   mkShell rec {
-    name = "Julia-1.8";
+    name = "Julia, the latest release.";
     packages = [
-      julia_18
+      julia
     ];
     buildInputs = [];
     shellHook = ''

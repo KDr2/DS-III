@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 function __dir__() {
     echo $(dirname $(realpath $0))
 }

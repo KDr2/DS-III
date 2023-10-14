@@ -1,5 +1,7 @@
-let pkgs = import path {};
-    path = <ustc-unstable>;
+let chs = import ./_channels.nix {};
+    path = chs.ustc-unstable;
+    # path = <ustc-unstable>;
+    pkgs = import path {};
 in with pkgs;
   mkShell rec {
     name = "Scala3";

@@ -1,5 +1,6 @@
 (ns klib
-  (:require [babashka.fs :as fs]))
+  (:require [babashka.fs :as fs]
+            [babashka.process :refer [shell process exec]]))
 
 (require '[clojure.java.io :as io])
 
@@ -11,6 +12,13 @@
 
 (defn nix-shell-cmd [name]
   (str "nix-shell " script-dir "/../nix/" name "-ns.nix"))
+
+(defn nix-shell [name]
+  (if (= name "list")
+    (doall (->> (.listFiles (io/file (str script-dir "/../nix/")))
+                (map #(.getName %)) (filter #(.endsWith % "-ns.nix"))
+                (map #(.replace % "-ns.nix" "")) (map println)))
+    (shell (nix-shell-cmd name))))
 
 (defn emacs-env []
   (let [bins [(home-path "/programs/emacs-nox/bin/emacs")

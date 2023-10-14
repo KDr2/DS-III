@@ -60,7 +60,6 @@ function ds3() {
 
 function init() {
     import-rcs
-    string-prepend-to-var PATH $DS3_HOME/gen-bin
     string-prepend-to-var PATH $DS3_HOME/xbin
     string-prepend-to-var PATH $DS3_HOME/bin
 

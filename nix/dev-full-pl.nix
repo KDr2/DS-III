@@ -3,8 +3,10 @@
 #   `nix-env -f norm.nix -i '.*'`
 # to install all packages in this file
 #
-let pkgs = import path {};
-    path = <ustc-unstable>;
+let chs = import ./_channels.nix {};
+    path = chs.ustc-unstable;
+    # path = <ustc-unstable>;
+    pkgs = import path {};
 in
 with pkgs;
 [
@@ -31,6 +33,7 @@ with pkgs;
   # * Haskell
   ghc
   cabal-install
+  stack
   # agda
   # * Lisp
   clojure
