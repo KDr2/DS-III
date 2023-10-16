@@ -10,12 +10,44 @@ function import-rcs() {
     local RC_SCRIPTS=(
         lib/bash/bash-basic.rc
         lib/bash/common.bash
-        bin/ds3-env.rc
         lib/bash/completion.rc
     )
     for RC in ${RC_SCRIPTS[*]}; do
         [[ -f $DS3_HOME/$RC ]] && source $DS3_HOME/$RC
     done
+}
+
+function ds3-env() {
+    local FUNC_NAME
+    if [[ $1 == 'off' ]]; then
+        shift 1
+        FUNC_NAME=env-off
+    else
+        FUNC_NAME=env-setup
+    fi
+
+    local MODULE=$1
+    shift 1
+
+    local ENV_FILE=$DS3_HOME/scripts/$MODULE/setup-env.rc
+    local TARGET_FUNC=$FUNC_NAME
+
+    source $ENV_FILE
+    $TARGET_FUNC "$@"
+}
+
+function ds3-run() {
+    local MODULE=$1
+    local SCRIPT_NAME=$2
+    shift 2
+
+    local SCRIPT_FILES=($(ls $DS3_HOME/scripts/$MODULE/$SCRIPT_NAME*))
+    if [[ ${#SCRIPT_FILES[*]} -gt 1 ]]; then
+        echo "More then one command available!"
+        return 1
+    else
+        ${SCRIPT_FILES[0]} "$@"
+    fi
 }
 
 function ds3-help() {
@@ -44,7 +76,7 @@ function ds3() {
             return
             ;;
         RUN)
-            $DS3_HOME/bin/ds3-run "$@"
+            ds3-run "$@"
             return
         ;;
         HELP)
@@ -58,7 +90,7 @@ function ds3() {
     return 0
 }
 
-function init() {
+function ds3_init() {
     import-rcs
     string-prepend-to-var PATH $DS3_HOME/bin
 
@@ -66,17 +98,15 @@ function init() {
         string-prepend-to-var PATH $HOME/local/bin
     fi
 
-    local PROGRAMS_BIN=(
-        bin
-        local/bin
-        depot_tools
-        google-cloud-sdk/bin
+    local EXTRA_BIN_DIRS=(
+        $HOME/programs/bin
+        $HOME/programs/local/bin
     )
-    for BIN in ${PROGRAMS_BIN[*]}; do
-        if [ -d $HOME/programs/$BIN ]; then
-            string-prepend-to-var PATH $HOME/programs/$BIN
+    for DIR in ${EXTRA_BIN_DIRS[*]}; do
+        if [ -d $DIR ]; then
+            string-prepend-to-var PATH $DIR
         fi
     done
 }
 
-echo ${DS3_HOME?variable not set.} &>/dev/null && init
+echo ${DS3_HOME?variable not set.} &>/dev/null && ds3_init

@@ -1,6 +1,6 @@
 #-*- mode: sh -*-
 
-function julia-env-setup() {
+function env-setup() {
     local VERSION=${1-dev}
     local NEW_JULIA_HOME
     if [[ $VERSION == dev ]] ; then
@@ -22,7 +22,7 @@ function julia-env-setup() {
     echo "[JULIA] JULIA_HOME is set to $JULIA_HOME"
 }
 
-function julia-env-off() {
+function env-off() {
     [[ -d $JULIA_HOME ]] && string-remove-from-var PATH $JULIA_HOME/bin
     unset JULIA_HOME
     echo "[JULIA] JULIA_HOME is unset."

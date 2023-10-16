@@ -95,6 +95,7 @@ function _delete()
     if(empty($dest)) return err("No `dest`.");
     if(!is_file($dest)) return err(" `dest` doesn't exist.");
     if(!unlink($dest)) return err("unlink failed.");
+    return ok();
 }
 
 

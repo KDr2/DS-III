@@ -1,6 +1,6 @@
 #-*- mode: sh -*-
 
-function kernel-env-setup() {
+function env-setup() {
     local ENVS=($(ls $DS3_HOME/scripts/kernel/build.env-v*))
     for (( i=0; i < ${#ENVS[*]}; i++ )); do
         ENVS[$i]=${ENVS[i]##*build.env-}
@@ -18,7 +18,7 @@ function kernel-env-setup() {
     done
 }
 
-function kernel-env-off() {
+function env-off() {
     unset BUILDDIR
     unset KBUILD_OUTPUT
     unset INSTALL_PATH

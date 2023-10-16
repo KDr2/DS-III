@@ -1,6 +1,6 @@
 #-*- mode: sh -*-
 
-function python-env-setup() {
+function env-setup() {
     if [ -z $PYENV_ROOT ]; then
         export PYENV_ROOT="$HOME/.pyenv"
         string-prepend-to-var PATH $PYENV_ROOT/bin
@@ -14,7 +14,7 @@ function python-env-setup() {
 }
 
 
-function python-env-off() {
+function env-off() {
     string-remove-from-var PATH $PYENV_ROOT/bin
     string-remove-from-var PATH $PYENV_ROOT/libexec
     unset PYENV_ROOT
