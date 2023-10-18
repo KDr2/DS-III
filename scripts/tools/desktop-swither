@@ -7,8 +7,8 @@
     - http://sourceforge.net/p/fluxbox/bugs/1008/
     - http://sourceforge.net/p/fluxbox/bugs/1067/
 
-    It maybe fixed by edman007, at 1067, I patch this on my bug1067 branch
-    And hope it will be patched to the upstream.
+    It maybe fixed by edman007, at 1067, I patched this on my bug1067 branch
+    And hoped it would be merged to the upstream.
 
     See the patch at the end of this file.
 
@@ -30,7 +30,7 @@ sub desktop {
 sub desktop_next {
     my ($num, $cur) = desktop();
     my $nex = ($cur + 1) % $num;
-    `wmctrl -s  $nex`
+    `wmctrl -s $nex`
 }
 
 sub desktop_prev {
