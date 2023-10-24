@@ -49,6 +49,7 @@ with pkgs;
   # * Emacs
   emacs
   # * Others
-  perl
-  perl538Packages.Appcpanminus
+  perl536
+  perl536Packages.Appcpanminus
+  perl536Packages.locallib
 ]
