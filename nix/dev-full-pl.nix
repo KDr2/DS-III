@@ -12,10 +12,6 @@ with pkgs;
 [
   # * Basics
   glibcLocales
-  # * X11, Graphics
-  tigervnc
-  fluxbox
-  gtk3
   # * Python
   python310Full
   python310Packages.virtualenv
