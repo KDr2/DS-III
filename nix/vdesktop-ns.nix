@@ -9,14 +9,21 @@ in with pkgs;
   mkShell rec {
     name = "Virtual Desktop";
     packages = [
-      # * X11, Graphics
-      noto-fonts-emoji
+      # * Basics
+      glibcLocales
+      # * X11, WM
       tigervnc
       icewm
-      gtk3
+      # * Fonts
+      noto-fonts-emoji
+      # * Applications
+      lxterminal
+      evince
       google-chrome-dev
       # nix-daemon needs a proxy to install this in China Mainland:
       # chromiumDev
+      # * Developing libraries
+      gtk3
     ];
     buildInputs = [];
     shellHook = ''
