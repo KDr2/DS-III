@@ -4,8 +4,7 @@
 # to install all packages in this file
 #
 let chs = import ./_channels.nix {};
-    path = chs.ustc-unstable;
-    # path = <ustc-unstable>;
+    path = chs.v2305;
     pkgs = import path {};
 in
 with pkgs;
@@ -44,6 +43,8 @@ with pkgs;
   R
   # * Emacs
   emacs
+  # * DB
+  postgresql.lib
   # * Others
   perl536
   perl536Packages.Appcpanminus

@@ -10,6 +10,6 @@ in with pkgs;
       stack
     ];
     shellHook = ''
-      export PS1="=>(${name})$PS1"
+      export PS1="=> (${name})$PS1"
     '';
   }

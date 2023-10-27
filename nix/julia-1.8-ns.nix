@@ -9,7 +9,7 @@ in with pkgs;
     ];
     buildInputs = [];
     shellHook = ''
-      export PS1="=>(${name})$PS1"
+      export PS1="=> (${name})$PS1"
       export JULIA_PKG_SERVER=https://mirrors.ustc.edu.cn/julia
     '';
   }
