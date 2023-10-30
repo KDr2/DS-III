@@ -3,7 +3,7 @@ We need NIXPKGS_ALLOW_UNFREE=1 because of:
 - google-chrome-dev
 */
 let chs = import ./_channels.nix {};
-    path = chs.ustc-unstable;
+    path = chs.unstable;
     pkgs = import path {};
 in with pkgs;
   mkShell rec {

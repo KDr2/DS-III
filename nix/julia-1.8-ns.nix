@@ -1,5 +1,5 @@
 let chs = import ./_channels.nix {};
-    path = chs.ustc-unstable;
+    path = chs.unstable;
     pkgs = import path {};
 in with pkgs;
   mkShell rec {

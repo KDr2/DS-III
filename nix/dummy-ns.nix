@@ -1,4 +1,5 @@
 let pkgs = import <nixpkgs> {};
+    unstable-pkgs = import <nixpkgs-unstable> {};
 in with pkgs;
   mkShell rec {
     name="dummy";
