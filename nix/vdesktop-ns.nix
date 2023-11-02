@@ -14,8 +14,9 @@ in with pkgs;
       # * X11, WM
       tigervnc
       icewm
-      # * Fonts
+      # * Fonts and Icons
       noto-fonts-emoji
+      arc-icon-theme
       # * Applications
       lxterminal
       evince
@@ -26,7 +27,9 @@ in with pkgs;
       gtk3
     ];
     buildInputs = [];
+    LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     shellHook = ''
       export PS1="=> (${name})$PS1"
+      export LC_ALL=en_US.UTF-8
     '';
   }
