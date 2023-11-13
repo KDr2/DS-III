@@ -12,6 +12,6 @@ pkgs.mkShell rec {
   LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
   shellHook = ''
   export PS1="=> (${name})$PS1"
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.postgresql.lib.outPath + "/lib"}
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.postgresql.lib.outPath + "/lib"}:${pkgs.stdenv.cc.cc.lib}/lib
   '';
 }
