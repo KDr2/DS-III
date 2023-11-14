@@ -11,6 +11,7 @@ with pkgs;
 [
   # * Basics
   glibcLocales
+  zlib
   # * Python
   python310Full
   python310Packages.virtualenv
