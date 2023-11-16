@@ -20,7 +20,8 @@ in with pkgs;
       # * Applications
       lxterminal
       evince
-      google-chrome-dev
+      google-chrome
+      xchm
       # nix-daemon needs a proxy to install this in China Mainland:
       # chromiumDev
       # * Developing libraries

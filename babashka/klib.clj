@@ -18,7 +18,7 @@
     (doall (->> (.listFiles (io/file (str script-dir "/../nix/")))
                 (map #(.getName %)) (filter #(.endsWith % "-ns.nix"))
                 (map #(.replace % "-ns.nix" "")) (map println)))
-    (shell (nix-shell-cmd name))))
+    (shell {:extra-env {:NIXPKGS_ALLOW_UNFREE "1"}}  (nix-shell-cmd name))))
 
 (defn emacs-env []
   (let [bins [(home-path "/programs/emacs-nox/bin/emacs")

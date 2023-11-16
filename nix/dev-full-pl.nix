@@ -12,6 +12,9 @@ with pkgs;
   # * Basics
   glibcLocales
   zlib
+  # * Convenience
+  nix
+  vim
   # * Python
   python310Full
   python310Packages.virtualenv
