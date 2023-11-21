@@ -6,6 +6,10 @@ There are many ways to get the library path of a package:
 - pkgs.postgresql.lib.outPath + "/lib"
 - pkgs.lib.makeLibraryPath [pkgs...]
 
+
+The LD_LIBRARY_PATH entry ${pkgs.stdenv.cc.cc.lib}/lib is for Python
+package Pandas.
+
 */
 
 let chs = import ./_channels.nix {};
@@ -20,7 +24,7 @@ pkgs.mkShell rec {
   LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
   shellHook = ''
   export PS1="=> (${name})$PS1"
-  # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.stdenv.cc.cc.lib}/lib
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.stdenv.cc.cc.lib}/lib
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath packages}
   '';
 }
