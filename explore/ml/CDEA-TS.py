@@ -7,9 +7,9 @@ class CDEA:
         self.input_file = input
         self.output_file = output
         self.epolicy = True
-        self.use_checkpoint = False
         self.policy_key = '试点与否'
-        self.output_columns = ['人均碳排放', '单位GDP碳排放'] # None for all
+        self.output_columns = []
+        # self.output_columns = ['人均碳排放', '单位GDP碳排放'] # None for all
         # self.output_columns = ['工业总产值', 'GDP'] # None for all
 
     def init_data(self):
@@ -48,30 +48,7 @@ class CDEA:
         self.E_ = torch.rand(self.n_regions, dtype=torch.float64, requires_grad=True)
         self.VH = torch.tensor(0.3, requires_grad=True)
 
-        # self.restore_checkpoints_1()
-
-    def restore_checkpoints_0(self):
-        self.use_checkpoint = True
-        # All Variables, Dynamic E, No TS(Or it doesn't matter much)
-        self.V_ = torch.tensor([99.9, 99.9, -44.4387, 99.9], dtype=torch.float64, requires_grad=True)
-        self.U_ = torch.tensor([-80.7511, -81.4838, 99.9, 99.9, 99.9, 99.9, -51.3516, -76.5833, -68.5186, 99.9, -71.8757, 99.9],
-                               dtype=torch.float64, requires_grad=True)
-        self.E_ = torch.tensor([-0.5671, -1.5475,  0.0599,  0.0413,  0.5225,  0.1637,  0.4996,  0.3229,
-                                -0.4324,  0.6812,  0.4149,  0.7802, -0.7963,  0.1500,  0.5812,  0.9951,
-                                -0.8254,  0.0269, -0.2335,  0.3756,  0.2750, -0.9915,  0.3336,  0.4737,
-                                0.1214,  0.8314,  0.5448,  0.3247,  0.5720,  0.6419], dtype=torch.float64, requires_grad=True)
-
-    def restore_checkpoints_1(self):
-        self.use_checkpoint = True
-        # Output: ['人均碳排放', '单位GDP碳排放'], Dynamic E
-        self.V_ = torch.tensor([99.9, 99.9, -44.4387, 99.9], dtype=torch.float64, requires_grad=True)
-        self.U_ = torch.tensor([-80.7511, -81.4838],
-                               dtype=torch.float64, requires_grad=True)
-        self.E_ = torch.tensor([-0.5671, -1.5475,  0.0599,  0.0413,  0.5225,  0.1637,  0.4996,  0.3229,
-                                -0.4324,  0.6812,  0.4149,  0.7802, -0.7963,  0.1500,  0.5812,  0.9951,
-                                -0.8254,  0.0269, -0.2335,  0.3756,  0.2750, -0.9915,  0.3336,  0.4737,
-                                0.1214,  0.8314,  0.5448,  0.3247,  0.5720,  0.6419], dtype=torch.float64, requires_grad=True)
-
+        self.opt = optim.Adam([self.V_, self.U_, self.E_, self.VH], lr=100)
 
     def get_input(self, r, y):
         if (r, y) in self.input_cache:
@@ -177,12 +154,13 @@ class CDEA:
                 H_i = YU / XVE
                 last_h = H_i
                 loss_i = torch.pow(1 - H_i, 2)
+                if H_i > 1:
+                    loss_i = loss_i * 10
                 loss = loss + loss_i
 
         return loss
 
     def train(self):
-        # last_loss_val = -1
         loop_count = 0
 
         self.init_parameters()
@@ -190,34 +168,25 @@ class CDEA:
         while True:
             loop_count += 1
             lv = self.loss()
-            if self.use_checkpoint:
-                rate = 100
-            else:
-                # / math.log(loop_count + 10, 10)
-                rate = 7.0 / loop_count if loop_count < 1000 else 0.05
+
+            lrate = 0.2 if loop_count < 1000 else 0.1
+            for g in self.opt.param_groups:
+                g['lr'] = lrate
 
             if loop_count % 50 == 0:
-                print(f"loop={loop_count}, r={rate}, loss={lv.item()}")
+                print(f"loop={loop_count}, lr={lrate}, loss={lv.item()}")
             if loop_count % 1000 == 0:
                 self.summary()
             lv.backward()
             with torch.no_grad():
-                opt = optim.Adam([self.V_, self.U_, self.E_, self.VH], lr=rate)
-                opt.step()
-                opt.zero_grad()
-                # self.V_ -= rate * self.V_.grad
-                # self.U_ -= rate * self.U_.grad
-                self.V_.grad = None
-                self.U_.grad = None
-                self.E_.grad = None
+                self.opt.step()
+                self.opt.zero_grad()
 
-            if loop_count > 3e3:
-                return lv.item() < self.n_DMU * 2 / 3
+            if loop_count > 2e4:
+                return lv.item() < self.n_DMU / 10
 
 
 if __name__ == '__main__':
     engine = CDEA()
     engine.init_data()
-    found = engine.train()
-    while not found:
-        found = engine.train()
+    engine.train()
