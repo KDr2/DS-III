@@ -26,5 +26,6 @@ pkgs.mkShell rec {
   export PS1="=> (${name})$PS1"
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.stdenv.cc.cc.lib}/lib
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.lib.makeLibraryPath packages}
+  export JULIA_PKG_SERVER=https://mirrors.ustc.edu.cn/julia
   '';
 }

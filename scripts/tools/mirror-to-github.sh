@@ -78,7 +78,6 @@ if [[ $1 == 'lang-theory' ]]; then
     mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
     mirror https://github.com/agda/agda.git $(github_repo KDr2 agda.git) master
     mirror https://github.com/agda/agda-stdlib.git $(github_repo KDr2 agda-stdlib.git) master
-    mirror https://github.com/idris-lang/Idris2.git $(github_repo KDr2 Idris2.git) main
 fi
 
 ### Lisp
@@ -98,7 +97,9 @@ if [[ $1 == 'others' ]]; then
     mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) main
 
     # Layout and Renderer
+    mirror https://github.com/typst/typst.git $(github_repo KDr2 typst.git) main
     mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
+
     # TODO: remove PDFium
     mirror https://pdfium.googlesource.com/pdfium $(github_repo PaodingAI pdfium.git) main
 fi
