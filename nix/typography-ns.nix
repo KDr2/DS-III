@@ -9,8 +9,7 @@ in with pkgs;
       typst
       texlive.combined.scheme-full
       gtk4
-      # harfbuzz
-      arcanPackages.harfbuzz
+      harfbuzz
     ];
     buildInputs = [];
     shellHook = ''

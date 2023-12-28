@@ -4,7 +4,7 @@
 # to install all packages in this file
 #
 let chs = import ./_channels.nix {};
-    path = chs.v2305;
+    path = chs.v2405;
     pkgs = import path {};
 in
 with pkgs;
@@ -14,7 +14,6 @@ with pkgs;
   zlib
   # * Convenience
   nix
-  vim
   # * Python
   python310Full
   python310Packages.virtualenv
@@ -45,8 +44,12 @@ with pkgs;
   julia-bin
   # * R
   R
-  # * Emacs
+  # * Editors
   emacs
+  helix
+  vim
+  # * Typography
+  typst
   # * DB
   postgresql.lib
   # * Others

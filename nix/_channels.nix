@@ -15,8 +15,10 @@ substituters = https://mirror.sjtu.edu.cn/nix-channels/store/
 rec {
   master = fetchTarball https://github.com/NixOS/nixpkgs/archive/master.tar.gz;
   unstable = ustc-unstable;
-  v2305 = fetchTarball https://github.com/NixOS/nixpkgs/archive/refs/tags/23.05.tar.gz;
-  # mirror
+  # mirrors of unstable
   official-unstable = fetchTarball https://nixos.org/channels/nixpkgs-unstable/nixexprs.tar.xz;
   ustc-unstable = fetchTarball https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz;
+  # releases
+  v2405 = fetchTarball https://github.com/NixOS/nixpkgs/archive/refs/tags/24.05-pre.tar.gz;
+  v2305 = fetchTarball https://github.com/NixOS/nixpkgs/archive/refs/tags/23.05.tar.gz;
 }
