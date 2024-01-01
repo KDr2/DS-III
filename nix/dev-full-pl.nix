@@ -1,6 +1,6 @@
 #
 # use
-#   `nix-env -f norm.nix -i '.*'`
+#   `nix-env -f dev-full-pl.nix -i '.*'`
 # to install all packages in this file
 #
 let chs = import ./_channels.nix {};

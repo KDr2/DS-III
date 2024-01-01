@@ -2,7 +2,7 @@
 
 Nix already has system level channels which can be manipulated by the
 `nix-channel` command. But to make nix-shell independent to these
-system level channels, I collect some usefull channel here.
+system level channels, I collect some usefull channels here.
 
 But I failed to find a way to customize substituter locally, so if you
 want a substituter, you should set it in the /etc/nix/nix.conf file:
