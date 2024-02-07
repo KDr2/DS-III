@@ -3,9 +3,11 @@ import torch
 from torch import optim
 
 class CDEA:
-    def __init__(self, input="~/input.xlsx", output="~/output.xlsx"):
+    def __init__(self, input="~/input.xlsx", output="~/output.xlsx",
+                 policy_ingredients="~/policy_ingredients.xlsx"):
         self.input_file = input
         self.output_file = output
+        self.policy_file = policy_ingredients
         self.epolicy = True
         self.policy_key = '试点与否'
         self.output_columns = []
@@ -13,7 +15,9 @@ class CDEA:
         # self.output_columns = ['工业总产值', 'GDP'] # None for all
 
     def init_data(self):
+        # the data are dictionaries of sheets/dataframes
         self.input_data = pandas.read_excel(self.input_file, sheet_name=None)
+
         self.output_data = pandas.read_excel(self.output_file, sheet_name=None)
         if self.output_columns: # only pick some certain columns
             output_data = {}
@@ -22,11 +26,15 @@ class CDEA:
             self.output_data = output_data
 
         self.policy_data = self.input_data.pop(self.policy_key)
+        self.policy_igd_data = pandas.read_excel(self.policy_file, sheet_name=None)
 
         self.n_input = len(self.input_data)
-        self.keys_input = list(self.input_data.keys()) # names of sheets
+        self.keys_input = list(self.input_data.keys()) # names of sheets/input
         self.n_output = len(self.output_data)
-        self.keys_output = list(self.output_data.keys()) # names of sheets
+        self.keys_output = list(self.output_data.keys()) # names of sheets/output
+        self.n_policy_igd = len(self.policy_igd_data)
+        self.keys_policy_igd = list(self.policy_igd_data.keys()) # names of sheets/policy-ingredients
+
 
         df_input_0 = self.input_data[[*self.input_data.keys()][0]]
         # number of rows of the df
@@ -35,6 +43,11 @@ class CDEA:
         # eliminate the first column, which is the region name:
         self.n_years = len(df_input_0.columns) - 1
         self.years = df_input_0.columns[1:]
+
+        # extract regions in policy data
+        df_pi_0 = self.policy_igd_data[[*self.policy_igd_data.keys()][0]]
+        self.p_regions = df_pi_0[df_pi_0.columns[0]]
+
 
         self.n_DMU = self.n_regions * self.n_years
 
@@ -45,10 +58,10 @@ class CDEA:
     def init_parameters(self):
         self.V_ = torch.rand(self.n_input, dtype=torch.float64, requires_grad=True)
         self.U_ = torch.rand(self.n_output, dtype=torch.float64, requires_grad=True)
-        self.E_ = torch.rand(self.n_regions, dtype=torch.float64, requires_grad=True)
+        self.Ke_ = torch.rand(self.n_policy_igd, dtype=torch.float64, requires_grad=True)
         self.VH = torch.tensor(0.3, requires_grad=True)
 
-        self.opt = optim.Adam([self.V_, self.U_, self.E_, self.VH], lr=100)
+        self.opt = optim.Adam([self.V_, self.U_, self.Ke_, self.VH], lr=100)
 
     def get_input(self, r, y):
         if (r, y) in self.input_cache:
@@ -78,60 +91,16 @@ class CDEA:
         year = self.years[y]
         p = self.policy_data[year][r]
         if p:
-            return torch.sigmoid(self.E_[r])
+            # here we use sum(K * ingrediants of policy) as e
+            r_name = self.regions[r]
+            rx = list(self.p_regions).index(r_name)
+            data = []
+            for pi in self.keys_policy_igd:
+                pv = self.policy_igd_data[pi][year][rx]
+                data.append(float(pv))
+            ke = torch.sigmoid(self.Ke_)
+            return torch.sum(ke * torch.tensor(data))
         return 1
-
-    def summary(self):
-        with torch.no_grad():
-            print("=== Technical Checkpoint ===")
-            print(f" V = torch.{self.V_}")
-            print(f" U = torch.{self.U_}")
-            print(f" E = torch.{self.E_}")
-            print(f"VH = {self.VH}")
-            V = map(lambda x: x.item(), torch.sigmoid(self.V_))
-            VS = list(zip(self.keys_input, V))
-            U = map(lambda x: x.item(), torch.sigmoid(self.U_))
-            US = list(zip(self.keys_output, U))
-
-            print("=== Result ===")
-            print(f"V = {VS}")
-            print(f"U = {US}")
-        print(self.productivity())
-
-    def productivity(self):
-        data = {}
-        with torch.no_grad():
-            sigmoid_v = torch.sigmoid(self.V_)
-            sigmoid_u = torch.sigmoid(self.U_)
-            sigmoid_e = torch.sigmoid(self.E_)
-
-            real_e = []
-            for r in range(self.n_regions):
-                if any(self.policy_data.iloc[r][1:]):
-                    real_e.append(sigmoid_e[r].item())
-                else:
-                    real_e.append(0)
-
-            for r in range(self.n_regions):
-                prods = []
-                if self.epolicy:
-                    prods.append(real_e[r])
-                for y in range(self.n_years):
-                    input_i = self.get_input(r, y)
-                    XV = sigmoid_v * input_i
-                    policy_i = self.get_policy(r, y)
-                    XVE = torch.sum(policy_i * XV)
-
-                    output_i = self.get_output(r, y)
-                    YU = torch.dot(sigmoid_u, output_i)
-
-                    H_i = YU / XVE
-                    prods.append(round(H_i.item(), 2))
-                data[self.regions[r]] = prods
-
-
-        index = ["E"] + list(self.years) if self.epolicy else self.years
-        return pandas.DataFrame(data, index=index).T
 
     def loss(self):
         sigmoid_v = torch.sigmoid(self.V_)
@@ -143,15 +112,15 @@ class CDEA:
             last_h = 0
             for y in range(self.n_years):
                 input_i = self.get_input(r, y)
-                XV = sigmoid_v * input_i
-                policy_i = self.get_policy(r, y)
-                XVE = torch.sum(policy_i * XV)
-                XVE = XVE + last_h * torch.sigmoid(self.VH)
+                XV = torch.sum(sigmoid_v * input_i)
+                XV = XV + last_h * torch.sigmoid(self.VH)
 
                 output_i = self.get_output(r, y)
                 YU = torch.dot(sigmoid_u, output_i)
 
-                H_i = YU / XVE
+                policy_i = self.get_policy(r, y)
+
+                H_i = policy_i * YU / XV
                 last_h = H_i
                 loss_i = torch.pow(1 - H_i, 2)
                 if H_i > 1:
@@ -184,6 +153,70 @@ class CDEA:
 
             if loop_count > 2e4:
                 return lv.item() < self.n_DMU / 10
+
+    def summary(self):
+        with torch.no_grad():
+            print("=== Technical Checkpoint ===")
+            print(f" V = torch.{self.V_}")
+            print(f" U = torch.{self.U_}")
+            print(f" K = torch.{self.Ke_}")
+            print(f"VH = {self.VH}")
+            V = map(lambda x: x.item(), torch.sigmoid(self.V_))
+            VS = list(zip(self.keys_input, V))
+            U = map(lambda x: x.item(), torch.sigmoid(self.U_))
+            US = list(zip(self.keys_output, U))
+
+            print("=== Result ===")
+            print(f"V = {VS}")
+            print(f"U = {US}")
+
+        print("=== H of DMUs ===")
+        print(self.productivity())
+        print("=== E of Policies ===")
+        print(self.policy_e())
+
+    def productivity(self):
+        data = {}
+        with torch.no_grad():
+            sigmoid_v = torch.sigmoid(self.V_)
+            sigmoid_u = torch.sigmoid(self.U_)
+
+            last_h = 0
+            for r in range(self.n_regions):
+                prods = []
+                for y in range(self.n_years):
+                    input_i = self.get_input(r, y)
+                    XV = torch.sum(sigmoid_v * input_i)
+                    XV = XV + last_h * torch.sigmoid(self.VH)
+
+                    output_i = self.get_output(r, y)
+                    YU = torch.dot(sigmoid_u, output_i)
+
+                    policy_i = self.get_policy(r, y)
+
+                    H_i = policy_i * YU / XV
+                    last_h = H_i
+                    prods.append(round(H_i.item(), 2))
+                data[self.regions[r]] = prods
+
+        index = self.years
+        return pandas.DataFrame(data, index=index).T
+
+    def policy_e(self):
+        data = {}
+        with torch.no_grad():
+            for r in range(self.n_regions):
+                pe = []
+                for y in range(self.n_years):
+                    policy_i = self.get_policy(r, y)
+                    if policy_i == 1:
+                        policy_i = torch.tensor(0)
+
+                    pe.append(round(policy_i.item(), 2))
+                data[self.regions[r]] = pe
+
+        index = self.years
+        return pandas.DataFrame(data, index=index).T
 
 
 if __name__ == '__main__':
