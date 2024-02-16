@@ -69,9 +69,8 @@ if [[ $1 == 'lang-native' ]]; then
 fi
 
 if [[ $1 == 'lang-app' ]]; then
-    mirror https://chromium.googlesource.com/v8/v8 $(github_repo KDr2 v8.git) main
     mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
-    # TODO: add TypeScript, Python
+    # TODO: add Python, TypeScript, V8
 fi
 
 if [[ $1 == 'lang-theory' ]]; then
