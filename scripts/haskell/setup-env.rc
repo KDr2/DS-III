@@ -1,0 +1,13 @@
+#-*- mode: sh -*-
+
+function env-setup() {
+    string-prepend-to-var PATH $HOME/.ghcup/bin
+    string-prepend-to-var PATH $HOME/.cabal/bin
+    echo "[Haskell] env setup done."
+}
+
+function env-off() {
+    string-remove-from-var PATH $HOME/.ghcup/bin
+    string-remove-from-var PATH $HOME/.cabal/bin
+    echo "[haskell] env cleared."
+}

@@ -1,0 +1,28 @@
+#-*- mode: sh -*-
+
+function java-env-setup() {
+    local ORACLE_JDK=($(find /usr/local/java  -mindepth 1 -maxdepth 1 -type d 2>/dev/null))
+    local OPENJDK=($(find /usr/lib/jvm/  -mindepth 1 -maxdepth 1 -type d -name "java-*-openjdk-amd64" 2>/dev/null))
+    local OPT_JDK=($(find /opt/programs/  -mindepth 1 -maxdepth 1 -type d -name "jdk*" 2>/dev/null))
+    local WSL_JDK=($(find /mnt/d/WSL/programs/  -mindepth 1 -maxdepth 1 -type d -name "jdk*" 2>/dev/null))
+
+    local _JAVA_HOME
+    echo "[JAVA] Please select a JDK:"
+    select _JAVA_HOME in "${OPT_JDK[@]}" "${ORACLE_JDK[@]}" "${OPENJDK[@]}" "${WSL_JDK[@]}"; do
+        [[ -d $_JAVA_HOME ]] && {
+            [[ -n $JAVA_HOME ]] && string-remove-from-var PATH "$JAVA_HOME/bin"
+            export JAVA_HOME=$_JAVA_HOME;
+            string-prepend-to-var PATH $JAVA_HOME/bin
+            echo "[JAVA] JAVA_HOME is set to $JAVA_HOME."
+            return;
+        }
+    done
+    echo "[JAVA] JAVA_HOME is not set or changed."
+    return 1
+}
+
+function java-env-off() {
+    string-remove-from-var PATH "$JAVA_HOME/bin"
+    unset JAVA_HOME
+    echo "[JAVA] Java env variables are unset."
+}
