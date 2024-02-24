@@ -1,0 +1,15 @@
+#-*- mode: sh -*-
+
+function env-setup() {
+
+    export NVM_DIR="$HOME/.nvm"
+    # loads nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+    # loads nvm bash_completion
+    [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+    echo "[NVM] env setup done."
+}
+
+function env-off() {
+    echo "[NVM] env can NOT be set off, please restart a shell!"
+}
