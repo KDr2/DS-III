@@ -64,8 +64,6 @@ function mirror {
 if [[ $1 == 'lang-native' ]]; then
     mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
     mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
-    mirror https://github.com/emscripten-core/emscripten.git $(github_repo KDr2 emscripten.git) main
-    mirror https://github.com/WebAssembly/binaryen.git $(github_repo KDr2 binaryen.git) main
 fi
 
 if [[ $1 == 'lang-app' ]]; then
