@@ -2,6 +2,7 @@
 .data/*
 gen-bin/*
 \#*\#
+.\#*
 
 # Compiled Object files
 *.exe

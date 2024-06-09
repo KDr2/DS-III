@@ -170,10 +170,14 @@ class CDEA:
             print(f"V = {VS}")
             print(f"U = {US}")
 
+        p = self.productivity()
+        p.to_csv("~/h.csv")
+        e = self.policy_e()
+        e.to_csv("~/e.csv")
         print("=== H of DMUs ===")
-        print(self.productivity())
+        print(p)
         print("=== E of Policies ===")
-        print(self.policy_e())
+        print(e)
 
     def productivity(self):
         data = {}

@@ -15,7 +15,6 @@ jobs:
           - lang-native
           - lang-app
           - lang-theory
-          - lang-lisp
           - others
     steps:
       - uses: actions/checkout@v1.0.0

@@ -67,6 +67,8 @@ if [[ $1 == 'lang-native' ]]; then
 fi
 
 if [[ $1 == 'lang-app' ]]; then
+    mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
+    # TODO: add Clojure
     mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
     # TODO: add Python, TypeScript, V8
 fi
@@ -75,14 +77,6 @@ if [[ $1 == 'lang-theory' ]]; then
     mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
     mirror https://github.com/agda/agda.git $(github_repo KDr2 agda.git) master
     mirror https://github.com/agda/agda-stdlib.git $(github_repo KDr2 agda-stdlib.git) master
-fi
-
-### Lisp
-if [[ $1 == 'lang-lisp' ]]; then
-    mirror https://git.savannah.gnu.org/git/emacs.git $(github_repo KDr2 emacs.git) master emacs-27
-    mirror https://git.savannah.gnu.org/git/emacs/org-mode.git $(github_repo KDr2 org-mode.git) main maint
-    mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
-    # TODO: add Clojure
 fi
 
 ### Others
