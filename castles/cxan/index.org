@@ -6,7 +6,7 @@
 #+OPTIONS:   ^:{}
 
 If you find any dead link to this site or missing files, please mail
-me: [ zhuoql@@html:&#x01F4E7;@@zoho.com ].
+me: [ killian.zhuo@@html:&#x01F4E7;@@gmail.com ].
 
 - [[https://cxan.kdr2.com/julia][Julia]]
 - [[https://cxan.kdr2.com/pdfium][PDFium]]

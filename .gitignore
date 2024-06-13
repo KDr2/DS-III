@@ -51,6 +51,8 @@ gen-bin/*
 
 # haskell
 *.hi
+*.dyn_hi
+*.dyn_o
 
 # wasm
 *.wasm
