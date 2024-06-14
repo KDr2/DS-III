@@ -63,14 +63,11 @@ function mirror {
 ### Compiler + Lang
 if [[ $1 == 'lang-native' ]]; then
     mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
-    mirror https://github.com/llvm/llvm-project.git $(github_repo KDr2 llvm-project.git) main
 fi
 
 if [[ $1 == 'lang-app' ]]; then
     mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
-    # TODO: add Clojure
     mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
-    # TODO: add Python, TypeScript, V8
 fi
 
 if [[ $1 == 'lang-theory' ]]; then
@@ -81,15 +78,11 @@ fi
 
 ### Others
 if [[ $1 == 'others' ]]; then
-    # Database
-    mirror https://github.com/postgres/postgres.git $(github_repo KDr2 postgres.git) master
-
     # ML
     mirror https://github.com/pytorch/pytorch.git $(github_repo KDr2 pytorch.git) main
 
     # Layout and Renderer
     mirror https://github.com/typst/typst.git $(github_repo KDr2 typst.git) main
-    mirror https://github.com/google/skia.git $(github_repo KDr2 skia.git) main
 
     # TODO: remove PDFium
     mirror https://pdfium.googlesource.com/pdfium $(github_repo PaodingAI pdfium.git) main
