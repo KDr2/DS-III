@@ -1,16 +1,13 @@
 {:paths ["."] ;; classpath
- :deps {}
- :tasks {:requires ([klib])
-         ns {:doc "nix-shell starter"
+ :deps {org.babashka/http-server {:mvn/version "0.1.12"}}
+ :tasks {:requires ([klib] [babashka.http-server :as hs])
+         ns {:doc "Start a nix-shell"
              :task (klib/nix-shell (first *command-line-args*))}
-         dev-full {:doc "full nix-shell for development"
+         dev-full {:doc "Start the full nix-shell for development"
                    :task (klib/nix-shell "dev-full")}
-         kd-pub {:doc "publish kdr2.com"
-                 :task (shell
-                        {:extra-env (klib/emacs-env)}
-                        (str "make -C"
-                             (klib/home-path "/Work/mine/kdr2-on-web")))}
-         task-demo {:doc "a demo task"
+         http {:doc "Start a HTTP Server"
+               :task (apply hs/-main *command-line-args*)}
+         task-demo {:doc "A demo task"
                     :task (shell "echo I am a task in babashka.")}
          k0 (klib/show)
          k1 (prn *command-line-args*)
