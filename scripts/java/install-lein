@@ -1,7 +1,8 @@
 #!/bin/bash
+# -*- mode: sh -*-
 
-mkdir -p $DS3_HOME/gen-bin
+mkdir -p $DS3_HOME/local/bin
 mkdir -p $DS3_HOME/.data
-curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o $DS3_HOME/gen-bin/lein
-chmod +x $DS3_HOME/gen-bin/lein
+curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o $DS3_HOME/local/bin/lein
+chmod +x $DS3_HOME/local/bin/lein
 lein -v

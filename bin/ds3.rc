@@ -15,6 +15,7 @@ function import-rcs() {
     for RC in ${RC_SCRIPTS[*]}; do
         [[ -f $DS3_HOME/$RC ]] && source $DS3_HOME/$RC
     done
+    mkdir -p $DS3_HOME/local/bin
 }
 
 function ds3-env() {
@@ -93,7 +94,7 @@ function ds3() {
 function ds3_init() {
     import-rcs
     string-prepend-to-var PATH $DS3_HOME/bin
-    string-prepend-to-var PATH $DS3_HOME/gen-bin
+    string-prepend-to-var PATH $DS3_HOME/local/bin
 
     if [ -d $HOME/local/bin ]; then
         string-prepend-to-var PATH $HOME/local/bin
