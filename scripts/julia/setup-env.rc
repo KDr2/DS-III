@@ -23,7 +23,7 @@ function env-setup() {
 }
 
 function env-off() {
-    [[ -d $JULIA_HOME ]] && string-remove-from-var PATH $JULIA_HOME/bin
+    string-remove-from-var PATH $JULIA_HOME/bin
     unset JULIA_HOME
     echo "[JULIA] JULIA_HOME is unset."
 }

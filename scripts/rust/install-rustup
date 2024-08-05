@@ -4,3 +4,5 @@ chmod +x /tmp/rustup.sh
 
 /tmp/rustup.sh --no-modify-path --profile complete # [minimal|default|complete]
 # /tmp/rustup.sh --no-modify-path
+
+rm /tmp/rustup.sh
