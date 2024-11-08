@@ -12,6 +12,7 @@ with pkgs;
   # * Basics
   glibcLocales
   zlib
+  icu
   # * Convenience
   nix
   # * Python

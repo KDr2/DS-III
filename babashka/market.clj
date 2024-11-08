@@ -5,37 +5,45 @@
 (require '[clojure.java.io :as io])
 (require '[babashka.http-client :as http])
 (require '[cheshire.core :as json])
+(import clojure.lang.ExceptionInfo)
 
 (def licence-premium
   (-> (str (System/getenv "HOME") "/.config/byapi.key") slurp str/trim))
 (def licence licence-premium)
 
+(def api-prefix "n") ;; api/n/b
+
 ;; API End-Points
-(def url-stock-list (str "https://api.biyingapi.com/hslt/list/" licence))
+(def url-stock-list (str "https://" api-prefix ".biyingapi.com/hslt/list/" licence))
 
 (defn url-norm-history [code]
-  (str "https://api.biyingapi.com/hszbl/fsjy/" code "/dq/" licence))
+  (str "https://" api-prefix ".biyingapi.com/hszbl/fsjy/" code "/dq/" licence))
 
 (defn url-macd-history [code]
-  (str "https://api.biyingapi.com/hszbl/macd/" code "/dq/" licence))
+  (str "https://" api-prefix ".biyingapi.com/hszbl/macd/" code "/dq/" licence))
 
 (defn url-boll-history [code]
-  (str "https://api.biyingapi.com/hszbl/boll/" code "/dq/" licence))
+  (str "https://" api-prefix ".biyingapi.com/hszbl/boll/" code "/dq/" licence))
 
 ;; Utilities
 (defn api-data
   ([url] (api-data url nil))
   ([url checker]
    (let [data (try (-> url (http/get) (:body) (json/parse-string) (reverse))
+                   (catch ExceptionInfo e
+                     (let [ed (.getData e)
+                           status (:status ed 0)]
+                       (if (not= status 404) (.println *err* (str "Error: get data from " url " code:" status))))
+                     [{}])
                    (catch Exception e
-                     ;; (.println *err* (str "Error: get data from " url))
+                     (.println *err* (str "Error: get data from " url " E:" e))
                      [{}]))]
      (if checker
        (if (checker data) data [{}])
        data))))
 
 (defn get-num [data key]
-  (Float/parseFloat (get data key "0")))
+  (get data key 0.0))
 
 (defn stock-info [info]
   (str (get info "mc") ": https://xueqiu.com/S/" (get info "jys") (get info "dm")))
@@ -51,10 +59,10 @@
     (-> url-stock-list (http/get) (:body) (json/parse-string))))
 
 (defn norm-data [code]
-  (-> code (url-norm-history) (api-data)))
+  (-> code (url-norm-history) (api-data (date-checker "d"))))
 
 (def latest-date
-  (delay (-> "000001" (norm-data) (first) (get "d"))))
+  (delay (-> "000001" (url-norm-history) (api-data) (first) (get "d"))))
 
 ;; normal pred
 (defn pred [stock & rest]
@@ -117,10 +125,40 @@
    (let [code (get stock "dm")]
      (boll-drill-down (norm-data code) (boll-data code) ndays-ago))))
 
+;; minmax
+(defn fix-zero [z] (if (< z 0.001) 0.001 z))
+(defn minmax [stock]
+  (let [code (get stock "dm")
+        data (norm-data code)
+        closep (map #(get-num % "c") data)
+        ;; closep (or (nthnext closep 35) [0]) ;; see before 9.25
+        cmin (apply min closep)
+        cmax (apply max closep)
+        recent-max (apply max (take 25 closep))
+        curr (nth closep 0 0.0)
+        d-total (fix-zero (- cmax cmin))
+        d-curr (- curr cmin)
+        d-recent (- recent-max curr)]
+    (if (and (> (count closep) 200) (< curr 20)
+             (< (/ d-curr d-total) 0.1)
+             (> (/ d-recent d-total) 0.08)
+             )
+      (do (print cmin cmax curr)
+          true)
+      false)))
+
 ;; main
-(defn main []
+
+(defn thr-all [& f-preds]
   (doall (for [stk @all-stocks]
-           (if (-> stk (pred name-pred `(~boll-pred 0)))
-             (-> stk (stock-info) (println))))))
+           (do
+             (Thread/sleep 25) ;; 3000 per 60 sec => 1 per 20ms
+             (if (apply pred stk f-preds)
+               (-> stk (stock-info) (println)))))))
+(defn main []
+  ;; (thr-all name-pred `(~boll-pred 1))
+  (thr-all name-pred `(~macd-pred 0))
+  ;; (thr-all name-pred minmax)
+  )
 
 (main)
