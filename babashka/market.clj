@@ -1,20 +1,60 @@
 (require '[babashka.deps :as deps])
 (deps/add-deps '{:deps {org.babashka/http-client {:mvn/version "0.3.11"}}})
 
+(require '[clojure.edn :as edn])
 (require '[clojure.string :as str])
 (require '[clojure.java.io :as io])
 (require '[babashka.http-client :as http])
 (require '[cheshire.core :as json])
+
 (import clojure.lang.ExceptionInfo)
 
-(def licence-premium
-  (-> (str (System/getenv "HOME") "/.config/byapi.key") slurp str/trim))
-(def licence licence-premium)
+;; Configuration
+(def config
+  (-> (str (System/getenv "HOME") "/.config/investment.edn") slurp edn/read-string))
+
+(def licence (:biying-licence config))
 
 (def api-prefix "n") ;; api/n/b
 
-;; API End-Points
+;; Feishu Utilities
+(defn get-feishu-tenant-token []
+  (let [resp (http/post "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
+                        {:headers {:content-type "application/json"}
+                         :body (json/encode {:app_id (:feishu-app-id config) :app_secret (:feishu-secret config)})})
+        data (-> resp :body json/parse-string)]
+    (get data "tenant_access_token")))
+
+(defn send-feishu-msg [text]
+  (let [msg (json/encode {:text text})
+        token (get-feishu-tenant-token)]
+      (http/post "https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=chat_id"
+               {:headers {:content-type "application/json" :authorization (str "Bearer " token)}
+                :body (json/encode {:content msg :msg_type "text" :receive_id "oc_8c02eefd0812b071c152c0d48edd0807"})})))
+
+(defn clean-feishu-records [raw-data]
+  (let [data (get-in raw-data ["data" "items"])]
+    (->> data
+         (map #(get % "fields"))
+         (filter #(and (get % "Code") (= (get % "Status") "On")))
+         (map #(let [code (-> % (get "Code") first (get "text"))
+                     name (-> % (get "Name") first (get "text"))]
+                 {:code code :name name :lb (get % "LowerBound") :ub (get % "UpperBound")})))))
+
+(defn get-feishu-screening []
+  (let [token (get-feishu-tenant-token)
+        resp (http/post
+              "https://open.feishu.cn/open-apis/bitable/v1/apps/Z9cFbVqcOaCJSksgJVWcbTuTncd/tables/tblSB2Fw92iAGRIH/records/search?page_size=100"
+              {:headers {:content-type "application/json" :authorization (str "Bearer " token)}
+               :body (json/encode {})})
+        data (-> resp (:body) (json/parse-string))]
+    (clean-feishu-records data)))
+
+;; Biying Utilities
 (def url-stock-list (str "https://" api-prefix ".biyingapi.com/hslt/list/" licence))
+
+(defn url-latest-history [code] ;; 15min
+  (str "https://" api-prefix ".biyingapi.com/hszb/fsjy/" code "/15m/" licence))
 
 (defn url-norm-history [code]
   (str "https://" api-prefix ".biyingapi.com/hszbl/fsjy/" code "/dq/" licence))
@@ -25,7 +65,6 @@
 (defn url-boll-history [code]
   (str "https://" api-prefix ".biyingapi.com/hszbl/boll/" code "/dq/" licence))
 
-;; Utilities
 (defn api-data
   ([url] (api-data url nil))
   ([url checker]
@@ -63,6 +102,16 @@
 
 (def latest-date
   (delay (-> "000001" (url-norm-history) (api-data) (first) (get "d"))))
+
+;; screen notification
+(defn screen-notify []
+  (doall (for [stk (get-feishu-screening)]
+           (let [data (into {} (-> (:code stk) (url-latest-history) (api-data)))
+                 curr (get-num data "c")
+                 l (get-num data "l")
+                 h (get-num data "h")]
+             (if (or (< l (:lb stk)) (> h (:ub stk)))
+               (send-feishu-msg (str "![" (:name stk) "(" (:code stk) ")] = " curr "!")))))))
 
 ;; normal pred
 (defn pred [stock & rest]
@@ -155,10 +204,15 @@
              (Thread/sleep 25) ;; 3000 per 60 sec => 1 per 20ms
              (if (apply pred stk f-preds)
                (-> stk (stock-info) (println)))))))
+
 (defn main []
-  ;; (thr-all name-pred `(~boll-pred 1))
-  (thr-all name-pred `(~macd-pred 0))
-  ;; (thr-all name-pred minmax)
-  )
+  (let [cmd (first *command-line-args*)]
+    (cond
+      (= cmd "boll") (thr-all name-pred `(~boll-pred 1))
+      (= cmd "macd") (thr-all name-pred `(~macd-pred 0))
+      (= cmd "minmax") (thr-all name-pred minmax)
+      (= cmd "fmsg") (send-feishu-msg (nth *command-line-args* 1))
+      (= cmd "notify") (screen-notify)
+      :else (println "I need a proper command."))))
 
 (main)
