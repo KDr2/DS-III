@@ -7,6 +7,7 @@
 (require '[babashka.http-client :as http])
 (require '[cheshire.core :as json])
 
+(import java.util.Date)
 (import clojure.lang.ExceptionInfo)
 
 ;; Configuration
@@ -53,8 +54,10 @@
 ;; Biying Utilities
 (def url-stock-list (str "https://" api-prefix ".biyingapi.com/hslt/list/" licence))
 
-(defn url-latest-history [code] ;; 15min
-  (str "https://" api-prefix ".biyingapi.com/hszb/fsjy/" code "/15m/" licence))
+(defn url-realtime-data [code] ;; realtime
+  (if (= code "000000")
+    (str "https://" api-prefix ".biyingapi.com/zs/sssj/sh000001/" licence)
+    (str "https://" api-prefix ".biyingapi.com/hsrl/ssjy/" code "/" licence)))
 
 (defn url-norm-history [code]
   (str "https://" api-prefix ".biyingapi.com/hszbl/fsjy/" code "/dq/" licence))
@@ -104,14 +107,25 @@
   (delay (-> "000001" (url-norm-history) (api-data) (first) (get "d"))))
 
 ;; screen notification
+(defn time-near [num-tm margin]
+  (let [now (Date.)
+        h (.getHours now)
+        m (.getMinutes now)
+        num-now (+ (* 100 h) m)]
+    (< (abs (- num-tm num-now)) margin)))
+
 (defn screen-notify []
+  (if (time-near 910 6)
+    (send-feishu-msg "I am on standby!"))
   (doall (for [stk (get-feishu-screening)]
-           (let [data (into {} (-> (:code stk) (url-latest-history) (api-data)))
-                 curr (get-num data "c")
-                 l (get-num data "l")
-                 h (get-num data "h")]
-             (if (or (< l (:lb stk)) (> h (:ub stk)))
-               (send-feishu-msg (str "![" (:name stk) "(" (:code stk) ")] = " curr "!")))))))
+           (let [data (into {} (-> (:code stk) (url-realtime-data) (api-data)))
+                 curr (get-num data "p")
+                 sym (cond
+                       (<= curr (:lb stk)) "_"
+                       (>= curr (:ub stk)) "^"
+                       :else "")]
+             (if (seq sym )
+               (send-feishu-msg (str sym "[" (:name stk) "(" (:code stk) ")] = " curr "!")))))))
 
 ;; normal pred
 (defn pred [stock & rest]
@@ -196,14 +210,19 @@
           true)
       false)))
 
-;; main
-
 (defn thr-all [& f-preds]
   (doall (for [stk @all-stocks]
            (do
              (Thread/sleep 25) ;; 3000 per 60 sec => 1 per 20ms
              (if (apply pred stk f-preds)
                (-> stk (stock-info) (println)))))))
+
+;; test
+(defn test [args]
+  (println args)
+  (println (time-near 1409 8)))
+
+;; main
 
 (defn main []
   (let [cmd (first *command-line-args*)]
@@ -213,6 +232,7 @@
       (= cmd "minmax") (thr-all name-pred minmax)
       (= cmd "fmsg") (send-feishu-msg (nth *command-line-args* 1))
       (= cmd "notify") (screen-notify)
+      (= cmd "test") (test *command-line-args*)
       :else (println "I need a proper command."))))
 
 (main)

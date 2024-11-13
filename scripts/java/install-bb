@@ -1,0 +1,11 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+mkdir -p $DS3_HOME/local/bin
+
+TMPDIR=${TMPDIR-/tmp}
+
+curl -L https://raw.githubusercontent.com/babashka/babashka/master/install -o $TMPDIR/linux-install
+chmod +x $TMPDIR/linux-install
+$TMPDIR/linux-install --dir $DS3_HOME/local/bin
+

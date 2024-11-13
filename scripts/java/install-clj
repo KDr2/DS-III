@@ -3,6 +3,8 @@
 
 mkdir -p $DS3_HOME/local/bin
 
+TMPDIR=${TMPDIR-/tmp}
+
 curl -L https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh -o $TMPDIR/linux-install.sh
 chmod +x $TMPDIR/linux-install.sh
 
