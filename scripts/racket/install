@@ -1,0 +1,15 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+VERSION=${1-8.15}
+
+PKG=racket-${VERSION}-x86_64-linux-cs.sh
+URL=https://mirror.racket-lang.org/installers/${VERSION}/${PKG}
+DEST=$HOME/programs/racket-${VERSION}
+TMPDIR=${TMPDIR-/tmp}
+
+curl -L $URL -o ${TMPDIR}/${PKG}
+chmod +x ${TMPDIR}/${PKG}
+${TMPDIR}/${PKG} --dest $DEST --in-place
+
+rm ${TMPDIR}/${PKG}

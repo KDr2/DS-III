@@ -1,0 +1,25 @@
+#-*- mode: sh -*-
+
+function env-setup() {
+    local VERSION=${1-dev}
+    local NEW_RKT_HOME
+
+    if [[ -d $HOME/programs/racket-$VERSION/bin ]]; then
+        NEW_RKT_HOME=$HOME/programs/racket-$VERSION
+    else
+        echo "[RACKET] version $VERSION not found."
+        [[ -z $RACKET_HOME ]] || echo "[RACKET] the last env $RACKET_HOME is still in use."
+        return 1
+    fi
+
+    [[ -d $RACKET_HOME ]] && string-remove-from-var PATH $RACKET_HOME/bin
+    export RACKET_HOME=$NEW_RKT_HOME
+    string-prepend-to-var PATH $RACKET_HOME/bin
+    echo "[RACKET] RACKET_HOME is set to $RACKET_HOME"
+}
+
+function env-off() {
+    string-remove-from-var PATH $RACKET_HOME/bin
+    unset RACKET_HOME
+    echo "[RACKET] RACKET_HOME is unset."
+}
