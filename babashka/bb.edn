@@ -1,10 +1,6 @@
 {:paths ["."] ;; classpath
  :deps {org.babashka/http-server {:mvn/version "0.1.12"}}
  :tasks {:requires ([klib] [babashka.http-server :as hs])
-         ns {:doc "Start a nix-shell"
-             :task (klib/nix-shell (first *command-line-args*))}
-         dev-full {:doc "Start the full nix-shell for development"
-                   :task (klib/nix-shell "dev-full")}
          http {:doc "Start a HTTP Server"
                :task (apply hs/-main *command-line-args*)}
          task-demo {:doc "A demo task"

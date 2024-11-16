@@ -1,2 +1,7 @@
 # -*- mode : sh -*-
-curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+
+TMPDIR=${TMPDIR-/tmp}
+
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org -o $TMPDIR/ghc-up.sh
+chmod +x $TMPDIR/ghc-up.sh
+$TMPDIR/ghc-up.sh

@@ -9,5 +9,5 @@ function env-setup() {
 function env-off() {
     string-remove-from-var PATH $HOME/.ghcup/bin
     string-remove-from-var PATH $HOME/.cabal/bin
-    echo "[haskell] env cleared."
+    echo "[Haskell] env cleared."
 }
