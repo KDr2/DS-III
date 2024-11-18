@@ -1,4 +1,0 @@
-stable  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-utrace  https://github.com/utrace/linux.git
-linus   https://github.com/torvalds/linux.git
-KDr2    git@github.com:KDr2/linux.git
