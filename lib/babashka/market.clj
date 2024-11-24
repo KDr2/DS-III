@@ -124,7 +124,7 @@
                        (<= curr (:lb stk)) "_"
                        (>= curr (:ub stk)) "^"
                        :else "")]
-             (if (seq sym )
+             (if (and (> curr 0.1) (seq sym))
                (send-feishu-msg (str sym "[" (:name stk) "(" (:code stk) ")] = " curr "!")))))))
 
 ;; normal pred
