@@ -50,7 +50,7 @@ function string-append() {
 function string-append-to-var() {
     local REAL_IFS=${3-:}
     local FULL_STRING=$(eval "echo \$$1")
-    export $1=$(string-append "$FULL_STRING" "$2" "$REAL_IFS")
+    export $1="$(string-append "$FULL_STRING" "$2" "$REAL_IFS")"
 }
 
 
@@ -69,7 +69,7 @@ function string-prepend() {
 function string-prepend-to-var() {
     local REAL_IFS=${3-:}
     local FULL_STRING=$(eval "echo \$$1")
-    export $1=$(string-prepend "$FULL_STRING" "$2" "$REAL_IFS")
+    export $1="$(string-prepend "$FULL_STRING" "$2" "$REAL_IFS")"
 }
 
 
@@ -102,5 +102,5 @@ function string-remove() {
 function string-remove-from-var() {
     local REAL_IFS=${3-:}
     local FULL_STRING=$(eval "echo \$$1")
-    export $1=$(string-remove "$FULL_STRING" "$2" "$REAL_IFS")
+    export $1="$(string-remove "$FULL_STRING" "$2" "$REAL_IFS")"
 }
