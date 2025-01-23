@@ -101,8 +101,8 @@ function ds3_init() {
     fi
 
     local EXTRA_BIN_DIRS=(
-        $HOME/programs/bin
-        $HOME/programs/local/bin
+        $PROG_DIR/bin
+        $PROG_DIR/local/bin
     )
     for DIR in ${EXTRA_BIN_DIRS[*]}; do
         if [ -d $DIR ]; then

@@ -1,5 +1,5 @@
 
-RACKET = $(HOME)/programs/racket
+RACKET = $(PROG_DIR)/racket
 
 all: e3m.exe
 

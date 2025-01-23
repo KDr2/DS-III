@@ -1,7 +1,7 @@
 #
 # author: KDr2
 #
-ECL_HOME ?= $(HOME)/programs/ecl
+ECL_HOME ?= $(PROG_DIR)/ecl
 ECL = $(ECL_HOME)/bin/ecl
 
 all: ecl-cmd

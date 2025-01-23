@@ -4,11 +4,10 @@ function java-env-setup() {
     local ORACLE_JDK=($(find /usr/local/java  -mindepth 1 -maxdepth 1 -type d 2>/dev/null))
     local OPENJDK=($(find /usr/lib/jvm/  -mindepth 1 -maxdepth 1 -type d -name "java-*-openjdk-amd64" 2>/dev/null))
     local OPT_JDK=($(find /opt/programs/  -mindepth 1 -maxdepth 1 -type d -name "jdk*" 2>/dev/null))
-    local WSL_JDK=($(find /mnt/d/WSL/programs/  -mindepth 1 -maxdepth 1 -type d -name "jdk*" 2>/dev/null))
 
     local _JAVA_HOME
     echo "[JAVA] Please select a JDK:"
-    select _JAVA_HOME in "${OPT_JDK[@]}" "${ORACLE_JDK[@]}" "${OPENJDK[@]}" "${WSL_JDK[@]}"; do
+    select _JAVA_HOME in "${OPT_JDK[@]}" "${ORACLE_JDK[@]}" "${OPENJDK[@]}"; do
         [[ -d $_JAVA_HOME ]] && {
             [[ -n $JAVA_HOME ]] && string-remove-from-var PATH "$JAVA_HOME/bin"
             export JAVA_HOME=$_JAVA_HOME;

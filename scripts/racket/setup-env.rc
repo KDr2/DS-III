@@ -4,8 +4,8 @@ function env-setup() {
     local VERSION=${1-dev}
     local NEW_RKT_HOME
 
-    if [[ -d $HOME/programs/racket-$VERSION/bin ]]; then
-        NEW_RKT_HOME=$HOME/programs/racket-$VERSION
+    if [[ -d $PROG_DIR/racket-$VERSION/bin ]]; then
+        NEW_RKT_HOME=$PROG_DIR/racket-$VERSION
     else
         echo "[RACKET] version $VERSION not found."
         [[ -z $RACKET_HOME ]] || echo "[RACKET] the last env $RACKET_HOME is still in use."

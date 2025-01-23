@@ -2,7 +2,7 @@
 #-*- mode: sh -*-
 # build in build~ dir
 # toolkit: gtk/gtk2/gtk3/... \
-../configure --prefix=$HOME/programs/emacs.dev \
+../configure --prefix=$PROG_DIR/emacs.dev \
   --with-x --with-xft --with-x-toolkit=gtk3 --with-xwidgets \
   --with-modules \
   --without-pop --without-selinux

@@ -4,10 +4,10 @@ function env-setup() {
     local VERSION=${1-dev}
     local NEW_JULIA_HOME
     if [[ $VERSION == dev ]] ; then
-        NEW_JULIA_HOME=$HOME/Work/julia/julia/usr
+        NEW_JULIA_HOME=$WORK_DIR/julia/julia/usr
     else
-        if [[ -d $HOME/programs/julia-$VERSION/bin ]]; then
-            NEW_JULIA_HOME=$HOME/programs/julia-$VERSION
+        if [[ -d $PROG_DIR/julia-$VERSION/bin ]]; then
+            NEW_JULIA_HOME=$PROG_DIR/julia-$VERSION
         elif [[ -d /usr/local/julia-$VERSION/bin ]]; then
             NEW_JULIA_HOME=/usr/local/julia-$VERSION
         else

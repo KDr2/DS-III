@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export CPY_SRC_ROOT=$PWD
-export CPY_DEST_DIR=$HOME/programs/python-dev
+export CPY_DEST_DIR=$PROG_DIR/python-dev
 
 $CPY_SRC_ROOT/configure --prefix=$CPY_DEST_DIR/$VERSION \
                         --enable-shared --with-threads \

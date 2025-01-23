@@ -12,7 +12,7 @@ VER_DIR=$(echo $VERSION | sed -e 's/\.[0-9]*$//g')
 TMPDIR=${TMPDIR-/tmp}
 PKG=julia-${VERSION}-linux-x86_64.tar.gz
 URL=https://julialang-s3.julialang.org/bin/linux/x64/${VER_DIR}/julia-${VERSION}-linux-x86_64.tar.gz
-DEST=$HOME/programs/
+DEST=$PROG_DIR
 
 curl -L $URL -o ${TMPDIR}/${PKG}
 cd $DEST

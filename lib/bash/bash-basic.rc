@@ -16,7 +16,7 @@ shopt -s checkwinsize
 # for ** expand
 shopt -s globstar &>/dev/null
 
-### PS1
+### PS1, Colors, etc.
 case "$TERM" in
     xterm*|xterm-color|eterm*|screen)
         PS1='[$(printf %03d $?)]\[\033[01;38m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -25,6 +25,10 @@ case "$TERM" in
         PS1='[$(printf %03d $?)]\u@\h:\w\$ '
         ;;
 esac
+
+if [[ -n $WSLENV ]]; then # settings for WSL
+    export LS_COLORS="$LS_COLORS:ow=100;29;01"
+fi
 
 ### alias
 alias ls='ls --color=auto'
@@ -43,3 +47,8 @@ function ta {
 function title {
     [[ -n "$1" ]] && { echo -ne "\e]0;$1\a"; }
 }
+
+
+### useful variables
+export WORK_DIR=${WORK_DIR-$HOME/work}
+export PROG_DIR=${PROG_DIR-$HOME/programs}

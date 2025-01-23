@@ -13,10 +13,16 @@
 (defn ds3-path [path]
   (str (System/getenv "DS3_HOME") path))
 
+(defn work-path [path]
+  (str (System/getenv "WORK_DIR") path))
+
+(defn prog-path [path]
+  (str (System/getenv "PROG_DIR") path))
+
 (defn emacs-env []
-  (let [bins [(home-path "/programs/emacs-nox/bin/emacs")
-              (home-path "/programs/emacs.dev/bin/emacs")
-              (home-path "/programs/emacs/bin/emacs")
+  (let [bins [(prog-path "/emacs-nox/bin/emacs")
+              (prog-path "/emacs.dev/bin/emacs")
+              (prog-path "/emacs/bin/emacs")
               (ds3-path "/local/bin/emacs")
               "/usr/bin/emacs"]
         emacs (first (filter fs/exists? bins))]
