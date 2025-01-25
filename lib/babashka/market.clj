@@ -68,18 +68,25 @@
 (defn url-boll-history [code]
   (str "https://" api-prefix ".biyingapi.com/hszbl/boll/" code "/dq/" licence))
 
+
+(defn api-data-raw-retry [url times]
+  (try (-> url (http/get) (:body) (json/parse-string) (reverse))
+       (catch ExceptionInfo e
+         (let [ed (.getData e)
+               status (:status ed 0)]
+           (if (not= status 404) (.println *err* (str "Error: get data from " url " code:" status))))
+         [{}])
+       (catch Exception e
+         (if (> times 0)
+           (api-data-raw-retry url (- times 1))
+           (do
+             (.println *err* (str "Error: get data from " url " E:" e))
+             [{}])))))
+
 (defn api-data
   ([url] (api-data url nil))
   ([url checker]
-   (let [data (try (-> url (http/get) (:body) (json/parse-string) (reverse))
-                   (catch ExceptionInfo e
-                     (let [ed (.getData e)
-                           status (:status ed 0)]
-                       (if (not= status 404) (.println *err* (str "Error: get data from " url " code:" status))))
-                     [{}])
-                   (catch Exception e
-                     (.println *err* (str "Error: get data from " url " E:" e))
-                     [{}]))]
+   (let [data (api-data-raw-retry url 3)]
      (if checker
        (if (checker data) data [{}])
        data))))
@@ -213,7 +220,7 @@
 (defn thr-all [& f-preds]
   (doall (for [stk @all-stocks]
            (do
-             (Thread/sleep 25) ;; 3000 per 60 sec => 1 per 20ms
+             (Thread/sleep 50) ;; 3000 per 60 sec => 1 per 20ms
              (if (apply pred stk f-preds)
                (-> stk (stock-info) (println)))))))
 
