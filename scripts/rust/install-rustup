@@ -1,8 +1,11 @@
 #!/bin/bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh
-chmod +x /tmp/rustup.sh
 
-/tmp/rustup.sh --no-modify-path --profile complete # [minimal|default|complete]
-# /tmp/rustup.sh --no-modify-path
+TMPDIR=${TMPDIR-/tmp}
 
-rm /tmp/rustup.sh
+curl -sSf https://sh.rustup.rs -o $TMPDIR/rustup.sh
+chmod +x $TMPDIR/rustup.sh
+
+$TMPDIR/rustup.sh --no-modify-path --profile complete # [minimal|default|complete]
+# $TMPDIR/rustup.sh --no-modify-path
+
+rm $TMPDIR/rustup.sh

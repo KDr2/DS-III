@@ -11,6 +11,18 @@ function string-join() {
     echo "$*"
 }
 
+# use .exe or not
+function exe-if-there-is() {
+    local CMD="$1"
+    shift
+    which $CMD.exe > /dev/null
+    if [[ $? -eq 0 ]]; then
+        $CMD.exe "$@"
+    else
+        $CMD "$@"
+    fi
+}
+export -f exe-if-there-is
 
 #
 # arg1: FULL_STRING
