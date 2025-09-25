@@ -61,16 +61,12 @@ function mirror {
 
 
 ### Compiler + Lang
-if [[ $1 == 'lang-native' ]]; then
+if [[ $1 == 'lang-1' ]]; then
     mirror https://github.com/rust-lang/rust.git $(github_repo KDr2 rust.git) master stable
-fi
-
-if [[ $1 == 'lang-app' ]]; then
-    mirror https://github.com/racket/racket.git $(github_repo KDr2 racket.git) master
     mirror https://github.com/JuliaLang/julia.git $(github_repo KDr2 julia.git) master
 fi
 
-if [[ $1 == 'lang-theory' ]]; then
+if [[ $1 == 'lang-2' ]]; then
     mirror https://github.com/ghc/ghc.git $(github_repo KDr2 ghc.git) master
     mirror https://github.com/agda/agda.git $(github_repo KDr2 agda.git) master
     mirror https://github.com/agda/agda-stdlib.git $(github_repo KDr2 agda-stdlib.git) master

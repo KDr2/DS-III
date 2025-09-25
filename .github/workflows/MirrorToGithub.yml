@@ -12,9 +12,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         cat:
-          - lang-native
-          - lang-app
-          - lang-theory
+          - lang-1
+          - lang-2
           - others
     steps:
       - uses: actions/checkout@v1.0.0
