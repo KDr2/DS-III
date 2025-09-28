@@ -3,6 +3,7 @@
             [babashka.process :refer [shell process exec]]))
 
 (require '[clojure.java.io :as io])
+(require '[clojure.string :as cljstr])
 
 (def script-dir (-> *file* io/file
                     .getParentFile .getAbsolutePath))
@@ -14,10 +15,10 @@
   (str (System/getenv "DS3_HOME") path))
 
 (defn work-path [path]
-  (str (System/getenv "WORK_DIR") path))
+  (str (or (System/getenv "WORK_DIR") (home-path "/work")) path))
 
 (defn prog-path [path]
-  (str (System/getenv "PROG_DIR") path))
+  (str (or (System/getenv "PROG_DIR") (home-path "/programs")) path))
 
 (defn emacs-env []
   (let [bins [(prog-path "/emacs-nox/bin/emacs")
