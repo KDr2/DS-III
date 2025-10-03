@@ -12,28 +12,11 @@
 
 ;; Configuration
 (def config
-  (-> (str (System/getenv "HOME") "/.config/investment.edn") slurp edn/read-string))
+  (-> (str (System/getenv "HOME") "/.config/kz-private.edn") slurp edn/read-string :investment))
 
-(def licence (:biying-licence config))
+;; Lark Utilities
 
-(def api-prefix "n") ;; api/n/b
-
-;; Feishu Utilities
-(defn get-feishu-tenant-token []
-  (let [resp (http/post "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
-                        {:headers {:content-type "application/json"}
-                         :body (json/encode {:app_id (:feishu-app-id config) :app_secret (:feishu-secret config)})})
-        data (-> resp :body json/parse-string)]
-    (get data "tenant_access_token")))
-
-(defn send-feishu-msg [text]
-  (let [msg (json/encode {:text text})
-        token (get-feishu-tenant-token)]
-      (http/post "https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=chat_id"
-               {:headers {:content-type "application/json" :authorization (str "Bearer " token)}
-                :body (json/encode {:content msg :msg_type "text" :receive_id "oc_8c02eefd0812b071c152c0d48edd0807"})})))
-
-(defn clean-feishu-records [raw-data]
+(defn lark-clear-records [raw-data]
   (let [data (get-in raw-data ["data" "items"])]
     (->> data
          (map #(get % "fields"))
@@ -42,32 +25,70 @@
                      name (-> % (get "Name") first (get "text"))]
                  {:code code :name name :lb (get % "LowerBound") :ub (get % "UpperBound")})))))
 
-(defn get-feishu-screening []
-  (let [token (get-feishu-tenant-token)
-        resp (http/post
-              "https://open.feishu.cn/open-apis/bitable/v1/apps/Z9cFbVqcOaCJSksgJVWcbTuTncd/tables/tblSB2Fw92iAGRIH/records/search?page_size=100"
-              {:headers {:content-type "application/json" :authorization (str "Bearer " token)}
-               :body (json/encode {})})
-        data (-> resp (:body) (json/parse-string))]
-    (clean-feishu-records data)))
+(def lark-url-map
+  {:root ""
+   :tenant-token "/auth/v3/tenant_access_token/internal"
+   :msg "/im/v1/messages?receive_id_type=chat_id"
+   :stocks "/bitable/v1/apps/Z9cFbVqcOaCJSksgJVWcbTuTncd/tables/tblSB2Fw92iAGRIH/records/search?page_size=100"})
+
+(defprotocol IM
+  (url [this key])
+  (tenant-token [this])
+  (send-msg [this text])
+  (target-stocks [this]))
+
+(deftype Lark [api-root url-map]
+  IM
+  (url [this key]
+    (str (.api-root this) (key (.url-map this))))
+
+  (tenant-token [this]
+    (let [url (url this :tenant-token)
+          resp (http/post url
+                          {:headers {:content-type "application/json"}
+                           :body (json/encode {:app_id (:feishu-app-id config) :app_secret (:feishu-secret config)})})
+          data (-> resp :body json/parse-string)]
+      (get data "tenant_access_token")))
+
+  (send-msg [this text]
+    (let [msg (json/encode {:text text})
+          data {:content msg :msg_type "text" :receive_id "oc_8c02eefd0812b071c152c0d48edd0807"}
+          token (tenant-token this)
+          url (url this :msg)]
+      (http/post url
+                 {:headers {:content-type "application/json" :authorization (str "Bearer " token)}
+                  :body (json/encode data)})))
+  (target-stocks [this]
+    (let [token (tenant-token this)
+          url (url this :stocks)
+          resp (http/post url
+                          {:headers {:content-type "application/json" :authorization (str "Bearer " token)}
+                           :body (json/encode {})})
+          data (-> resp (:body) (json/parse-string))]
+      (lark-clear-records data))))
+
+(def lark (delay (->Lark "https://open.feishu.cn/open-apis" lark-url-map)))
 
 ;; Biying Utilities
-(def url-stock-list (str "https://" api-prefix ".biyingapi.com/hslt/list/" licence))
 
-(defn url-realtime-data [code] ;; realtime
-  (if (= code "000000")
-    (str "https://" api-prefix ".biyingapi.com/zs/sssj/sh000001/" licence)
-    (str "https://" api-prefix ".biyingapi.com/hsrl/ssjy/" code "/" licence)))
+(def by-url-map
+  {:licence (:biying-licence config)
+   :root "https://n.biyingapi.com"      ; api/n/b
+   })
 
-(defn url-norm-history [code]
-  (str "https://" api-prefix ".biyingapi.com/hszbl/fsjy/" code "/dq/" licence))
-
-(defn url-macd-history [code]
-  (str "https://" api-prefix ".biyingapi.com/hszbl/macd/" code "/dq/" licence))
-
-(defn url-boll-history [code]
-  (str "https://" api-prefix ".biyingapi.com/hszbl/boll/" code "/dq/" licence))
-
+(defmulti mkt-url :type)
+(defmethod mkt-url :stk-list [_]
+  (str (:root by-url-map) "/hslt/list/" (:licence by-url-map)))
+(defmethod mkt-url :rt-index [_]
+  (str (:root by-url-map) "/zs/sssj/sh000001/" (:licence by-url-map)))
+(defmethod mkt-url :rt-stock [stk]
+  (str (:root by-url-map) "/hsrl/ssjy/" (:code stk) "/" (:licence by-url-map)))
+(defmethod mkt-url :h-norm [stk]
+  (str (:root by-url-map) "/hszbl/fsjy/" (:code stk) "/dq/" (:licence by-url-map)))
+(defmethod mkt-url :h-macd [stk]
+  (str (:root by-url-map) "/hszbl/macd/" (:code stk) "/dq/" (:licence by-url-map)))
+(defmethod mkt-url :h-boll [stk]
+  (str (:root by-url-map) "/hszbl/boll/" (:code stk) "/dq/" (:licence by-url-map)))
 
 (defn api-data-raw-retry [url times]
   (try (-> url (http/get) (:body) (json/parse-string) (reverse))
@@ -86,6 +107,7 @@
 (defn api-data
   ([url] (api-data url nil))
   ([url checker]
+   ;; (println url)
    (let [data (api-data-raw-retry url 3)]
      (if checker
        (if (checker data) data [{}])
@@ -105,13 +127,13 @@
 ;; Basic data
 (def all-stocks
   (delay
-    (-> url-stock-list (http/get) (:body) (json/parse-string))))
+    (-> {:type :stk-list} mkt-url http/get :body json/parse-string)))
 
 (defn norm-data [code]
-  (-> code (url-norm-history) (api-data (date-checker "d"))))
+  (-> {:type :h-norm :code code} mkt-url (api-data (date-checker "d"))))
 
 (def latest-date
-  (delay (-> "000001" (url-norm-history) (api-data) (first) (get "d"))))
+  (delay (-> {:type :h-norm :code "000001"} mkt-url api-data first (get "d"))))
 
 ;; screen notification
 (defn time-near [num-tm margin]
@@ -123,16 +145,16 @@
 
 (defn screen-notify []
   (if (time-near 910 6)
-    (send-feishu-msg "I am on standby!"))
-  (doall (for [stk (get-feishu-screening)]
-           (let [data (into {} (-> (:code stk) (url-realtime-data) (api-data)))
+    (send-msg @lark "I am on standby!"))
+  (doall (for [stk (target-stocks @lark)]
+           (let [data (into {} (-> {:type :rt-stock :code (:code stk)} mkt-url api-data))
                  curr (get-num data "p")
                  sym (cond
                        (<= curr (:lb stk)) "_"
                        (>= curr (:ub stk)) "^"
                        :else "")]
              (if (and (> curr 0.1) (seq sym))
-               (send-feishu-msg (str sym "[" (:name stk) "(" (:code stk) ")] = " curr "!")))))))
+               (send-msg @lark (str sym "[" (:name stk) "(" (:code stk) ")] = " curr "!")))))))
 
 ;; normal pred
 (defn pred [stock & rest]
@@ -146,7 +168,7 @@
 
 ;; MACD deep-turn
 (defn macd-data [code]
-  (-> code (url-macd-history) (api-data (date-checker "t"))))
+  (-> {:type :h-macd :code code} mkt-url (api-data (date-checker "t"))))
 
 (defn macd-diff [macd] (get-num macd "diff"))
 
@@ -173,7 +195,7 @@
 
 ;; BOLL red drill-down
 (defn boll-data [code]
-  (-> code (url-boll-history) (api-data (date-checker "t"))))
+  (-> {:type :h-boll :code code} mkt-url (api-data (date-checker "t"))))
 
 (defn boll-drill-down
   ([norm boll] (boll-drill-down norm boll 0))
@@ -211,8 +233,7 @@
         d-recent (- recent-max curr)]
     (if (and (> (count closep) 200) (< curr 20)
              (< (/ d-curr d-total) 0.1)
-             (> (/ d-recent d-total) 0.08)
-             )
+             (> (/ d-recent d-total) 0.08))
       (do (print cmin cmax curr)
           true)
       false)))
@@ -237,7 +258,7 @@
       (= cmd "boll") (thr-all name-pred `(~boll-pred 1))
       (= cmd "macd") (thr-all name-pred `(~macd-pred 0))
       (= cmd "minmax") (thr-all name-pred minmax)
-      (= cmd "fmsg") (send-feishu-msg (nth *command-line-args* 1))
+      (= cmd "msg") (send-msg @lark (nth *command-line-args* 1))
       (= cmd "notify") (screen-notify)
       (= cmd "test") (test *command-line-args*)
       :else (println "I need a proper command."))))

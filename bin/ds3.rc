@@ -103,6 +103,7 @@ function ds3_init() {
     local EXTRA_BIN_DIRS=(
         $PROG_DIR/bin
         $PROG_DIR/local/bin
+        $HOME/.deno/bin
         # If WSL is used, Windows' PATH will be added to WSL PATH
         # automatically.
     )
