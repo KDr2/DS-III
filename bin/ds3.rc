@@ -100,6 +100,10 @@ function ds3_init() {
         string-prepend-to-var PATH $HOME/local/bin
     fi
 
+    if [ -d $HOME/.local/bin ]; then
+        string-prepend-to-var PATH $HOME/.local/bin
+    fi
+
     local EXTRA_BIN_DIRS=(
         $PROG_DIR/bin
         $PROG_DIR/local/bin

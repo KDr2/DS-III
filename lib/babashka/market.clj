@@ -73,7 +73,7 @@
 
 (def by-url-map
   {:licence (:biying-licence config)
-   :root "https://n.biyingapi.com"      ; api/n/b
+   :root "https://api.biyingapi.com"
    })
 
 (defmulti mkt-url :type)
@@ -82,7 +82,7 @@
 (defmethod mkt-url :rt-index [_]
   (str (:root by-url-map) "/zs/sssj/sh000001/" (:licence by-url-map)))
 (defmethod mkt-url :rt-stock [stk]
-  (str (:root by-url-map) "/hsrl/ssjy/" (:code stk) "/" (:licence by-url-map)))
+  (str (:root by-url-map) "/hsstock/real/time/" (:code stk) "/" (:licence by-url-map)))
 (defmethod mkt-url :h-norm [stk]
   (str (:root by-url-map) "/hszbl/fsjy/" (:code stk) "/dq/" (:licence by-url-map)))
 (defmethod mkt-url :h-macd [stk]
@@ -90,7 +90,7 @@
 (defmethod mkt-url :h-boll [stk]
   (str (:root by-url-map) "/hszbl/boll/" (:code stk) "/dq/" (:licence by-url-map)))
 
-(defn api-data-raw-retry [url times]
+(defn mkt-data-raw-retry [url times]
   (try (-> url (http/get) (:body) (json/parse-string) (reverse))
        (catch ExceptionInfo e
          (let [ed (.getData e)
@@ -99,16 +99,16 @@
          [{}])
        (catch Exception e
          (if (> times 0)
-           (api-data-raw-retry url (- times 1))
+           (mkt-data-raw-retry url (- times 1))
            (do
              (.println *err* (str "Error: get data from " url " E:" e))
              [{}])))))
 
-(defn api-data
-  ([url] (api-data url nil))
+(defn mkt-data
+  ([url] (mkt-data url nil))
   ([url checker]
    ;; (println url)
-   (let [data (api-data-raw-retry url 3)]
+   (let [data (mkt-data-raw-retry url 3)]
      (if checker
        (if (checker data) data [{}])
        data))))
@@ -130,10 +130,10 @@
     (-> {:type :stk-list} mkt-url http/get :body json/parse-string)))
 
 (defn norm-data [code]
-  (-> {:type :h-norm :code code} mkt-url (api-data (date-checker "d"))))
+  (-> {:type :h-norm :code code} mkt-url (mkt-data (date-checker "d"))))
 
 (def latest-date
-  (delay (-> {:type :h-norm :code "000001"} mkt-url api-data first (get "d"))))
+  (delay (-> {:type :h-norm :code "000001"} mkt-url mkt-data first (get "d"))))
 
 ;; screen notification
 (defn time-near [num-tm margin]
@@ -147,7 +147,7 @@
   (if (time-near 910 6)
     (send-msg @lark "I am on standby!"))
   (doall (for [stk (target-stocks @lark)]
-           (let [data (into {} (-> {:type :rt-stock :code (:code stk)} mkt-url api-data))
+           (let [data (into {} (-> {:type :rt-stock :code (:code stk)} mkt-url mkt-data))
                  curr (get-num data "p")
                  sym (cond
                        (<= curr (:lb stk)) "_"
@@ -168,7 +168,7 @@
 
 ;; MACD deep-turn
 (defn macd-data [code]
-  (-> {:type :h-macd :code code} mkt-url (api-data (date-checker "t"))))
+  (-> {:type :h-macd :code code} mkt-url (mkt-data (date-checker "t"))))
 
 (defn macd-diff [macd] (get-num macd "diff"))
 
@@ -195,7 +195,7 @@
 
 ;; BOLL red drill-down
 (defn boll-data [code]
-  (-> {:type :h-boll :code code} mkt-url (api-data (date-checker "t"))))
+  (-> {:type :h-boll :code code} mkt-url (mkt-data (date-checker "t"))))
 
 (defn boll-drill-down
   ([norm boll] (boll-drill-down norm boll 0))
